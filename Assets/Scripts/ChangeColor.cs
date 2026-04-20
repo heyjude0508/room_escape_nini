@@ -5,6 +5,7 @@ using UnityEngine;
 public class CubeTest: MonoBehaviour, IInteractable
 {
     public MeshRenderer cubeRenderer;
+    public GameEvent gameEvent;
 
     void Start()
     {
@@ -17,6 +18,7 @@ public class CubeTest: MonoBehaviour, IInteractable
     public void Interact()
     {
         cubeRenderer.material.color = new Color(Random.value, Random.value, Random.value);
+        gameEvent.Raise();
     }
 
     public string GetDescription()

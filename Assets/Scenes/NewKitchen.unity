@@ -3221,6 +3221,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubeRenderer: {fileID: 1936041313}
+  gameEvent: {fileID: 0}
 --- !u!1001 &1942356459
 PrefabInstance:
   m_ObjectHideFlags: 0
