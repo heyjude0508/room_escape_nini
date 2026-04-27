@@ -11,6 +11,8 @@ public class CubeTest: MonoBehaviour, IInteractable
     public GameEvent gameEventInteract;
 
     public DOTweenAnimation dtAnim;
+
+    public string showInfo;
     void Start()
     {
         //dtAnim.DOPlay();
@@ -18,25 +20,19 @@ public class CubeTest: MonoBehaviour, IInteractable
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            EventAimStart();
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            EventAimEnd();
-        }
+        
     }
 
     public void Interact()
     {
         cubeRenderer.material.color = new Color(Random.value, Random.value, Random.value);
-        gameEventInteract.Raise();
+        //gameEventInteract.Raise();
+        this.gameObject.SetActive(false);
     }
 
     public string GetDescription()
     {
-        return "Change the cube color";
+        return showInfo;
     }
 
     public void EventAimStart()
