@@ -42,6 +42,10 @@ public class CubeImpl : MonoBehaviour
                 UI_Interaction.SetActive(true);
                 UI_InteractionText.text = interactable.GetDescription();
 
+                
+                //interactable.EventAimStart();
+
+
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     interactable.Interact();
