@@ -8283,7 +8283,7 @@ PrefabInstance:
     - target: {fileID: 2519154994693396334, guid: 2356f3a17f426de4890fced077c3252e,
         type: 3}
       propertyPath: m_Name
-      value: Geek_room_Phone
+      value: Phone
       objectReference: {fileID: 0}
     - target: {fileID: 2519154994693396334, guid: 2356f3a17f426de4890fced077c3252e,
         type: 3}
