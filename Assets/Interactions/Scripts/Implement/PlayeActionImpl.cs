@@ -1,16 +1,16 @@
 using TMPro;
 using UnityEngine;
 
-public class CubeImpl : MonoBehaviour
+public class PlayerActionImpl: MonoBehaviour
 
 {
-    public Camera mainCamera;
+    [SerializeField] Camera mainCamera;
 
-    public float InteractionRange;
+    [SerializeField] float InteractionRange;
 
-    public GameObject UI_Interaction;
+    [SerializeField] GameObject UiInteraction;
 
-    public TMP_Text UI_InteractionText;
+    [SerializeField] TMP_Text UiInteractionText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,30 +21,28 @@ public class CubeImpl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        InteractionRay();
+        FindImpItem();
     }
 
-    private void InteractionRay()
+    // Ñ°ÕÒ¹Ø¼üµÀ¾ß
+    public void FindImpItem()
     {
 
         Ray ray = mainCamera.ViewportPointToRay(Vector3.one / 2);
-        RaycastHit hitInfo;
         bool IsHit = false;
-        UI_Interaction.SetActive(false);
+        UiInteraction.SetActive(false);
 
-        if (Physics.Raycast(ray, out hitInfo, InteractionRange))
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, InteractionRange))
         {
 
-            IInteractable interactable = hitInfo.collider.GetComponent<IInteractable>();
+            IPlayerAction interactable = hitInfo.collider.GetComponent<IPlayerAction>();
             if (interactable != null)
             {
                 IsHit = true;
-                UI_Interaction.SetActive(true);
-                UI_InteractionText.text = interactable.GetDescription();
-
-                
+                UiInteraction.SetActive(IsHit);
+                UiInteractionText.text = interactable.GetDescription();
+                 
                 //interactable.EventAimStart();
-
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
@@ -54,7 +52,7 @@ public class CubeImpl : MonoBehaviour
         }
         else
         {
-            UI_Interaction.SetActive(false);
+            UiInteraction.SetActive(IsHit);
         }
     }
 }

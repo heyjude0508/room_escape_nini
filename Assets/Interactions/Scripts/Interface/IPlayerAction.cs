@@ -2,9 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LivingRoomStart : MonoBehaviour
+public interface IPlayerAction
 {
-    public GameEvent gameEvent;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,9 +13,13 @@ public class LivingRoomStart : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp(KeyCode.Escape))
-        {
-            gameEvent.Raise();
-        }
+        
     }
+
+    // 返回关键道具的描述
+    string GetDescription();
+
+    // 和道具进行交互
+    void Interact();
+
 }
