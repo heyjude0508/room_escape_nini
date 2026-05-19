@@ -3,12 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyActionImpl: MonoBehaviour, IKeyAction
+public class LockActionImpl: MonoBehaviour, ILockAction
 {
-    [SerializeField] string keyID = "Default Key";
-    string description = "Press E to pick up the key.";
-
-    Renderer keyRenderer;
+    [SerializeField] string lockID = "DefaultLock";
+    [SerializeField] string requiredKeyID = "DefaultKey";
+    string description = "Press E to unlock.";
 
     IBagManagement bag;
 
@@ -52,40 +51,34 @@ public class KeyActionImpl: MonoBehaviour, IKeyAction
 
     public void Interact()
     {
-        PickKey();
+        Unlock();
     }
 
-    public void PickKey()
+    public void Unlock()
     {
 
-        if (bag != null) 
-        { 
-            bag.AddItem(keyID);
-        }
-        else
+        if (bag == null) 
         {
             Debug.LogError("找不到背包。");
             return;
         }
 
-        Destroy(gameObject);
-    }
-
-    // 变更道具的颜色
-    public void ChangeColor()
-    {
-        if (keyRenderer != null)
+        if (bag.HasItem(requiredKeyID))
         {
-            keyRenderer.material.color = new Color(Random.value, Random.value, Random.value);
+            bag.RemoveItem(requiredKeyID);
+
+            if (GetComponent<Collider>() != null)
+            {
+                GetComponent<Collider>().enabled = false;
+            }
+
+            this.enabled = false;
+            Debug.Log($"成功使用钥匙 [{requiredKeyID}] 打开了锁 [{lockID}]！");
         }
         else
         {
-            keyRenderer = GetComponentInChildren<Renderer>();
-            if (keyRenderer != null)
-            {
-                keyRenderer.material.color = new Color(Random.value, Random.value, Random.value);
-            }
-            //gameEventInteract.Raise();
+            Debug.Log($"需要找到钥匙！");
+            return;
         }
     }
 
