@@ -5,17 +5,17 @@ using UnityEngine;
 
 public class LockActionImpl: MonoBehaviour, ILockAction
 {
-    [SerializeField] string lockID = "DefaultLock";
-    [SerializeField] string requiredKeyID = "DefaultKey";
-    string description = "Press E to unlock.";
-
-    IBagManagement bag;
-
     public GameEvent gameEventAimStart;
     public GameEvent gameEventAimEnd;
     public GameEvent gameEventInteract;
 
     public DOTweenAnimation dtAnim;
+
+    IBagManagement bag;
+
+    [SerializeField] string lockID = "DefaultLock";
+    [SerializeField] string requiredKeyID = "DefaultKey";
+    string description = "Press E to unlock.";
 
     // Start is called before the first frame update
     void Start()
@@ -45,6 +45,11 @@ public class LockActionImpl: MonoBehaviour, ILockAction
     public void EventAimEnd()
     {
         gameEventAimEnd.Raise();
+    }
+
+    public void EventInteract()
+    {
+        gameEventInteract.Raise();
     }
 
     public string GetDescription() => description;

@@ -5,47 +5,52 @@ using UnityEngine;
 
 public class KeyActionImpl: MonoBehaviour, IKeyAction
 {
-    [SerializeField] string keyID = "Default Key";
-    string description = "Press E to pick up the key.";
-
-    Renderer keyRenderer;
-
-    IBagManagement bag;
-
     public GameEvent gameEventAimStart;
     public GameEvent gameEventAimEnd;
     public GameEvent gameEventInteract;
 
     public DOTweenAnimation dtAnim;
 
+    IBagManagement bag;
+
+    [SerializeField] string keyID = "Default Key";
+    string description = "Press E to pick up the key.";
+
+    Renderer keyRenderer;
+
     // Start is called before the first frame update
     void Start()
     {
-        //dtAnim.DOPlay();
         bag = BagManagementImpl.Instance;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Alpha1))
-        //{
-        //    EventAimStart();
-        //}
-        //if (Input.GetKeyDown(KeyCode.Alpha2))
-        //{
-        //    EventAimEnd();
-        //}
+
     }
 
     public void EventAimStart()
     {
-        gameEventAimStart.Raise();
+        if (gameEventAimStart != null)
+        {
+            gameEventAimStart.Raise();
+        }
+
+        if (dtAnim != null)
+        {
+            dtAnim.DOPlay();
+        }
     }
 
     public void EventAimEnd()
     {
         gameEventAimEnd.Raise();
+    }
+
+    public void EventInteract()
+    {
+        gameEventInteract.Raise();
     }
 
     public string GetDescription() => description;

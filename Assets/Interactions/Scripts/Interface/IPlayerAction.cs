@@ -4,17 +4,11 @@ using UnityEngine;
 
 public interface IPlayerAction
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    void EventAimStart();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    void EventAimEnd();
+
+    void EventInteract();
 
     // 返回关键道具的描述
     string GetDescription();

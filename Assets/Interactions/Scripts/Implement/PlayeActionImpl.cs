@@ -2,14 +2,10 @@ using TMPro;
 using UnityEngine;
 
 public class PlayerActionImpl: MonoBehaviour
-
 {
     [SerializeField] Camera mainCamera;
-
     [SerializeField] float InteractionRange;
-
     [SerializeField] GameObject UiInteraction;
-
     [SerializeField] TMP_Text UiInteractionText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -21,11 +17,11 @@ public class PlayerActionImpl: MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        FindImpItem();
+        DiscoverImpItem();
     }
 
     // Ñ°ÕÒ¹Ø¼üµÀ¾ß
-    public void FindImpItem()
+    public void DiscoverImpItem()
     {
 
         Ray ray = mainCamera.ViewportPointToRay(Vector3.one / 2);
@@ -42,7 +38,7 @@ public class PlayerActionImpl: MonoBehaviour
                 UiInteraction.SetActive(IsHit);
                 UiInteractionText.text = interactable.GetDescription();
                  
-                //interactable.EventAimStart();
+                interactable.EventAimStart();
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
