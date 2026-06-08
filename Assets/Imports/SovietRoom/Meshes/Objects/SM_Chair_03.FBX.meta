@@ -1,0 +1,251 @@
+fileFormatVersion: 2
+guid: cb9c2e042a320534083b957427715e02
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: SM_Chair_03
+    100004: UCX_SM_Chair_03
+    100006: UCX_SM_Chair_03 1
+    100008: UCX_SM_Chair_03 10
+    100010: UCX_SM_Chair_03 11
+    100012: UCX_SM_Chair_03 12
+    100014: UCX_SM_Chair_03 13
+    100016: UCX_SM_Chair_03 14
+    100018: UCX_SM_Chair_03 15
+    100020: UCX_SM_Chair_03 16
+    100022: UCX_SM_Chair_03 17
+    100024: UCX_SM_Chair_03 18
+    100026: UCX_SM_Chair_03 19
+    100028: UCX_SM_Chair_03 2
+    100030: UCX_SM_Chair_03 20
+    100032: UCX_SM_Chair_03 21
+    100034: UCX_SM_Chair_03 22
+    100036: UCX_SM_Chair_03 23
+    100038: UCX_SM_Chair_03 24
+    100040: UCX_SM_Chair_03 25
+    100042: UCX_SM_Chair_03 26
+    100044: UCX_SM_Chair_03 27
+    100046: UCX_SM_Chair_03 28
+    100048: UCX_SM_Chair_03 29
+    100050: UCX_SM_Chair_03 3
+    100052: UCX_SM_Chair_03 30
+    100054: UCX_SM_Chair_03 4
+    100056: UCX_SM_Chair_03 5
+    100058: UCX_SM_Chair_03 6
+    100060: UCX_SM_Chair_03 7
+    100062: UCX_SM_Chair_03 8
+    100064: UCX_SM_Chair_03 9
+    400000: SM_Chair_03
+    400002: //RootNode
+    400004: UCX_SM_Chair_03
+    400006: UCX_SM_Chair_03 1
+    400008: UCX_SM_Chair_03 10
+    400010: UCX_SM_Chair_03 11
+    400012: UCX_SM_Chair_03 12
+    400014: UCX_SM_Chair_03 13
+    400016: UCX_SM_Chair_03 14
+    400018: UCX_SM_Chair_03 15
+    400020: UCX_SM_Chair_03 16
+    400022: UCX_SM_Chair_03 17
+    400024: UCX_SM_Chair_03 18
+    400026: UCX_SM_Chair_03 19
+    400028: UCX_SM_Chair_03 2
+    400030: UCX_SM_Chair_03 20
+    400032: UCX_SM_Chair_03 21
+    400034: UCX_SM_Chair_03 22
+    400036: UCX_SM_Chair_03 23
+    400038: UCX_SM_Chair_03 24
+    400040: UCX_SM_Chair_03 25
+    400042: UCX_SM_Chair_03 26
+    400044: UCX_SM_Chair_03 27
+    400046: UCX_SM_Chair_03 28
+    400048: UCX_SM_Chair_03 29
+    400050: UCX_SM_Chair_03 3
+    400052: UCX_SM_Chair_03 30
+    400054: UCX_SM_Chair_03 4
+    400056: UCX_SM_Chair_03 5
+    400058: UCX_SM_Chair_03 6
+    400060: UCX_SM_Chair_03 7
+    400062: UCX_SM_Chair_03 8
+    400064: UCX_SM_Chair_03 9
+    2100000: No Name
+    2100002: default
+    2300000: SM_Chair_03
+    2300002: UCX_SM_Chair_03
+    2300004: UCX_SM_Chair_03 1
+    2300006: UCX_SM_Chair_03 10
+    2300008: UCX_SM_Chair_03 11
+    2300010: UCX_SM_Chair_03 12
+    2300012: UCX_SM_Chair_03 13
+    2300014: UCX_SM_Chair_03 14
+    2300016: UCX_SM_Chair_03 15
+    2300018: UCX_SM_Chair_03 16
+    2300020: UCX_SM_Chair_03 17
+    2300022: UCX_SM_Chair_03 18
+    2300024: UCX_SM_Chair_03 19
+    2300026: UCX_SM_Chair_03 2
+    2300028: UCX_SM_Chair_03 20
+    2300030: UCX_SM_Chair_03 21
+    2300032: UCX_SM_Chair_03 22
+    2300034: UCX_SM_Chair_03 23
+    2300036: UCX_SM_Chair_03 24
+    2300038: UCX_SM_Chair_03 25
+    2300040: UCX_SM_Chair_03 26
+    2300042: UCX_SM_Chair_03 27
+    2300044: UCX_SM_Chair_03 28
+    2300046: UCX_SM_Chair_03 29
+    2300048: UCX_SM_Chair_03 3
+    2300050: UCX_SM_Chair_03 30
+    2300052: UCX_SM_Chair_03 4
+    2300054: UCX_SM_Chair_03 5
+    2300056: UCX_SM_Chair_03 6
+    2300058: UCX_SM_Chair_03 7
+    2300060: UCX_SM_Chair_03 8
+    2300062: UCX_SM_Chair_03 9
+    3300000: SM_Chair_03
+    3300002: UCX_SM_Chair_03
+    3300004: UCX_SM_Chair_03 1
+    3300006: UCX_SM_Chair_03 10
+    3300008: UCX_SM_Chair_03 11
+    3300010: UCX_SM_Chair_03 12
+    3300012: UCX_SM_Chair_03 13
+    3300014: UCX_SM_Chair_03 14
+    3300016: UCX_SM_Chair_03 15
+    3300018: UCX_SM_Chair_03 16
+    3300020: UCX_SM_Chair_03 17
+    3300022: UCX_SM_Chair_03 18
+    3300024: UCX_SM_Chair_03 19
+    3300026: UCX_SM_Chair_03 2
+    3300028: UCX_SM_Chair_03 20
+    3300030: UCX_SM_Chair_03 21
+    3300032: UCX_SM_Chair_03 22
+    3300034: UCX_SM_Chair_03 23
+    3300036: UCX_SM_Chair_03 24
+    3300038: UCX_SM_Chair_03 25
+    3300040: UCX_SM_Chair_03 26
+    3300042: UCX_SM_Chair_03 27
+    3300044: UCX_SM_Chair_03 28
+    3300046: UCX_SM_Chair_03 29
+    3300048: UCX_SM_Chair_03 3
+    3300050: UCX_SM_Chair_03 30
+    3300052: UCX_SM_Chair_03 4
+    3300054: UCX_SM_Chair_03 5
+    3300056: UCX_SM_Chair_03 6
+    3300058: UCX_SM_Chair_03 7
+    3300060: UCX_SM_Chair_03 8
+    3300062: UCX_SM_Chair_03 9
+    4300000: UCX_SM_Chair_03
+    4300002: UCX_SM_Chair_03
+    4300004: UCX_SM_Chair_03
+    4300006: UCX_SM_Chair_03
+    4300008: UCX_SM_Chair_03
+    4300010: UCX_SM_Chair_03
+    4300012: UCX_SM_Chair_03
+    4300014: UCX_SM_Chair_03
+    4300016: UCX_SM_Chair_03
+    4300018: UCX_SM_Chair_03
+    4300020: UCX_SM_Chair_03
+    4300022: UCX_SM_Chair_03
+    4300024: UCX_SM_Chair_03
+    4300026: UCX_SM_Chair_03
+    4300028: UCX_SM_Chair_03
+    4300030: UCX_SM_Chair_03
+    4300032: UCX_SM_Chair_03
+    4300034: UCX_SM_Chair_03
+    4300036: UCX_SM_Chair_03
+    4300038: UCX_SM_Chair_03
+    4300040: UCX_SM_Chair_03
+    4300042: UCX_SM_Chair_03
+    4300044: UCX_SM_Chair_03
+    4300046: UCX_SM_Chair_03
+    4300048: UCX_SM_Chair_03
+    4300050: UCX_SM_Chair_03
+    4300052: UCX_SM_Chair_03
+    4300054: UCX_SM_Chair_03
+    4300056: UCX_SM_Chair_03
+    4300058: UCX_SM_Chair_03
+    4300060: UCX_SM_Chair_03
+    4300062: SM_Chair_03
+    7400000: Take 001
+    9500000: //RootNode
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
