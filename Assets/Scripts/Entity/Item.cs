@@ -29,8 +29,7 @@ public class Item : MonoBehaviour, IPlayerAction
 
     public void Interact()
     {
-        //Slot slot = new Slot(,"Key1", 1);
-        //InventoryController.Instance.AddItemToMyList(slot);
+        // BagManagementImpl.Instance.AddItem("Key1");
     }
 
     // Start is called before the first frame update
