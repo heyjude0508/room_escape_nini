@@ -13,7 +13,7 @@ public class KeyActionImpl: MonoBehaviour, IKeyAction
 
     IBagManagement bag;
 
-    [SerializeField] string keyID = "Default Key";
+    [SerializeField] string keyID = "DefaultKey";
     string description = "Press E to pick up the key.";
 
     Renderer keyRenderer;
