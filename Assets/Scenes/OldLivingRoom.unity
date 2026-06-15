@@ -4544,6 +4544,7 @@ MonoBehaviour:
   gameEventAimStart: {fileID: 11400000, guid: ff233ea6009adf849ac4429671310358, type: 2}
   gameEventAimEnd: {fileID: 11400000, guid: 8f7621e7a27933348832c24453ff9d78, type: 2}
   gameEventInteract: {fileID: 11400000, guid: 0c4fa0a19aa846d479bd0353a37bae5d, type: 2}
+  itemData: {fileID: 11400000, guid: 3b9f7d4f0c2e5f6b9f8e7d6c5b4a503928, type: 2}
   keyID: CabinetKey
 --- !u!65 &939827486
 BoxCollider:

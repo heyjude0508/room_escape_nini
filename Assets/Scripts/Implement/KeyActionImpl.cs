@@ -13,6 +13,7 @@ public class KeyActionImpl: MonoBehaviour, IKeyAction
 
     IBagManagement bag;
 
+    [SerializeField] ItemData itemData;
     [SerializeField] string keyID = "DefaultKey";
     string description = "Press E to pick up the key.";
 
@@ -64,19 +65,26 @@ public class KeyActionImpl: MonoBehaviour, IKeyAction
     {
 
         if (bag != null) 
-        { 
-            bag.AddItem(keyID);
+        {
+            if (itemData != null)
+            {
+                bag.AddItem(itemData.itemId, itemData.icon, itemData.displayName);
+            }
+            else
+            {
+                bag.AddItem(keyID);
+            }
         }
         else
         {
-            Debug.LogError("找不到背包。");
+            Debug.LogError("???????????");
             return;
         }
 
         Destroy(gameObject);
     }
 
-    // 变更道具的颜色
+    // ???????????
     public void ChangeColor()
     {
         if (keyRenderer != null)

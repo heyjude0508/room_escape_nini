@@ -4,12 +4,18 @@ using UnityEngine.UI;
 
 public class BagManagementImpl : MonoBehaviour, IBagManagement
 {
+    const string IconChildName = "Icon";
+
     public static BagManagementImpl Instance { get; private set; }
 
     [SerializeField] Transform slotPanel;
+    [SerializeField] Color emptySlotColor = new Color(1f, 1f, 1f, 0.3f);
+    [SerializeField] Color filledSlotColor = new Color(1f, 1f, 1f, 1f);
 
     public List<GameObject> slotsIcon = new List<GameObject>();
     public List<Slot> slotList = new List<Slot>();
+
+    readonly Dictionary<string, Image> slotIconImages = new Dictionary<string, Image>();
 
     private void Awake()
     {
@@ -29,6 +35,7 @@ public class BagManagementImpl : MonoBehaviour, IBagManagement
     {
         slotsIcon.Clear();
         slotList.Clear();
+        slotIconImages.Clear();
 
         if (slotPanel == null)
         {
@@ -37,14 +44,16 @@ public class BagManagementImpl : MonoBehaviour, IBagManagement
 
         for (int i = 0; i < slotPanel.childCount; i++)
         {
-            slotsIcon.Add(slotPanel.GetChild(i).gameObject);
+            GameObject slotObject = slotPanel.GetChild(i).gameObject;
+            slotsIcon.Add(slotObject);
             slotList.Add(new Slot());
+            GetOrCreateIconImage(slotObject);
         }
 
         UpdateSlotsAppearance();
     }
 
-    public void AddItem(string itemId)
+    public void AddItem(string itemId, Sprite icon = null, string displayName = null)
     {
         if (HasItem(itemId))
         {
@@ -58,10 +67,22 @@ public class BagManagementImpl : MonoBehaviour, IBagManagement
             return;
         }
 
-        slotList[emptyIndex].itemId = itemId;
-        slotList[emptyIndex].displayName = itemId;
+        Slot slot = slotList[emptyIndex];
+        slot.itemId = itemId;
+        slot.displayName = string.IsNullOrEmpty(displayName) ? itemId : displayName;
+        slot.icon = icon;
         Debug.Log($"背包系统成功放入物品: {itemId}，当前物品总数: {GetItemCount()}。");
         UpdateSlotsAppearance();
+    }
+
+    public void AddItem(ItemData itemData)
+    {
+        if (itemData == null)
+        {
+            return;
+        }
+
+        AddItem(itemData.itemId, itemData.icon, itemData.displayName);
     }
 
     public void RemoveItem(string itemId)
@@ -83,28 +104,57 @@ public class BagManagementImpl : MonoBehaviour, IBagManagement
     {
         for (int i = 0; i < slotsIcon.Count && i < slotList.Count; i++)
         {
-            Image image = slotsIcon[i].GetComponent<Image>();
-            if (image == null)
-            {
-                continue;
-            }
-
+            GameObject slotObject = slotsIcon[i];
+            Image background = slotObject.GetComponent<Image>();
+            Image iconImage = GetOrCreateIconImage(slotObject);
             Slot slot = slotList[i];
-            if (slot.IsEmpty)
+
+            if (background != null)
             {
-                Color color = image.color;
-                image.color = new Color(color.r, color.g, color.b, 0.3f);
+                background.color = slot.IsEmpty ? emptySlotColor : filledSlotColor;
+            }
+
+            if (slot.IsEmpty || slot.icon == null)
+            {
+                iconImage.enabled = false;
+                iconImage.sprite = null;
                 continue;
             }
 
-            if (slot.icon != null)
-            {
-                image.sprite = slot.icon;
-            }
-
-            Color filledColor = image.color;
-            image.color = new Color(filledColor.r, filledColor.g, filledColor.b, 1f);
+            iconImage.sprite = slot.icon;
+            iconImage.color = Color.white;
+            iconImage.enabled = true;
         }
+    }
+
+    Image GetOrCreateIconImage(GameObject slotObject)
+    {
+        if (slotIconImages.TryGetValue(slotObject.name, out Image cachedIcon))
+        {
+            return cachedIcon;
+        }
+
+        Transform iconTransform = slotObject.transform.Find(IconChildName);
+        if (iconTransform == null)
+        {
+            GameObject iconObject = new GameObject(IconChildName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            iconTransform = iconObject.transform;
+            iconTransform.SetParent(slotObject.transform, false);
+
+            RectTransform rect = iconTransform as RectTransform;
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.one;
+            rect.offsetMin = new Vector2(10f, 10f);
+            rect.offsetMax = new Vector2(-10f, -10f);
+            rect.localScale = Vector3.one;
+        }
+
+        Image iconImage = iconTransform.GetComponent<Image>();
+        iconImage.raycastTarget = false;
+        iconImage.preserveAspect = true;
+        iconImage.enabled = false;
+        slotIconImages[slotObject.name] = iconImage;
+        return iconImage;
     }
 
     int FindEmptySlotIndex()
