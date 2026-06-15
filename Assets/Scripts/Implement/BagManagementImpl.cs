@@ -1,13 +1,16 @@
 //using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class BagManagementImpl: MonoBehaviour, IBagManagement
 {
-    public static BagManagementImpl Instance { get; private set; }
+    public List<Item> itemList;
+    public List<string> itemIdList;
     public List<Slot> slotList;
-    public List<GameObject> slotsIcon;
+    public static BagManagementImpl Instance { get; private set; }
 
     // Start is called before the first frame update
     void Start()
@@ -35,26 +38,35 @@ public class BagManagementImpl: MonoBehaviour, IBagManagement
         }
     }
 
-    public void AddItem(string itemId)
+    public void AddItem(Item item)
     {
         // 如果背包里还没有这个物品才放进去，防止重复捡起报错
-        if (!bagItems.Contains(itemId))
+        if (!itemList.Contains(item))
         {
-            bagItems.Add(itemId);
-            Debug.Log($"背包系统成功放入物品: {itemId}，当前物品总数: {bagItems.Count}。");
+            itemList.Add(item);
+            Debug.Log($"Put item {item.id} into the bag successfully，total number of items: {itemList.Count}.");
         }
     }
 
-    public void RemoveItem(string itemId)
+    public void RemoveItem(Item item)
     {
         // 只有在背包里有这件物品时才移除
-        if (bagItems.Contains(itemId))
+        if (itemList.Contains(item))
         {
-            bagItems.Remove(itemId);
-            Debug.Log($"背包系统物品已移除: {itemId}。");
+            itemList.Remove(item);
+            Debug.Log($"Get item {item.id} out of the bag successfully, total number of items: {itemList.Count}.");
         }
     }
 
-    public bool HasItem(string itemId) => bagItems.Contains(itemId);
+    public List<string> GetItemIdList()
+    {
+        foreach (Item item in itemList)
+        {
+            itemIdList.Add(item.id);
+        }
+        return itemIdList;
+    }
+
+    public bool HasItem(Item item) => itemList.Contains(item);
 
 }

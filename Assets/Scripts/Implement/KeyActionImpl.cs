@@ -1,6 +1,7 @@
 //using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public class KeyActionImpl: MonoBehaviour, IKeyAction
@@ -11,12 +12,11 @@ public class KeyActionImpl: MonoBehaviour, IKeyAction
 
     //public DOTweenAnimation dtAnim;
 
-    IBagManagement bag;
-
-    [SerializeField] string keyID = "Default Key";
-    string description = "Press E to pick up the key.";
+    [SerializeField] KeyItem keyItem;
 
     Renderer keyRenderer;
+
+    IBagManagement bag;
 
     // Start is called before the first frame update
     void Start()
@@ -53,7 +53,7 @@ public class KeyActionImpl: MonoBehaviour, IKeyAction
         //gameEventInteract.Raise();
     }
 
-    public string GetDescription() => description;
+    public string GetDescription() => keyItem.itemDesc;
 
     public void Interact()
     {
@@ -65,11 +65,11 @@ public class KeyActionImpl: MonoBehaviour, IKeyAction
 
         if (bag != null) 
         { 
-            bag.AddItem(keyID);
+            bag.AddItem(keyItem);
         }
         else
         {
-            Debug.LogError("ÕÒ²»µ½±³°ü¡£");
+            Debug.LogError("Cannot find the bag.");
             return;
         }
 
@@ -90,7 +90,6 @@ public class KeyActionImpl: MonoBehaviour, IKeyAction
             {
                 keyRenderer.material.color = new Color(Random.value, Random.value, Random.value);
             }
-            //gameEventInteract.Raise();
         }
     }
 

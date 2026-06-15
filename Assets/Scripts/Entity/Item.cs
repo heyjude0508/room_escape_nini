@@ -2,46 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item : MonoBehaviour, IPlayerAction
+[System.Serializable]
+public class Item
 {
-    public int id;
-    //public string itemName;
-        public string description;
-    public void EventAimEnd()
+    public string id;
+    public string itemName;
+    public string itemDesc;
+    public Sprite itemSprite;
+
+    public Item(string id, string itemName, string itemDesc, Sprite itemSprite)
     {
-       
+        this.id = id;
+        this.itemName = itemName;
+        this.itemDesc = itemDesc;
+        this.itemSprite = itemSprite;
     }
 
-    public void EventAimStart()
-    {
-        
-    }
+    public Item() { }
 
-    public void EventInteract()
-    {
-        
-    }
-
-    public string GetDescription()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void Interact()
-    {
-        //Slot slot = new Slot(,"Key1", 1);
-        //InventoryController.Instance.AddItemToMyList(slot);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
