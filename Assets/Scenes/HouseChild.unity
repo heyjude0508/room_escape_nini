@@ -13589,6 +13589,12 @@ PrefabInstance:
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7293847562019384756, guid: a2e1bb6daa99d10448ecb13dbc48741e,
+        type: 3}
+      propertyPath: checkSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c6ba52c3e8af5b341995cc343e85e4a0,
+        type: 3}
     - target: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e,
         type: 3}
       propertyPath: m_Pivot.x
