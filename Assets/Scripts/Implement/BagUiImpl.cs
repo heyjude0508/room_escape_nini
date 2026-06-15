@@ -27,7 +27,7 @@ public class IBagUiImpl : MonoBehaviour, IBagUi
         
     }
 
-    public void UpdateSlotImage(Item item)
+    public void AddItem(Item item)
     {
         int slotId = GetMinEmptySlotId();
         if (slotId == -1)
@@ -35,6 +35,8 @@ public class IBagUiImpl : MonoBehaviour, IBagUi
             Debug.LogWarning("The bag is full!");
             return;
         }
+        slotList[slotId].itemId = item.id;
+        slotList[slotId].itemName = item.itemName;
         slotList[slotId].iconImage.sprite = item.itemSprite;
     }
 

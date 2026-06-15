@@ -13,8 +13,8 @@ public class Slot
         
     public Slot(string itemId, string itemName, Image iconImage)
     {
-        itemId = itemId;
-        itemName = itemName;
-        iconImage = iconImage;
+        this.itemId = itemId;
+        this.itemName = itemName;
+        this.iconImage = iconImage;
     }
 }
