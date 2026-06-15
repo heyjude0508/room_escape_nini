@@ -10,8 +10,8 @@ public class KeyItem: Item
     {
         id = "DefaultKey";
         itemName = "DefaultKey";
-        itemDesc = "Press E to pick up the key.";
         itemSprite = null;
+        itemDesc = "Press E to pick up the key.";
     }
 
 }

@@ -9,7 +9,7 @@ public class BagManagementImpl: MonoBehaviour, IBagManagement
 {
     public List<Item> itemList;
     public List<string> itemIdList;
-    public List<Slot> slotList;
+
     public static BagManagementImpl Instance { get; private set; }
 
     // Start is called before the first frame update

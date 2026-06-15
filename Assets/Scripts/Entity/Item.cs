@@ -7,15 +7,15 @@ public class Item
 {
     public string id;
     public string itemName;
-    public string itemDesc;
     public Sprite itemSprite;
+    public string itemDesc;
 
     public Item(string id, string itemName, string itemDesc, Sprite itemSprite)
     {
         this.id = id;
         this.itemName = itemName;
-        this.itemDesc = itemDesc;
         this.itemSprite = itemSprite;
+        this.itemDesc = itemDesc;
     }
 
     public Item() { }
