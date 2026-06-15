@@ -7897,7 +7897,6 @@ GameObject:
   m_Component:
   - component: {fileID: 371056877}
   - component: {fileID: 371056876}
-  - component: {fileID: 371056878}
   m_Layer: 0
   m_Name: VOL
   m_TagString: Untagged
@@ -7937,27 +7936,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &371056878
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 371056875}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1.5679638, y: 2.2952924, z: 1.9749529}
-  m_Center: {x: -0.28398192, y: -0.21297884, z: 0.48747647}
 --- !u!1001 &372116357
 PrefabInstance:
   m_ObjectHideFlags: 0
