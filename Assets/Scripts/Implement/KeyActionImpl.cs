@@ -15,7 +15,7 @@ public class KeyActionImpl : MonoBehaviour, IKeyAction
 
     Renderer keyRenderer;
 
-    IBagManagement bag;
+    BagManagementImpl bag;
 
     // Start is called before the first frame update
     void Start()
