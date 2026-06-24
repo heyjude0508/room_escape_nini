@@ -1,9 +1,10 @@
 //using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class LockActionImpl: MonoBehaviour, ILockAction
+public class LockActionImpl : MonoBehaviour, ILockAction
 {
     //public GameEvent gameEventAimStart;
     //public GameEvent gameEventAimEnd;
@@ -11,11 +12,9 @@ public class LockActionImpl: MonoBehaviour, ILockAction
 
     //public DOTweenAnimation dtAnim;
 
-    IBagManagement bag;
+    [SerializeField] LockPuzzle lockPuzzle;
 
-    [SerializeField] string lockID = "DefaultLock";
-    [SerializeField] string requiredKeyID = "DefaultKey";
-    string description = "Press E to unlock.";
+    BagManagementImpl bag;
 
     // Start is called before the first frame update
     void Start()
@@ -27,14 +26,7 @@ public class LockActionImpl: MonoBehaviour, ILockAction
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Alpha1))
-        //{
-        //    EventAimStart();
-        //}
-        //if (Input.GetKeyDown(KeyCode.Alpha2))
-        //{
-        //    EventAimEnd();
-        //}
+
     }
 
     public void EventAimStart()
@@ -52,7 +44,7 @@ public class LockActionImpl: MonoBehaviour, ILockAction
         //gameEventInteract.Raise();
     }
 
-    public string GetDescription() => description;
+    public string GetDescription() => lockPuzzle.puzzleDesc;
 
     public void Interact()
     {
@@ -62,27 +54,25 @@ public class LockActionImpl: MonoBehaviour, ILockAction
     public void Unlock()
     {
 
-        if (bag == null) 
+        if (bag == null)
         {
-            Debug.LogError("找不到背包。");
+            Debug.LogError("Cannot find the bag.");
             return;
         }
 
-        if (bag.HasItem(requiredKeyID))
+        List<string> itemIdList = bag.GetItemIdList();
+        if (itemIdList.Contains(lockPuzzle.solution))
         {
-            bag.RemoveItem(requiredKeyID);
-
             if (GetComponent<Collider>() != null)
             {
                 GetComponent<Collider>().enabled = false;
             }
-
             this.enabled = false;
-            Debug.Log($"成功使用钥匙 [{requiredKeyID}] 打开了锁 [{lockID}]！");
+            Debug.Log($"Unlock the lock {lockPuzzle.id} using the key {lockPuzzle.solution} successfully.");
         }
         else
         {
-            Debug.Log($"需要找到钥匙！");
+            Debug.Log("Need to find the key!");
             return;
         }
     }

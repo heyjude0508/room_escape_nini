@@ -2,45 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item : MonoBehaviour, IPlayerAction
+[System.Serializable]
+public class Item
 {
-    public int id;
-    //public string itemName;
-        public string description;
-    public void EventAimEnd()
+    public string id;
+    public string itemName;
+    public Sprite itemSprite;
+    public string itemDesc;
+
+    public Item(string id, string itemName, string itemDesc, Sprite itemSprite)
     {
-       
+        this.id = id;
+        this.itemName = itemName;
+        this.itemSprite = itemSprite;
+        this.itemDesc = itemDesc;
     }
 
-    public void EventAimStart()
-    {
-        
-    }
+    public Item() { }
 
-    public void EventInteract()
-    {
-        
-    }
-
-    public string GetDescription()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void Interact()
-    {
-        // BagManagementImpl.Instance.AddItem("Key1");
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

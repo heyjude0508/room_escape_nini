@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerActionImpl: MonoBehaviour
 {
     [SerializeField] Camera mainCamera;
-    [SerializeField] float InteractionRange;
+    [SerializeField] float InteractionRange = 0.6f;
     [SerializeField] GameObject UiInteraction;
     [SerializeField] TMP_Text UiInteractionText;
 

@@ -1,29 +1,36 @@
+//using DG.Tweening;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class BagManagementImpl : MonoBehaviour, IBagManagement
 {
-    const string IconChildName = "Icon";
+    public List<Item> itemList;
+    public List<string> itemIdList;
 
     public static BagManagementImpl Instance { get; private set; }
 
-    [SerializeField] Transform slotPanel;
-    [SerializeField] Color emptySlotColor = new Color(1f, 1f, 1f, 0.3f);
-    [SerializeField] Color filledSlotColor = new Color(1f, 1f, 1f, 1f);
+    // Start is called before the first frame update
+    void Start()
+    {
 
-    public List<GameObject> slotsIcon = new List<GameObject>();
-    public List<Slot> slotList = new List<Slot>();
+    }
 
-    readonly Dictionary<string, Image> slotIconImages = new Dictionary<string, Image>();
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     private void Awake()
     {
+        // 创建背包单例
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
-            InitializeSlots();
+            DontDestroyOnLoad(gameObject); // 背包跨关卡不销毁
         }
         else
         {
@@ -31,169 +38,35 @@ public class BagManagementImpl : MonoBehaviour, IBagManagement
         }
     }
 
-    void InitializeSlots()
+    public void AddItem(Item item)
     {
-        slotsIcon.Clear();
-        slotList.Clear();
-        slotIconImages.Clear();
-
-        if (slotPanel == null)
+        // 如果背包里还没有这个物品才放进去，防止重复捡起报错
+        if (!itemList.Contains(item))
         {
-            return;
-        }
-
-        for (int i = 0; i < slotPanel.childCount; i++)
-        {
-            GameObject slotObject = slotPanel.GetChild(i).gameObject;
-            slotsIcon.Add(slotObject);
-            slotList.Add(new Slot());
-            GetOrCreateIconImage(slotObject);
-        }
-
-        UpdateSlotsAppearance();
-    }
-
-    public void AddItem(string itemId, Sprite icon = null, string displayName = null)
-    {
-        if (HasItem(itemId))
-        {
-            return;
-        }
-
-        int emptyIndex = FindEmptySlotIndex();
-        if (emptyIndex < 0)
-        {
-            Debug.LogWarning($"背包已满，无法放入物品: {itemId}");
-            return;
-        }
-
-        Slot slot = slotList[emptyIndex];
-        slot.itemId = itemId;
-        slot.displayName = string.IsNullOrEmpty(displayName) ? itemId : displayName;
-        slot.icon = icon;
-        Debug.Log($"背包系统成功放入物品: {itemId}，当前物品总数: {GetItemCount()}。");
-        UpdateSlotsAppearance();
-    }
-
-    public void AddItem(ItemData itemData)
-    {
-        if (itemData == null)
-        {
-            return;
-        }
-
-        AddItem(itemData.itemId, itemData.icon, itemData.displayName);
-    }
-
-    public void RemoveItem(string itemId)
-    {
-        int index = FindSlotIndexByItemId(itemId);
-        if (index < 0)
-        {
-            return;
-        }
-
-        slotList[index].Clear();
-        Debug.Log($"背包系统物品已移除: {itemId}。");
-        UpdateSlotsAppearance();
-    }
-
-    public bool HasItem(string itemId) => FindSlotIndexByItemId(itemId) >= 0;
-
-    public void UpdateSlotsAppearance()
-    {
-        for (int i = 0; i < slotsIcon.Count && i < slotList.Count; i++)
-        {
-            GameObject slotObject = slotsIcon[i];
-            Image background = slotObject.GetComponent<Image>();
-            Image iconImage = GetOrCreateIconImage(slotObject);
-            Slot slot = slotList[i];
-
-            if (background != null)
-            {
-                background.color = slot.IsEmpty ? emptySlotColor : filledSlotColor;
-            }
-
-            if (slot.IsEmpty || slot.icon == null)
-            {
-                iconImage.enabled = false;
-                iconImage.sprite = null;
-                continue;
-            }
-
-            iconImage.sprite = slot.icon;
-            iconImage.color = Color.white;
-            iconImage.enabled = true;
+            itemList.Add(item);
+            Debug.Log($"Put item {item.id} into the bag successfully，total number of items: {itemList.Count}.");
         }
     }
 
-    Image GetOrCreateIconImage(GameObject slotObject)
+    public void RemoveItem(Item item)
     {
-        if (slotIconImages.TryGetValue(slotObject.name, out Image cachedIcon))
+        // 只有在背包里有这件物品时才移除
+        if (itemList.Contains(item))
         {
-            return cachedIcon;
+            itemList.Remove(item);
+            Debug.Log($"Get item {item.id} out of the bag successfully, total number of items: {itemList.Count}.");
         }
-
-        Transform iconTransform = slotObject.transform.Find(IconChildName);
-        if (iconTransform == null)
-        {
-            GameObject iconObject = new GameObject(IconChildName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-            iconTransform = iconObject.transform;
-            iconTransform.SetParent(slotObject.transform, false);
-
-            RectTransform rect = iconTransform as RectTransform;
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = new Vector2(10f, 10f);
-            rect.offsetMax = new Vector2(-10f, -10f);
-            rect.localScale = Vector3.one;
-        }
-
-        Image iconImage = iconTransform.GetComponent<Image>();
-        iconImage.raycastTarget = false;
-        iconImage.preserveAspect = true;
-        iconImage.enabled = false;
-        slotIconImages[slotObject.name] = iconImage;
-        return iconImage;
     }
 
-    int FindEmptySlotIndex()
+    public List<string> GetItemIdList()
     {
-        for (int i = 0; i < slotList.Count; i++)
+        foreach (Item item in itemList)
         {
-            if (slotList[i].IsEmpty)
-            {
-                return i;
-            }
+            itemIdList.Add(item.id);
         }
-
-        return -1;
+        return itemIdList;
     }
 
-    int FindSlotIndexByItemId(string itemId)
-    {
-        for (int i = 0; i < slotList.Count; i++)
-        {
-            if (slotList[i].itemId == itemId)
-            {
-                return i;
-            }
-        }
+    public bool HasItem(Item item) => itemList.Contains(item);
 
-        return -1;
-    }
-
-    int GetItemCount()
-    {
-        int count = 0;
-        foreach (Slot slot in slotList)
-        {
-            if (!slot.IsEmpty)
-            {
-                count++;
-            }
-        }
-
-        return count;
-    }
 }

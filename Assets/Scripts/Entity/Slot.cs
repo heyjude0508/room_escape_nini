@@ -1,19 +1,20 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public class Slot
 {
     public string itemId;
-    public string displayName;
-    public Sprite icon;
+    public string itemName;
+    public Image iconImage;
 
-    public bool IsEmpty => string.IsNullOrEmpty(itemId);
-
-    public void Clear()
+    public Slot(string itemId, string itemName, Image iconImage)
     {
-        itemId = string.Empty;
-        displayName = string.Empty;
-        icon = null;
+        this.itemId = itemId;
+        this.itemName = itemName;
+        this.iconImage = iconImage;
     }
 }

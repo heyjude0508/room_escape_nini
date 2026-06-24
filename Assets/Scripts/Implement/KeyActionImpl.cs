@@ -1,9 +1,9 @@
-//using DG.Tweening;
+﻿//using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyActionImpl: MonoBehaviour, IKeyAction
+public class KeyActionImpl : MonoBehaviour, IKeyAction
 {
     //public GameEvent gameEventAimStart;
     //public GameEvent gameEventAimEnd;
@@ -11,13 +11,11 @@ public class KeyActionImpl: MonoBehaviour, IKeyAction
 
     //public DOTweenAnimation dtAnim;
 
-    IBagManagement bag;
-
-    [SerializeField] ItemData itemData;
-    [SerializeField] string keyID = "DefaultKey";
-    string description = "Press E to pick up the key.";
+    [SerializeField] KeyItem keyItem;
 
     Renderer keyRenderer;
+
+    IBagManagement bag;
 
     // Start is called before the first frame update
     void Start()
@@ -54,7 +52,7 @@ public class KeyActionImpl: MonoBehaviour, IKeyAction
         //gameEventInteract.Raise();
     }
 
-    public string GetDescription() => description;
+    public string GetDescription() => keyItem.itemDesc;
 
     public void Interact()
     {
@@ -64,27 +62,20 @@ public class KeyActionImpl: MonoBehaviour, IKeyAction
     public void PickKey()
     {
 
-        if (bag != null) 
+        if (bag != null)
         {
-            if (itemData != null)
-            {
-                bag.AddItem(itemData.itemId, itemData.icon, itemData.displayName);
-            }
-            else
-            {
-                bag.AddItem(keyID);
-            }
+            bag.AddItem(keyItem);
         }
         else
         {
-            Debug.LogError("???????????");
+            Debug.LogError("Cannot find the bag.");
             return;
         }
 
         Destroy(gameObject);
     }
 
-    // ???????????
+    // ±ä¸üµÀ¾ßµÄÑÕÉ«
     public void ChangeColor()
     {
         if (keyRenderer != null)
@@ -98,7 +89,6 @@ public class KeyActionImpl: MonoBehaviour, IKeyAction
             {
                 keyRenderer.material.color = new Color(Random.value, Random.value, Random.value);
             }
-            //gameEventInteract.Raise();
         }
     }
 

@@ -1,10 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public interface IBagManagement
 {
-    void AddItem(string itemId, Sprite icon = null, string displayName = null);
+    // 把物品放进包里
+    void AddItem(Item item);
 
-    void RemoveItem(string itemId);
+    // 把物品从包里移除
+    void RemoveItem(Item item);
 
-    bool HasItem(string itemId);
+    public List<string> GetItemIdList();
+
+    // 检查包里有没有某件物品
+    bool HasItem(Item item);
+
 }
