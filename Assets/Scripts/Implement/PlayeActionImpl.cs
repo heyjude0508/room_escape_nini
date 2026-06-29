@@ -31,7 +31,7 @@ public class PlayerActionImpl: MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hitInfo, InteractionRange))
         {
 
-            IPlayerAction interactable = hitInfo.collider.GetComponent<IPlayerAction>();
+            IPlayerAction interactable = hitInfo.collider.GetComponentInParent<IPlayerAction>();
             if (interactable != null)
             {
                 IsHit = true;
