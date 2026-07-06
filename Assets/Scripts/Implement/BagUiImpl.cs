@@ -12,14 +12,24 @@ public class BagUiImpl : MonoBehaviour, IBagUi
     [SerializeField] Transform itemSlotListRoot;
     [SerializeField] Image itemDetailImage;
     [SerializeField] TMP_Text itemDescText;
+    [SerializeField] KeyCode toggleKey = KeyCode.I;
 
     readonly List<Slot> slotList = new List<Slot>(MaxItemSlots);
     BagManagementImpl bag;
+    CanvasGroup canvasGroup;
+    bool isOpen;
 
     void Awake()
     {
+        canvasGroup = GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = gameObject.AddComponent<CanvasGroup>();
+        }
+
         AutoFindReferences();
         InitItemSlots();
+        SetBagVisible(false);
     }
 
     void Start()
@@ -33,6 +43,14 @@ public class BagUiImpl : MonoBehaviour, IBagUi
 
         bag.OnBagUpdated += RefreshAllSlots;
         RefreshAllSlots();
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown(toggleKey))
+        {
+            ToggleBag();
+        }
     }
 
     void OnDestroy()
@@ -239,6 +257,24 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         if (itemDescText != null)
         {
             itemDescText.text = "";
+        }
+    }
+
+    public void ToggleBag()
+    {
+        SetBagVisible(!isOpen);
+    }
+
+    void SetBagVisible(bool visible)
+    {
+        isOpen = visible;
+        canvasGroup.alpha = visible ? 1f : 0f;
+        canvasGroup.interactable = visible;
+        canvasGroup.blocksRaycasts = visible;
+
+        if (!visible)
+        {
+            ClearDetailPanel();
         }
     }
 }
