@@ -10,10 +10,10 @@ public interface IPlayerAction
 
     void EventInteract();
 
-    // ·µ»Ø¹Ø¼üµÀ¾ßµÄÃèÊö
+    // ï¿½ï¿½ï¿½Ø¹Ø¼ï¿½ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ï¿½ï¿½
     string GetDescription();
 
-    // ºÍµÀ¾ß½øÐÐ½»»¥
+    // ï¿½Íµï¿½ï¿½ß½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½
     void Interact();
 
 }
