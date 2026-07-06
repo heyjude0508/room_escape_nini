@@ -3,15 +3,15 @@ using UnityEngine;
 
 public interface IBagManagement
 {
-    // 把物品放进包里
     void AddItem(Item item);
 
-    // 把物品从包里移除
     void RemoveItem(Item item);
 
-    public List<string> GetItemIdList();
+    void RemoveItem(string itemId);
 
-    // 检查包里有没有某件物品
+    List<string> GetItemIdList();
+
     bool HasItem(Item item);
 
+    bool HasItem(string itemId);
 }

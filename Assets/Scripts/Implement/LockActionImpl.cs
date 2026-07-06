@@ -60,9 +60,10 @@ public class LockActionImpl : MonoBehaviour, ILockAction
             return;
         }
 
-        List<string> itemIdList = bag.GetItemIdList();
-        if (itemIdList.Contains(lockPuzzle.solution))
+        if (bag.HasItem(lockPuzzle.solution))
         {
+            bag.RemoveItem(lockPuzzle.solution);
+
             if (GetComponent<Collider>() != null)
             {
                 GetComponent<Collider>().enabled = false;

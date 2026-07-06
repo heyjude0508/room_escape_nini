@@ -5,6 +5,8 @@ using System.Linq;
 
 public class BagManagementImpl : MonoBehaviour, IBagManagement
 {
+    public const int MaxItemSlots = 8;
+
     public List<Item> itemList = new List<Item>();
     public List<string> itemIdList = new List<string>();
 
@@ -37,6 +39,12 @@ public class BagManagementImpl : MonoBehaviour, IBagManagement
             return;
         }
 
+        if (itemList.Count >= MaxItemSlots)
+        {
+            Debug.LogWarning("The bag is full!");
+            return;
+        }
+
         itemList.Add(item);
         Debug.Log($"Put item {item.id} into the bag successfully, total number of items: {itemList.Count}.");
 
@@ -45,19 +53,29 @@ public class BagManagementImpl : MonoBehaviour, IBagManagement
 
     public void RemoveItem(Item item)
     {
-        if (item == null)
+        if (item == null || string.IsNullOrEmpty(item.id))
         {
             return;
         }
 
-        Item existingItem = itemList.FirstOrDefault(existing => existing.id == item.id);
+        RemoveItem(item.id);
+    }
+
+    public void RemoveItem(string itemId)
+    {
+        if (string.IsNullOrEmpty(itemId))
+        {
+            return;
+        }
+
+        Item existingItem = itemList.FirstOrDefault(existing => existing.id == itemId);
         if (existingItem == null)
         {
             return;
         }
 
         itemList.Remove(existingItem);
-        Debug.Log($"Get item {item.id} out of the bag successfully, total number of items: {itemList.Count}.");
+        Debug.Log($"Get item {itemId} out of the bag successfully, total number of items: {itemList.Count}.");
 
         OnBagUpdated?.Invoke();
     }
@@ -79,6 +97,16 @@ public class BagManagementImpl : MonoBehaviour, IBagManagement
             return false;
         }
 
-        return itemList.Any(existingItem => existingItem.id == item.id);
+        return HasItem(item.id);
+    }
+
+    public bool HasItem(string itemId)
+    {
+        if (string.IsNullOrEmpty(itemId))
+        {
+            return false;
+        }
+
+        return itemList.Any(existingItem => existingItem.id == itemId);
     }
 }

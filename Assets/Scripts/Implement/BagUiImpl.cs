@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -5,21 +6,20 @@ using UnityEngine.UI;
 
 public class BagUiImpl : MonoBehaviour, IBagUi
 {
-    [SerializeField] Transform slotListRoot;
+    public const int MaxItemSlots = BagManagementImpl.MaxItemSlots;
+    const string ItemSlotPrefix = "ItemSlot_";
+
+    [SerializeField] Transform itemSlotListRoot;
     [SerializeField] Image itemDetailImage;
     [SerializeField] TMP_Text itemDescText;
 
-    readonly List<Slot> slotList = new List<Slot>();
+    readonly List<Slot> slotList = new List<Slot>(MaxItemSlots);
     BagManagementImpl bag;
 
     void Awake()
     {
-        if (slotListRoot == null)
-        {
-            slotListRoot = transform.Find("SlotList");
-        }
-
-        InitSlots();
+        AutoFindReferences();
+        InitItemSlots();
     }
 
     void Start()
@@ -43,29 +43,70 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         }
     }
 
-    void InitSlots()
+    void AutoFindReferences()
+    {
+        if (itemSlotListRoot == null)
+        {
+            itemSlotListRoot = transform.Find("ItemSlotList");
+        }
+
+        if (itemDetailImage == null)
+        {
+            Transform prefabPanel = transform.Find("PrefabPanel");
+            if (prefabPanel != null)
+            {
+                itemDetailImage = prefabPanel.GetComponent<Image>();
+            }
+        }
+
+        if (itemDescText == null)
+        {
+            Transform descPanel = transform.Find("DescPanel");
+            if (descPanel != null)
+            {
+                itemDescText = descPanel.GetComponentInChildren<TMP_Text>(true);
+            }
+        }
+    }
+
+    void InitItemSlots()
     {
         slotList.Clear();
 
-        if (slotListRoot == null)
+        if (itemSlotListRoot == null)
         {
-            Debug.LogError("SlotList not found under BagPanel.");
+            Debug.LogError("ItemSlotList not found under BagPanel.");
             return;
         }
 
-        for (int i = 0; i < slotListRoot.childCount; i++)
+        List<Transform> itemSlotTransforms = new List<Transform>();
+        for (int i = 0; i < itemSlotListRoot.childCount; i++)
         {
-            Transform slotTransform = slotListRoot.GetChild(i);
+            Transform child = itemSlotListRoot.GetChild(i);
+            if (child.name.StartsWith(ItemSlotPrefix, StringComparison.Ordinal))
+            {
+                itemSlotTransforms.Add(child);
+            }
+        }
+
+        itemSlotTransforms.Sort((left, right) =>
+            string.Compare(left.name, right.name, StringComparison.Ordinal));
+
+        for (int i = 0; i < itemSlotTransforms.Count && slotList.Count < MaxItemSlots; i++)
+        {
+            Transform slotTransform = itemSlotTransforms[i];
             Image iconImage = slotTransform.GetComponent<Image>();
             if (iconImage == null)
             {
+                Debug.LogWarning($"Missing Image on {slotTransform.name}.");
                 continue;
             }
 
-            iconImage.enabled = false;
-            slotList.Add(new Slot("", "", iconImage));
+            Sprite emptySlotSprite = iconImage.sprite;
+            slotList.Add(new Slot("", "", iconImage, emptySlotSprite));
+            ClearSlotVisual(slotList[slotList.Count - 1]);
 
-            int slotIndex = i;
+            int slotIndex = slotList.Count - 1;
             Button slotButton = slotTransform.GetComponent<Button>();
             if (slotButton == null)
             {
@@ -74,11 +115,21 @@ public class BagUiImpl : MonoBehaviour, IBagUi
 
             slotButton.onClick.AddListener(() => SelectSlot(slotIndex));
         }
+
+        if (slotList.Count != MaxItemSlots)
+        {
+            Debug.LogWarning($"Bag UI expects {MaxItemSlots} item slots, but initialized {slotList.Count}.");
+        }
     }
 
     void RefreshAllSlots()
     {
-        ClearAllSlots();
+        for (int i = 0; i < slotList.Count; i++)
+        {
+            ClearSlotVisual(slotList[i]);
+        }
+
+        ClearDetailPanel();
 
         if (bag == null)
         {
@@ -105,17 +156,18 @@ public class BagUiImpl : MonoBehaviour, IBagUi
 
     void SetSlotItem(int slotId, Item item)
     {
-        slotList[slotId].itemId = item.id;
-        slotList[slotId].itemName = item.itemName;
-        slotList[slotId].iconImage.sprite = item.itemSprite;
-        slotList[slotId].iconImage.enabled = item.itemSprite != null;
+        Slot slot = slotList[slotId];
+        slot.itemId = item.id;
+        slot.itemName = item.itemName;
+        slot.iconImage.sprite = item.itemSprite != null ? item.itemSprite : slot.emptySlotSprite;
+        slot.iconImage.enabled = true;
     }
 
     public int GetMinEmptySlotId()
     {
         for (int i = 0; i < slotList.Count; i++)
         {
-            if (string.IsNullOrEmpty(slotList[i].itemId))
+            if (slotList[i].IsEmpty)
             {
                 return i;
             }
@@ -133,10 +185,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
                 continue;
             }
 
-            slotList[i].itemId = "";
-            slotList[i].itemName = "";
-            slotList[i].iconImage.sprite = null;
-            slotList[i].iconImage.enabled = false;
+            ClearSlotVisual(slotList[i]);
             ClearDetailPanel();
             return;
         }
@@ -152,7 +201,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         }
 
         Slot slot = slotList[index];
-        if (string.IsNullOrEmpty(slot.itemId))
+        if (slot.IsEmpty)
         {
             ClearDetailPanel();
             return;
@@ -171,17 +220,12 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         }
     }
 
-    void ClearAllSlots()
+    void ClearSlotVisual(Slot slot)
     {
-        for (int i = 0; i < slotList.Count; i++)
-        {
-            slotList[i].itemId = "";
-            slotList[i].itemName = "";
-            slotList[i].iconImage.sprite = null;
-            slotList[i].iconImage.enabled = false;
-        }
-
-        ClearDetailPanel();
+        slot.itemId = "";
+        slot.itemName = "";
+        slot.iconImage.sprite = slot.emptySlotSprite;
+        slot.iconImage.enabled = slot.emptySlotSprite != null;
     }
 
     void ClearDetailPanel()

@@ -80,11 +80,9 @@ public class DoorActionImpl : MonoBehaviour, IDoorAction
             return;
         }
 
-        if (isLocked && bag != null)
+        if (isLocked && bag != null && !string.IsNullOrEmpty(requiredKeyID))
         {
-            Item item = new Item();
-            Debug.LogWarning("Item Here is Temporary");
-            bag.RemoveItem(item);
+            bag.RemoveItem(requiredKeyID);
         }
 
         PlayOpenAnimation();
@@ -106,9 +104,12 @@ public class DoorActionImpl : MonoBehaviour, IDoorAction
             return true;
         }
 
-        Item item = new Item();
-        Debug.LogWarning("Item Here is Temporary");
-        return bag != null && bag.HasItem(item);
+        if (bag == null || string.IsNullOrEmpty(requiredKeyID))
+        {
+            return false;
+        }
+
+        return bag.HasItem(requiredKeyID);
     }
 
     void PlayOpenAnimation()
