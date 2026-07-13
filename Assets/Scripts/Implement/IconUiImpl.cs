@@ -110,4 +110,5 @@ public class IconUiImpl : MonoBehaviour, IIconUi
                 break;
         }
     }
+
 }

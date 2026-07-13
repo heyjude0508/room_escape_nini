@@ -185,7 +185,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
     {
         for (int i = 0; i < slotList.Count; i++)
         {
-            if (slotList[i].IsEmpty)
+            if (slotList[i].itemId.IsEmpty())
             {
                 return i;
             }
@@ -219,7 +219,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         }
 
         Slot slot = slotList[index];
-        if (slot.IsEmpty)
+        if (slot.itemId.IsEmpty())
         {
             ClearDetailPanel();
             return;
@@ -277,4 +277,5 @@ public class BagUiImpl : MonoBehaviour, IBagUi
             ClearDetailPanel();
         }
     }
+
 }

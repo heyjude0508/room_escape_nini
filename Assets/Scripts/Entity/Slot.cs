@@ -18,5 +18,4 @@ public class Slot
         this.emptySlotSprite = emptySlotSprite;
     }
 
-    public bool IsEmpty => string.IsNullOrEmpty(itemId);
 }

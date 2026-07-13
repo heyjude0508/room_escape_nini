@@ -1,23 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 [System.Serializable]
-public class Puzzle
+public class LockPuzzle: Puzzle
 {
-    public string id;
-    public string puzzleName;
-    public string puzzleDesc;
-    public string solution;
-
-    public Puzzle(string id, string puzzleName, string puzzleDesc, string solution)
+    public LockPuzzle()
     {
-        this.id = id;
-        this.puzzleName = puzzleName;
-        this.puzzleDesc = puzzleDesc;
-        this.solution = solution;
-    }
+        id = "DefaultLock";
+        puzzleName = "DefaultLock";
+        puzzleDesc = "It is locked.";                                  
+        solutionId = "Default Key";
+        solveDesc = "Press E to unlock.";
+        isSolved = false;
 
-    public Puzzle() { }
+        animationSource = null;
+        solveAnimationName = null;
+
+        audioSource = null;
+        unsolvedSound = null;
+        solvedSound = null;
+
+        puzzleCollider = null;
+}
 
 }

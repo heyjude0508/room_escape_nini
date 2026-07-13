@@ -20,4 +20,5 @@ public class SimpleInteractableSoundPlayer : MonoBehaviour, IInteractableSound
 
         AudioSource.PlayClipAtPoint(sound, transform.position);
     }
+
 }

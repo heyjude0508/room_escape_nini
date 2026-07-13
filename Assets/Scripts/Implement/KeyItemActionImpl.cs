@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyActionImpl : MonoBehaviour, IKeyAction
+public class KeyItemActionImpl : MonoBehaviour, IKeyItemAction
 {
     //public GameEvent gameEventAimStart;
     //public GameEvent gameEventAimEnd;
@@ -56,10 +56,10 @@ public class KeyActionImpl : MonoBehaviour, IKeyAction
 
     public void Interact()
     {
-        PickKey();
+        PickItem();
     }
 
-    public void PickKey()
+    public void PickItem()
     {
 
         if (bag != null)
@@ -75,7 +75,6 @@ public class KeyActionImpl : MonoBehaviour, IKeyAction
         Destroy(gameObject);
     }
 
-    // ±ä¸üµÀ¾ßµÄÑÕÉ«
     public void ChangeColor()
     {
         if (keyRenderer != null)

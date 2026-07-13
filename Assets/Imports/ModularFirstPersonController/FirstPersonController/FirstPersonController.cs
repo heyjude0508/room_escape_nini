@@ -116,6 +116,29 @@ public class FirstPersonController : MonoBehaviour
     private Vector3 originalScale;
 
     #endregion
+
+    #region Walk Sound
+
+    public bool enableWalkSound = true;
+    public AudioClip[] walkSounds;
+    public AudioSource walkAudioSource;
+    public float walkStepInterval = 0.45f;
+
+    static readonly KeyCode[] MovementKeys =
+    {
+        KeyCode.W,
+        KeyCode.A,
+        KeyCode.S,
+        KeyCode.D,
+        KeyCode.UpArrow,
+        KeyCode.DownArrow,
+        KeyCode.LeftArrow,
+        KeyCode.RightArrow
+    };
+
+    float walkStepTimer;
+
+    #endregion
     #endregion
 
     #region Head Bob
@@ -147,6 +170,19 @@ public class FirstPersonController : MonoBehaviour
             sprintRemaining = sprintDuration;
             sprintCooldownReset = sprintCooldown;
         }
+
+        if (walkAudioSource == null)
+        {
+            walkAudioSource = GetComponent<AudioSource>();
+            if (walkAudioSource == null)
+            {
+                walkAudioSource = gameObject.AddComponent<AudioSource>();
+            }
+        }
+
+        walkAudioSource.playOnAwake = false;
+        walkAudioSource.loop = false;
+        walkAudioSource.spatialBlend = 0f;
     }
 
     void Start()
@@ -357,6 +393,7 @@ public class FirstPersonController : MonoBehaviour
         #endregion
 
         CheckGround();
+        HandleWalkSound();
 
         if(enableHeadBob)
         {
@@ -494,6 +531,74 @@ public class FirstPersonController : MonoBehaviour
             walkSpeed *= speedReduction;
 
             isCrouched = true;
+        }
+    }
+
+    private void HandleWalkSound()
+    {
+        if (!enableWalkSound || walkSounds == null || walkSounds.Length == 0 || !playerCanMove)
+        {
+            return;
+        }
+
+        if (!IsMovementKeyHeld() || !isGrounded)
+        {
+            walkStepTimer = 0f;
+            return;
+        }
+
+        if (IsMovementKeyPressedThisFrame())
+        {
+            PlayRandomWalkSound();
+            walkStepTimer = walkStepInterval;
+            return;
+        }
+
+        walkStepTimer -= Time.deltaTime;
+        if (walkStepTimer <= 0f)
+        {
+            PlayRandomWalkSound();
+            walkStepTimer = walkStepInterval;
+        }
+    }
+
+    private bool IsMovementKeyPressedThisFrame()
+    {
+        for (int i = 0; i < MovementKeys.Length; i++)
+        {
+            if (Input.GetKeyDown(MovementKeys[i]))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsMovementKeyHeld()
+    {
+        for (int i = 0; i < MovementKeys.Length; i++)
+        {
+            if (Input.GetKey(MovementKeys[i]))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void PlayRandomWalkSound()
+    {
+        if (walkAudioSource == null || walkSounds == null || walkSounds.Length == 0)
+        {
+            return;
+        }
+
+        AudioClip clip = walkSounds[Random.Range(0, walkSounds.Length)];
+        if (clip != null)
+        {
+            walkAudioSource.PlayOneShot(clip);
         }
     }
 

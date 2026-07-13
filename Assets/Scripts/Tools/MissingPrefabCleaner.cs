@@ -33,4 +33,5 @@ public class MissingPrefabCleaner : EditorWindow
 
         EditorUtility.DisplayDialog("清理完成", $"所有Prefab里共删除了 {totalRemoved} 个Missing Script组件", "确定");
     }
+
 }

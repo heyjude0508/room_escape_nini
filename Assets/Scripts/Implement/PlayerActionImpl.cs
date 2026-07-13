@@ -51,4 +51,5 @@ public class PlayerActionImpl: MonoBehaviour
             UiInteraction.SetActive(IsHit);
         }
     }
+
 }

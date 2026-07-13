@@ -109,4 +109,5 @@ public class BagManagementImpl : MonoBehaviour, IBagManagement
 
         return itemList.Any(existingItem => existingItem.id == itemId);
     }
+
 }

@@ -14,4 +14,5 @@ public interface IBagManagement
     bool HasItem(Item item);
 
     bool HasItem(string itemId);
+
 }
