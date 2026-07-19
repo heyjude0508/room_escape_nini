@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyItemActionImpl : MonoBehaviour, IKeyItemAction
+public class KeyItemImpl : MonoBehaviour, IKeyItem
 {
     //public GameEvent gameEventAimStart;
     //public GameEvent gameEventAimEnd;

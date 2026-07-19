@@ -3,7 +3,7 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class BagManagementImpl : MonoBehaviour, IBagManagement
+public class BagManagementImpl : MonoBehaviour, IBagManager
 {
     public const int MaxItemSlots = 8;
 

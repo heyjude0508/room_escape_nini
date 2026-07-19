@@ -194,13 +194,6 @@ MonoBehaviour:
   joint: {fileID: 4459864851508666808}
   bobSpeed: 9
   bobAmount: {x: 0, y: 0.025, z: 0}
-  enableWalkSound: 1
-  walkSounds:
-  - {fileID: 8300000, guid: 5f07759c226c74a40a68962090f17bca, type: 3}
-  - {fileID: 8300000, guid: f69bbdfefec68884687a81f299c25b70, type: 3}
-  - {fileID: 8300000, guid: 958499f2630202d4ab5bd931bf7fea2b, type: 3}
-  walkAudioSource: {fileID: 0}
-  walkStepInterval: 0.45
 --- !u!114 &5909650472822606658
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,6 +210,14 @@ MonoBehaviour:
   InteractionRange: 3
   UiInteraction: {fileID: 0}
   UiInteractionText: {fileID: 0}
+  enableWalkSound: 1
+  walkSounds:
+  - {fileID: 8300000, guid: 5f07759c226c74a40a68962090f17bca, type: 3}
+  - {fileID: 8300000, guid: f69bbdfefec68884687a81f299c25b70, type: 3}
+  - {fileID: 8300000, guid: 958499f2630202d4ab5bd931bf7fea2b, type: 3}
+  walkAudioSource: {fileID: 0}
+  walkStepInterval: 0.45
+  groundCheckDistance: 0.75
 --- !u!1 &4459864850190357393
 GameObject:
   m_ObjectHideFlags: 0

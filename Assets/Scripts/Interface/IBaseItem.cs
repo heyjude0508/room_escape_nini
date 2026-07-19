@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IItemAction: IPlayerAction
+public interface IBaseItem: IBaseAction
 {
 
     void PickItem();

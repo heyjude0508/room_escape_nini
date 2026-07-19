@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IPuzzleAction : IPlayerAction
+public interface IBasePuzzle : IBaseAction
 {
     bool CanSolve();
 

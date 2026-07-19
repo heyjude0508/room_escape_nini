@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
-public class LockActionImpl : MonoBehaviour, ILockPuzzleAction
+public class LockPuzzleImpl : MonoBehaviour, ILockPuzzle
 {
     //public GameEvent gameEventAimStart;
     //public GameEvent gameEventAimEnd;

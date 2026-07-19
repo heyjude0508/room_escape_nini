@@ -4,14 +4,16 @@ using UnityEngine;
 
 public interface IPlayerAction
 {
-    void EventAimStart();
+    void DiscoverImpItem();
 
-    void EventAimEnd();
+    void HandleWalkSound();
 
-    void EventInteract();
+    bool IsGrounded();
 
-    string GetDescription();
+    bool IsMovementKeyPressedThisFrame();
 
-    void Interact();
+    bool IsMovementKeyHeld();
+
+    void PlayRandomWalkSound();
 
 }
