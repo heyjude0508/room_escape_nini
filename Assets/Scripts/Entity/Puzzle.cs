@@ -7,8 +7,6 @@ public class Puzzle
     public string id;
     public string puzzleName;
     public string puzzleDesc;
-    public string solutionId;
-    public string solveDesc;
     public bool isSolved;
     
     public Animation animationSource;
@@ -24,7 +22,6 @@ public class Puzzle
     string id,
     string puzzleName,
     string puzzleDesc,
-    string solutionId,
     bool isSolved,
     Animation animationSource,
     string solveAnimationName,
@@ -37,7 +34,6 @@ public class Puzzle
         this.id = id;
         this.puzzleName = puzzleName;
         this.puzzleDesc = puzzleDesc;
-        this.solutionId = solutionId;
         this.isSolved = isSolved;
         this.solveAnimationName = solveAnimationName;
         this.animationSource = animationSource;

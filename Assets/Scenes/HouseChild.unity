@@ -6638,7 +6638,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &286231404
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9974,8 +9974,6 @@ MonoBehaviour:
     id: Lock_02
     puzzleName: DoorSlildeLock_R
     puzzleDesc: It is locked.
-    solutionId: Key_02
-    solveDesc: Press E to unlock.
     isSolved: 0
     animationSource: {fileID: 555915467}
     solveAnimationName: DoorSlide02_open
@@ -9983,6 +9981,8 @@ MonoBehaviour:
     unsolvedSound: {fileID: 8300000, guid: 0cddfa79ad4fe064d8c71699bab862ac, type: 3}
     solvedSound: {fileID: 8300000, guid: 6427f56e53a25cb4baad158c6bd6aa67, type: 3}
     puzzleCollider: {fileID: 555915468}
+    keyId: Default Key
+    unlockDesc: Press E to unlock.
 --- !u!1001 &416359207
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22463,8 +22463,6 @@ MonoBehaviour:
     id: Lock_01
     puzzleName: TvStamdLock
     puzzleDesc: It's locked.
-    solutionId: Key_01
-    solveDesc: Press E to unlock.
     isSolved: 0
     animationSource: {fileID: 498358418}
     solveAnimationName: TvStandLeftDoorOpen
@@ -22472,6 +22470,8 @@ MonoBehaviour:
     unsolvedSound: {fileID: 8300000, guid: 0cddfa79ad4fe064d8c71699bab862ac, type: 3}
     solvedSound: {fileID: 8300000, guid: 5d036f68d1afce346b68eaca16d6b6e8, type: 3}
     puzzleCollider: {fileID: 0}
+    keyId: Default Key
+    unlockDesc: Press E to unlock.
 --- !u!65 &912077854
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -53132,8 +53132,6 @@ MonoBehaviour:
     id: Lock_01
     puzzleName: TvStamdLock
     puzzleDesc: It's locked.
-    solutionId: Key_01
-    solveDesc: Press E to unlock.
     isSolved: 0
     animationSource: {fileID: 1267490603}
     solveAnimationName: 
@@ -53141,6 +53139,8 @@ MonoBehaviour:
     unsolvedSound: {fileID: 8300000, guid: 0cddfa79ad4fe064d8c71699bab862ac, type: 3}
     solvedSound: {fileID: 8300000, guid: 5d036f68d1afce346b68eaca16d6b6e8, type: 3}
     puzzleCollider: {fileID: 0}
+    keyId: Default Key
+    unlockDesc: Press E to unlock.
 --- !u!65 &2102929890
 BoxCollider:
   m_ObjectHideFlags: 0

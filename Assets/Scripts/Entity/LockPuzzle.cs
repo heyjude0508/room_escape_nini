@@ -5,14 +5,18 @@ using UnityEngine.Serialization;
 [System.Serializable]
 public class LockPuzzle: Puzzle
 {
+    public string keyId;
+    public string unlockDesc;
+
     public LockPuzzle()
     {
         id = "DefaultLock";
         puzzleName = "DefaultLock";
         puzzleDesc = "It is locked.";                                  
-        solutionId = "Default Key";
-        solveDesc = "Press E to unlock.";
         isSolved = false;
+
+        keyId = "Default Key";
+        unlockDesc = "Press E to unlock.";
 
         animationSource = null;
         solveAnimationName = null;

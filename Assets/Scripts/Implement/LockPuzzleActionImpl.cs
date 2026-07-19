@@ -71,7 +71,7 @@ public class LockActionImpl : MonoBehaviour, ILockPuzzleAction
             return string.Empty;
         }
 
-        return CanSolve() ? lockPuzzle.solveDesc : lockPuzzle.puzzleDesc;
+        return CanSolve() ? lockPuzzle.unlockDesc : lockPuzzle.puzzleDesc;
     }
 
     public void Interact()
@@ -99,13 +99,13 @@ public class LockActionImpl : MonoBehaviour, ILockPuzzleAction
             return;
         }
 
-        if (!lockPuzzle.isSolved && bag.HasItem(lockPuzzle.solutionId))
+        if (!lockPuzzle.isSolved && bag.HasItem(lockPuzzle.keyId))
         {
-            bag.RemoveItem(lockPuzzle.solutionId);
+            bag.RemoveItem(lockPuzzle.keyId);
             PlaySolveAnimation();
             PlaySound(lockPuzzle.solvedSound);
             MarkSolved();
-            Debug.Log($"Unlock the lock {lockPuzzle.id} using the key {lockPuzzle.solutionId} successfully.");
+            Debug.Log($"Unlock the lock {lockPuzzle.id} using the key {lockPuzzle.keyId} successfully.");
         }
     }
 
@@ -116,12 +116,12 @@ public class LockActionImpl : MonoBehaviour, ILockPuzzleAction
             return true;
         }
 
-        if (bag == null || string.IsNullOrEmpty(lockPuzzle.solutionId))
+        if (bag == null || string.IsNullOrEmpty(lockPuzzle.keyId))
         {
             return false;
         }
 
-        return bag.HasItem(lockPuzzle.solutionId);
+        return bag.HasItem(lockPuzzle.keyId);
     }
 
     public void PlaySolveAnimation()
