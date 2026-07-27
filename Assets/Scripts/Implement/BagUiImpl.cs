@@ -16,8 +16,9 @@ public class BagUiImpl : MonoBehaviour, IBagUi
     [SerializeField] TMP_Text itemDescText;
     [SerializeField] KeyCode toggleKey = KeyCode.I;
     [SerializeField][Range(0.3f, 0.9f)] float itemIconFillRatio = 0.65f;
-    [SerializeField] float defaultUsageFontSize = 24f;
-    [SerializeField] TMP_FontAsset defaultUsageFont;
+    [SerializeField] TMP_FontAsset usageFont;
+    [SerializeField] float usageFontSize = 24f;
+    [SerializeField] Color usageFontColor = Color.white;
 
     readonly List<Slot> slotList = new List<Slot>(MaxItemSlots);
     BagManagementImpl bag;
@@ -284,12 +285,13 @@ public class BagUiImpl : MonoBehaviour, IBagUi
             return;
         }
 
-        if (defaultUsageFont != null)
+        if (usageFont != null)
         {
-            itemDescText.font = defaultUsageFont;
+            itemDescText.font = usageFont;
         }
 
-        itemDescText.fontSize = defaultUsageFontSize;
+        itemDescText.fontSize = usageFontSize;
+        itemDescText.color = usageFontColor;
     }
 
     void ClearSlotVisual(Slot slot)
@@ -370,9 +372,9 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         TextMeshProUGUI usageText = textObject.AddComponent<TextMeshProUGUI>();
         usageText.raycastTarget = false;
         usageText.alignment = TextAlignmentOptions.TopLeft;
-        usageText.font = defaultUsageFont;
-        usageText.fontSize = defaultUsageFontSize;
-        usageText.color = Color.white;
+        usageText.font = usageFont;
+        usageText.fontSize = usageFontSize;
+        usageText.color = usageFontColor;
         usageText.text = "";
         return usageText;
     }
