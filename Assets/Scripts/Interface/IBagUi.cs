@@ -6,4 +6,8 @@ public interface IBagUi
 
     public int GetMinEmptySlotId();
 
+    public bool IsBagOpen();
+
+    public bool TrySelectItemAtScreenPoint(Vector2 screenPoint);
+
 }

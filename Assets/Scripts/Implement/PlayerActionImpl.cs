@@ -9,6 +9,9 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
     [SerializeField] GameObject UiInteraction;
     [SerializeField] TMP_Text UiInteractionText;
 
+    [Header("Bag Settings")]
+    [SerializeField] BagUiImpl bagUi;
+
     [Header("Walk Sound Settings")]
     [SerializeField] bool enableWalkSound = true;
     [SerializeField] AudioClip[] walkSounds;
@@ -56,12 +59,26 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
         walkAudioSource.playOnAwake = false;
         walkAudioSource.loop = false;
         walkAudioSource.spatialBlend = 0f;
+
+        if (bagUi == null)
+        {
+            bagUi = FindObjectOfType<BagUiImpl>();
+        }
     }
 
     void Update()
     {
         HandleCrouch();
-        DiscoverImpItem();
+
+        if (bagUi != null && bagUi.IsBagOpen())
+        {
+            HandleBagItemSelection();
+        }
+        else
+        {
+            DiscoverImpItem();
+        }
+
         HandleWalkSound();
     }
 
@@ -71,6 +88,21 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
         {
             SetCrouched(false);
         }
+    }
+
+    public void HandleBagItemSelection()
+    {
+        if (bagUi == null || !bagUi.IsBagOpen())
+        {
+            return;
+        }
+
+        if (!Input.GetMouseButtonDown(0))
+        {
+            return;
+        }
+
+        bagUi.TrySelectItemAtScreenPoint(Input.mousePosition);
     }
 
     public void DiscoverImpItem()

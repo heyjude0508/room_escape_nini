@@ -12,6 +12,8 @@ public interface IPlayerAction
 
     bool IsCrouching();
 
+    void HandleBagItemSelection();
+
     bool IsGrounded();
 
     bool IsMovementKeyPressedThisFrame();

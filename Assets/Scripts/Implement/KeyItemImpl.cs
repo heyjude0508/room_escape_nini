@@ -52,7 +52,7 @@ public class KeyItemImpl : MonoBehaviour, IKeyItem
         //gameEventInteract.Raise();
     }
 
-    public string GetDescription() => keyItem.itemDesc;
+    public string GetDescription() => keyItem.itemActionDesc;
 
     public void Interact()
     {
@@ -64,7 +64,7 @@ public class KeyItemImpl : MonoBehaviour, IKeyItem
 
         if (bag != null)
         {
-            bag.AddItem(keyItem);
+            bag.AddItem(keyItem.CreateCopy());
         }
         else
         {
