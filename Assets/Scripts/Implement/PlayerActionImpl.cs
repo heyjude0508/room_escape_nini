@@ -16,6 +16,11 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
     [SerializeField] float walkStepInterval = 0.45f;
     [SerializeField] float groundCheckDistance = 0.75f;
 
+    [Header("Crouch Settings")]
+    [SerializeField] bool enableCrouch = true;
+    [SerializeField] KeyCode crouchKey = KeyCode.LeftShift;
+    [SerializeField] float crouchHeightRatio = 0.55f;
+
     static readonly KeyCode[] MovementKeys =
     {
         KeyCode.W,
@@ -29,9 +34,16 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
     };
 
     float walkStepTimer;
+    Vector3 originalScale;
+    bool isCrouched;
+    bool sprintEnabledBeforeCrouch = true;
+    FirstPersonController firstPersonController;
 
     void Awake()
     {
+        originalScale = transform.localScale;
+        firstPersonController = GetComponent<FirstPersonController>();
+
         if (walkAudioSource == null)
         {
             walkAudioSource = GetComponent<AudioSource>();
@@ -48,8 +60,17 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
 
     void Update()
     {
+        HandleCrouch();
         DiscoverImpItem();
         HandleWalkSound();
+    }
+
+    void OnDisable()
+    {
+        if (isCrouched)
+        {
+            SetCrouched(false);
+        }
     }
 
     public void DiscoverImpItem()
@@ -79,6 +100,52 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
         {
             UiInteraction.SetActive(IsHit);
         }
+    }
+
+    public void HandleCrouch()
+    {
+        if (!enableCrouch)
+        {
+            return;
+        }
+
+        bool wantCrouch = Input.GetKey(crouchKey);
+        if (wantCrouch == isCrouched)
+        {
+            return;
+        }
+
+        SetCrouched(wantCrouch);
+    }
+
+    public bool IsCrouching()
+    {
+        return isCrouched;
+    }
+
+    void SetCrouched(bool crouch)
+    {
+        isCrouched = crouch;
+
+        float scaleY = crouch
+            ? originalScale.y * crouchHeightRatio
+            : originalScale.y;
+
+        transform.localScale = new Vector3(originalScale.x, scaleY, originalScale.z);
+
+        if (firstPersonController == null)
+        {
+            return;
+        }
+
+        if (crouch)
+        {
+            sprintEnabledBeforeCrouch = firstPersonController.enableSprint;
+            firstPersonController.enableSprint = false;
+            return;
+        }
+
+        firstPersonController.enableSprint = sprintEnabledBeforeCrouch;
     }
 
     public void HandleWalkSound()

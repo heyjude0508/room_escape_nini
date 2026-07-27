@@ -17,6 +17,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
     readonly List<Slot> slotList = new List<Slot>(MaxItemSlots);
     BagManagementImpl bag;
     CanvasGroup canvasGroup;
+    Sprite emptyDetailSprite;
     bool isOpen;
 
     void Awake()
@@ -75,6 +76,11 @@ public class BagUiImpl : MonoBehaviour, IBagUi
             {
                 itemDetailImage = prefabPanel.GetComponent<Image>();
             }
+        }
+
+        if (itemDetailImage != null)
+        {
+            emptyDetailSprite = itemDetailImage.sprite;
         }
 
         if (itemDescText == null)
@@ -227,8 +233,10 @@ public class BagUiImpl : MonoBehaviour, IBagUi
 
         if (itemDetailImage != null)
         {
-            itemDetailImage.sprite = slot.iconImage.sprite;
-            itemDetailImage.enabled = slot.iconImage.sprite != null;
+            itemDetailImage.sprite = slot.iconImage.sprite != null
+                ? slot.iconImage.sprite
+                : emptyDetailSprite;
+            itemDetailImage.enabled = true;
         }
 
         if (itemDescText != null && bag != null)
@@ -250,8 +258,8 @@ public class BagUiImpl : MonoBehaviour, IBagUi
     {
         if (itemDetailImage != null)
         {
-            itemDetailImage.sprite = null;
-            itemDetailImage.enabled = false;
+            itemDetailImage.sprite = emptyDetailSprite;
+            itemDetailImage.enabled = emptyDetailSprite != null;
         }
 
         if (itemDescText != null)

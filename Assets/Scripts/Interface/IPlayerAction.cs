@@ -8,6 +8,10 @@ public interface IPlayerAction
 
     void HandleWalkSound();
 
+    void HandleCrouch();
+
+    bool IsCrouching();
+
     bool IsGrounded();
 
     bool IsMovementKeyPressedThisFrame();
