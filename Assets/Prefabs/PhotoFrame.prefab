@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 3609699335366502808}
   - component: {fileID: 4988906193888556951}
   m_Layer: 0
-  m_Name: photoFrame_001_001_low.002
+  m_Name: PhotoFrame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

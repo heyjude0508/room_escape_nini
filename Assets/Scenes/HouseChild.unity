@@ -4352,7 +4352,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1320203795}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9217107127612141874, guid: f38c661e1ca78ab409eda72d74c6e797, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f38c661e1ca78ab409eda72d74c6e797, type: 3}
@@ -6555,7 +6556,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1352613268}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9217107127612141872, guid: e489021bb0233b7438cf0c8ad022362b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e489021bb0233b7438cf0c8ad022362b, type: 3}
@@ -10153,9 +10155,9 @@ MonoBehaviour:
     puzzleName: DoorSlildeLock_R
     puzzleDesc: It is locked.
     isSolved: 0
-    animationSource: {fileID: 555915467}
+    animationSource: {fileID: 0}
     solveAnimationName: DoorSlide02_open
-    audioSource: {fileID: 555915469}
+    audioSource: {fileID: 0}
     unsolvedSound: {fileID: 8300000, guid: 0cddfa79ad4fe064d8c71699bab862ac, type: 3}
     solvedSound: {fileID: 8300000, guid: 6427f56e53a25cb4baad158c6bd6aa67, type: 3}
     puzzleCollider: {fileID: 555915468}
@@ -13357,19 +13359,44 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1737624450}
   m_PrefabAsset: {fileID: 0}
---- !u!111 &555915467 stripped
-Animation:
-  m_CorrespondingSourceObject: {fileID: 11189348, guid: 0b2cd981521c4034fac46674e0fdafdc,
-    type: 3}
-  m_PrefabInstance: {fileID: 1737624450}
-  m_PrefabAsset: {fileID: 0}
 --- !u!64 &555915468 stripped
 MeshCollider:
   m_CorrespondingSourceObject: {fileID: 6478604, guid: 0b2cd981521c4034fac46674e0fdafdc,
     type: 3}
   m_PrefabInstance: {fileID: 1737624450}
   m_PrefabAsset: {fileID: 0}
---- !u!82 &555915469
+--- !u!111 &555915474 stripped
+Animation:
+  m_CorrespondingSourceObject: {fileID: 11189348, guid: 0b2cd981521c4034fac46674e0fdafdc,
+    type: 3}
+  m_PrefabInstance: {fileID: 1737624450}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &555915475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210946380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0eb9a8f29be401469695de65cee6604, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lockPuzzle:
+    id: Lock_02
+    puzzleName: DoorSlideLock
+    puzzleDesc: It is locked.
+    isSolved: 0
+    animationSource: {fileID: 555915474}
+    solveAnimationName: DoorSlide02_open
+    audioSource: {fileID: 555915476}
+    unsolvedSound: {fileID: 8300000, guid: 0cddfa79ad4fe064d8c71699bab862ac, type: 3}
+    solvedSound: {fileID: 8300000, guid: 6427f56e53a25cb4baad158c6bd6aa67, type: 3}
+    puzzleCollider: {fileID: 0}
+    keyId: Key_02
+    unlockDesc: Press E to unlock.
+--- !u!82 &555915476
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -16974,7 +17001,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 288942497}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9217107127612141874, guid: f38c661e1ca78ab409eda72d74c6e797, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f38c661e1ca78ab409eda72d74c6e797, type: 3}
@@ -19908,7 +19936,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 598786309}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9217107127612141872, guid: e489021bb0233b7438cf0c8ad022362b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e489021bb0233b7438cf0c8ad022362b, type: 3}
@@ -28778,7 +28807,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1320203795}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9217107127612141874, guid: f38c661e1ca78ab409eda72d74c6e797, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f38c661e1ca78ab409eda72d74c6e797, type: 3}
@@ -32850,7 +32880,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1444780022}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9217107127612141872, guid: e489021bb0233b7438cf0c8ad022362b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e489021bb0233b7438cf0c8ad022362b, type: 3}
@@ -33716,7 +33747,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 748548526}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9217107127612141872, guid: e489021bb0233b7438cf0c8ad022362b, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e489021bb0233b7438cf0c8ad022362b, type: 3}
@@ -43799,8 +43831,10 @@ PrefabInstance:
       value: 90
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 11413912, guid: 0b2cd981521c4034fac46674e0fdafdc, type: 3}
+    - {fileID: 0}
+    - {fileID: 0}
     - {fileID: 11492842, guid: 0b2cd981521c4034fac46674e0fdafdc, type: 3}
+    - {fileID: 11413912, guid: 0b2cd981521c4034fac46674e0fdafdc, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 443342, guid: 0b2cd981521c4034fac46674e0fdafdc,
@@ -43815,7 +43849,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 109414, guid: 0b2cd981521c4034fac46674e0fdafdc,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 555915469}
+      addedObject: {fileID: 555915476}
+    - targetCorrespondingSourceObject: {fileID: 109414, guid: 0b2cd981521c4034fac46674e0fdafdc,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 555915475}
   m_SourcePrefab: {fileID: 100100000, guid: 0b2cd981521c4034fac46674e0fdafdc, type: 3}
 --- !u!4 &1737624451 stripped
 Transform:
@@ -44485,7 +44523,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 708049539}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9217107127612141874, guid: f38c661e1ca78ab409eda72d74c6e797, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f38c661e1ca78ab409eda72d74c6e797, type: 3}
@@ -49518,7 +49557,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1842606854}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9217107127612141874, guid: f38c661e1ca78ab409eda72d74c6e797, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f38c661e1ca78ab409eda72d74c6e797, type: 3}
