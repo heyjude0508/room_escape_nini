@@ -249,7 +249,6 @@ GameObject:
   - component: {fileID: 11189298}
   - component: {fileID: 6501768}
   - component: {fileID: 9182736450192837465}
-  - component: {fileID: 8473629102847365921}
   m_Layer: 0
   m_Name: DoorRoom_wide
   m_TagString: Untagged
@@ -272,7 +271,7 @@ Transform:
   m_Children:
   - {fileID: 448184}
   - {fileID: 407252}
-  - {fileID: 7100000000000000002}
+  - {fileID: 1811583443247989161}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!111 &11189298
@@ -312,31 +311,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.1346112, y: 2.27, z: 1.9153109}
   m_Center: {x: -0.009457986, y: 1.06, z: -0.24423075}
---- !u!114 &8473629102847365921
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 183562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8f3c2d1e0b94f7a8c6d5e4f3b2a1c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  doorAnimation: {fileID: 11189298}
-  openAnimationName: DoorRoomsWide_open
-  isLocked: 0
-  requiredKeyID: 
-  openSound: {fileID: 8300000, guid: 5d036f68d1afce346b68eaca16d6b6e8, type: 3}
-  audioSource: {fileID: 9182736450192837465}
-  interactableSound: {fileID: 0}
-  doorBlocker: {fileID: 6594724}
-  onDoorOpened:
-    m_PersistentCalls:
-      m_Calls: []
-  description: Press E to open the door.
-  lockedDescription: The door is locked.
 --- !u!82 &9182736450192837465
 AudioSource:
   m_ObjectHideFlags: 0
@@ -441,37 +415,44 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 481148}
     m_Modifications:
-    - target: {fileID: 2117248696756007219, guid: a2e1bb6daa99d10448ecb13dbc48741e, type: 3}
+    - target: {fileID: 2117248696756007219, guid: a2e1bb6daa99d10448ecb13dbc48741e,
+        type: 3}
       propertyPath: m_Name
       value: InteractableTip
       objectReference: {fileID: 0}
-    - target: {fileID: 6165270220545472065, guid: a2e1bb6daa99d10448ecb13dbc48741e, type: 3}
+    - target: {fileID: 6165270220545472065, guid: a2e1bb6daa99d10448ecb13dbc48741e,
+        type: 3}
       propertyPath: m_PresetInfoIsWorld
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.08
-      objectReference: {fileID: 0}
-    - target: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e, type: 3}
+    - target: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e,
+        type: 3}
       propertyPath: m_LocalScale.x
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e, type: 3}
+    - target: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e,
+        type: 3}
       propertyPath: m_LocalScale.y
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.08
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a2e1bb6daa99d10448ecb13dbc48741e, type: 3}
---- !u!4 &7100000000000000002 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e, type: 3}
+--- !u!224 &1811583443247989161 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e,
+    type: 3}
   m_PrefabInstance: {fileID: 7100000000000000001}
   m_PrefabAsset: {fileID: 0}

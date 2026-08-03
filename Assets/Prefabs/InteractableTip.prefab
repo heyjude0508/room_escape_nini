@@ -88,7 +88,6 @@ GameObject:
   - component: {fileID: 8980199899753986036}
   - component: {fileID: 6165270220545472065}
   - component: {fileID: 4870049546918330835}
-  - component: {fileID: 5829471036528471092}
   - component: {fileID: 7293847562019384756}
   m_Layer: 5
   m_Name: InteractableTip
@@ -180,19 +179,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &5829471036528471092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2117248696756007219}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4b7c2a91f3d4e5b8c6d9a0f1e2b3c4d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetCamera: {fileID: 0}
 --- !u!114 &7293847562019384756
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -202,13 +188,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2117248696756007219}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5a8c3d2e1b04f6a9c8d7e6f5a4b3c2d, type: 3}
+  m_Script: {fileID: 11500000, guid: 3218458ef0599e541bb5f0315ed584c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hintDistance: 1.3
-  interactDistance: 0.7
-  distanceTarget: {fileID: 0}
   targetCamera: {fileID: 0}
   tipImage: {fileID: 3160257212788517633}
-  pointSprite: {fileID: -2413806693520163455, guid: 62c5297b908f53f4692ebcb9f1645f28, type: 3}
+  circleSprite: {fileID: -2413806693520163455, guid: 62c5297b908f53f4692ebcb9f1645f28, type: 3}
   checkSprite: {fileID: 21300000, guid: 4800731ef4eae344c85a8e9b24fb7278, type: 3}
+  hintDistance: 1.3
+  interactDistance: 0.7
