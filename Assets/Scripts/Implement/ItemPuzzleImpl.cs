@@ -34,6 +34,13 @@ public class ItemPuzzleImpl : MonoBehaviour, IItemPuzzle
         {
             itemPuzzle.puzzleCollider = FindSolidCollider();
         }
+
+        ResolvePlacedItemReference();
+
+        if (!itemPuzzle.isSolved)
+        {
+            HidePlacedItem();
+        }
     }
 
     // Start is called before the first frame update
@@ -137,6 +144,20 @@ public class ItemPuzzleImpl : MonoBehaviour, IItemPuzzle
         }
 
         itemPuzzle.item.SetActive(false);
+    }
+
+    void ResolvePlacedItemReference()
+    {
+        if (itemPuzzle.item != null)
+        {
+            return;
+        }
+
+        Transform placedItem = transform.Find("PicArrivalDay");
+        if (placedItem != null)
+        {
+            itemPuzzle.item = placedItem.gameObject;
+        }
     }
 
     public bool CanSolve()

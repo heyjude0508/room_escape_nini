@@ -25767,7 +25767,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1026322193
 Transform:
   m_ObjectHideFlags: 0
@@ -43869,7 +43869,7 @@ MonoBehaviour:
     puzzleCollider: {fileID: 0}
     itemId: Default Item
     placeDesc: Press E to place item.
-    item: {fileID: 0}
+    item: {fileID: 1026322192}
 --- !u!65 &1716299160
 BoxCollider:
   m_ObjectHideFlags: 0
