@@ -11,7 +11,7 @@ public class QuestItemImpl : MonoBehaviour, IQuestItem
 
     //public DOTweenAnimation dtAnim;
 
-    [SerializeField] KeyItem keyItem;
+    [SerializeField] QuestItem questItem;
 
     Renderer keyRenderer;
 
@@ -52,7 +52,7 @@ public class QuestItemImpl : MonoBehaviour, IQuestItem
         //gameEventInteract.Raise();
     }
 
-    public string GetDescription() => keyItem.itemActionDesc;
+    public string GetDescription() => questItem.itemActionDesc;
 
     public void Interact()
     {
@@ -64,7 +64,7 @@ public class QuestItemImpl : MonoBehaviour, IQuestItem
 
         if (bag != null)
         {
-            bag.AddItem(keyItem.CreateCopy());
+            bag.AddItem(questItem.CreateCopy());
         }
         else
         {

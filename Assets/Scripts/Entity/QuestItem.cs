@@ -5,8 +5,8 @@ public class QuestItem : Item
 {
     public QuestItem() : base()
     {
-        id = "DefaultItem";
-        itemName = "DefaultItem";
+        id = "Default Item";
+        itemName = "Default Item";
         itemSprite = null;
         itemActionDesc = "Press E to pick up the item.";
         itemUsageDesc = "Default Usage";
