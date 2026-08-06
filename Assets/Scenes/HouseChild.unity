@@ -52963,6 +52963,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5909650472822606658, guid: 6bacecc4f3df9584198879c73a6b6c36,
         type: 3}
+      propertyPath: interactionRaycastRange
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5909650472822606658, guid: 6bacecc4f3df9584198879c73a6b6c36,
+        type: 3}
       propertyPath: UiInteractionText
       value: 
       objectReference: {fileID: 2043057643}

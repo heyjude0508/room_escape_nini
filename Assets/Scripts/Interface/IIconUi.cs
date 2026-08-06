@@ -2,6 +2,7 @@ using UnityEngine;
 
 public interface IIconUi
 {
-    public void FaceCamera();
+    void FaceCamera();
 
+    bool IsInCheckRange { get; }
 }

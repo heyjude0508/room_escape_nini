@@ -5,6 +5,7 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
 {
     [Header("Camera Settings")]
     [SerializeField] Camera mainCamera;
+    [SerializeField] float interactionRaycastRange = 1.3f;
     [SerializeField] float InteractionRange = 0.6f;
     [SerializeField] GameObject UiInteraction;
     [SerializeField] TMP_Text UiInteractionText;
@@ -111,10 +112,10 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
         bool IsHit = false;
         UiInteraction.SetActive(false);
 
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, InteractionRange))
+        if (Physics.Raycast(ray, out RaycastHit hitInfo, interactionRaycastRange))
         {
             IBaseAction interactable = hitInfo.collider.GetComponentInParent<IBaseAction>();
-            if (interactable != null)
+            if (interactable != null && CanInteract(interactable))
             {
                 IsHit = true;
                 UiInteraction.SetActive(IsHit);
@@ -242,6 +243,24 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
         }
 
         return false;
+    }
+
+    bool CanInteract(IBaseAction interactable)
+    {
+        MonoBehaviour interactableBehaviour = interactable as MonoBehaviour;
+        if (interactableBehaviour == null || mainCamera == null)
+        {
+            return false;
+        }
+
+        IconUiImpl iconUi = IconUiImpl.FindForInteractable(interactableBehaviour.transform);
+        if (iconUi != null)
+        {
+            return iconUi.IsInCheckRange;
+        }
+
+        float distance = Vector3.Distance(mainCamera.transform.position, interactableBehaviour.transform.position);
+        return distance <= InteractionRange;
     }
 
     public void PlayRandomWalkSound()
