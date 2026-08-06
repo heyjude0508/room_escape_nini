@@ -247,9 +247,14 @@ public class ItemPuzzleImpl : MonoBehaviour, IItemPuzzle
 
     void DisableIconTips()
     {
-        IconUiImpl[] iconTips = GetComponentsInChildren<IconUiImpl>(true);
+        IconUiImpl[] iconTips = FindObjectsOfType<IconUiImpl>(true);
         foreach (IconUiImpl iconTip in iconTips)
         {
+            if (!iconTip.IsOwnedBy(transform))
+            {
+                continue;
+            }
+
             iconTip.enabled = false;
             iconTip.gameObject.SetActive(false);
         }
