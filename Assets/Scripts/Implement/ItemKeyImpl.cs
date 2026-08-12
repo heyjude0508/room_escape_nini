@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuestItemImpl : MonoBehaviour, IQuestItem
+public class ItemKeyImpl : MonoBehaviour, IItemKey
 {
     //public GameEvent gameEventAimStart;
     //public GameEvent gameEventAimEnd;
@@ -11,9 +11,7 @@ public class QuestItemImpl : MonoBehaviour, IQuestItem
 
     //public DOTweenAnimation dtAnim;
 
-    [SerializeField] QuestItem questItem;
-
-    Renderer keyRenderer;
+    [SerializeField] ItemKey itemKey;
 
     BagManagementImpl bag;
 
@@ -52,7 +50,7 @@ public class QuestItemImpl : MonoBehaviour, IQuestItem
         //gameEventInteract.Raise();
     }
 
-    public string GetDescription() => questItem.itemActionDesc;
+    public string GetDescription() => itemKey.itemActionDesc;
 
     public void Interact()
     {
@@ -61,10 +59,9 @@ public class QuestItemImpl : MonoBehaviour, IQuestItem
 
     public void PickItem()
     {
-
         if (bag != null)
         {
-            bag.AddItem(questItem.CreateCopy());
+            bag.AddItem(CreateCopy());
         }
         else
         {
@@ -75,9 +72,15 @@ public class QuestItemImpl : MonoBehaviour, IQuestItem
         Destroy(gameObject);
     }
 
-    public void OpenItem()
+    ItemKey CreateCopy()
     {
-
+        ItemKey copy = new ItemKey();
+        copy.id = itemKey.id;
+        copy.itemName = itemKey.itemName;
+        copy.itemSprite = itemKey.itemSprite;
+        copy.itemActionDesc = itemKey.itemActionDesc;
+        copy.itemUsageDesc = itemKey.itemUsageDesc;
+        return copy;
     }
 
 }

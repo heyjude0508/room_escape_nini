@@ -70,7 +70,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         }
     }
 
-    void AutoFindReferences()
+    public void AutoFindReferences()
     {
         if (itemSlotListRoot == null)
         {
@@ -84,7 +84,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         }
     }
 
-    void InitItemSlots()
+    public void InitItemSlots()
     {
         slotList.Clear();
 
@@ -129,7 +129,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         }
     }
 
-    void RefreshAllSlots()
+    public void RefreshAllSlots()
     {
         for (int i = 0; i < slotList.Count; i++)
         {
@@ -149,19 +149,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         }
     }
 
-    public void AddItem(Item item)
-    {
-        int slotId = GetMinEmptySlotId();
-        if (slotId == -1)
-        {
-            Debug.LogWarning("The bag is full!");
-            return;
-        }
-
-        SetSlotItem(slotId, item);
-    }
-
-    void SetSlotItem(int slotId, Item item)
+    public void SetSlotItem(int slotId, ItemBase item)
     {
         Slot slot = slotList[slotId];
         slot.itemId = item.id;
@@ -180,36 +168,6 @@ public class BagUiImpl : MonoBehaviour, IBagUi
 
         slot.iconImage.sprite = null;
         slot.iconImage.enabled = false;
-    }
-
-    public int GetMinEmptySlotId()
-    {
-        for (int i = 0; i < slotList.Count; i++)
-        {
-            if (slotList[i].itemId.IsEmpty())
-            {
-                return i;
-            }
-        }
-
-        return -1;
-    }
-
-    public void RemoveItemFromSlot(Item item)
-    {
-        for (int i = 0; i < slotList.Count; i++)
-        {
-            if (slotList[i].itemId != item.id)
-            {
-                continue;
-            }
-
-            ClearSlotVisual(slotList[i]);
-            ClearDetailPanel();
-            return;
-        }
-
-        Debug.LogWarning("Item not found in bag!");
     }
 
     public bool IsBagOpen()
@@ -267,7 +225,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
             return;
         }
 
-        Item item = bag != null
+        ItemBase item = bag != null
             ? bag.itemList.Find(existingItem => existingItem.id == slot.itemId)
             : null;
 
@@ -313,7 +271,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         }
     }
 
-    string GetUsageDescription(Item item)
+    string GetUsageDescription(ItemBase item)
     {
         if (item == null || string.IsNullOrEmpty(item.itemUsageDesc))
         {

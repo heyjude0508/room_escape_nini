@@ -114,7 +114,7 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
 
         if (Physics.Raycast(ray, out RaycastHit hitInfo, interactionRaycastRange))
         {
-            IBaseAction interactable = hitInfo.collider.GetComponentInParent<IBaseAction>();
+            IPlayerBase interactable = hitInfo.collider.GetComponentInParent<IPlayerBase>();
             if (interactable != null && CanInteract(interactable))
             {
                 IsHit = true;
@@ -245,7 +245,7 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
         return false;
     }
 
-    bool CanInteract(IBaseAction interactable)
+    bool CanInteract(IPlayerBase interactable)
     {
         MonoBehaviour interactableBehaviour = interactable as MonoBehaviour;
         if (interactableBehaviour == null || mainCamera == null)

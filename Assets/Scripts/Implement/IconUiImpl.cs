@@ -20,66 +20,7 @@ public class IconUiImpl : MonoBehaviour, IIconUi
     Vector3 anchorOffset;
     bool useDetachedBillboard;
 
-    enum TipState
-    {
-        Hidden,
-        Point,
-        Check
-    }
-
-    TipState currentState = TipState.Hidden;
-
-    public bool IsInCheckRange
-    {
-        get
-        {
-            if (distanceTarget == null || targetCamera == null)
-            {
-                return false;
-            }
-
-            float distance = Vector3.Distance(targetCamera.transform.position, distanceTarget.position);
-            return distance <= interactDistance;
-        }
-    }
-
-    void OnEnable()
-    {
-        if (!activeInstances.Contains(this))
-        {
-            activeInstances.Add(this);
-        }
-    }
-
-    void OnDisable()
-    {
-        activeInstances.Remove(this);
-    }
-
-    public static IconUiImpl FindForInteractable(Transform interactableTransform)
-    {
-        if (interactableTransform == null)
-        {
-            return null;
-        }
-
-        IconUiImpl iconUi = interactableTransform.GetComponentInChildren<IconUiImpl>(true);
-        if (iconUi != null)
-        {
-            return iconUi;
-        }
-
-        for (int i = activeInstances.Count - 1; i >= 0; i--)
-        {
-            IconUiImpl candidate = activeInstances[i];
-            if (candidate != null && candidate.IsOwnedBy(interactableTransform))
-            {
-                return candidate;
-            }
-        }
-
-        return null;
-    }
+    IconTipEnum currentState = IconTipEnum.Hidden;
 
     void Awake()
     {
@@ -108,7 +49,107 @@ public class IconUiImpl : MonoBehaviour, IIconUi
             canvas.worldCamera = targetCamera;
         }
 
-        SetIconState(TipState.Hidden);
+        SetIconState(IconTipEnum.Hidden);
+    }
+
+    void OnEnable()
+    {
+        if (!activeInstances.Contains(this))
+        {
+            activeInstances.Add(this);
+        }
+    }
+
+    void OnDisable()
+    {
+        activeInstances.Remove(this);
+    }
+
+    void LateUpdate()
+    {
+        if (useDetachedBillboard && positionAnchor != null)
+        {
+            transform.position = positionAnchor.position + anchorOffset;
+        }
+
+        FaceCamera();
+
+        if (distanceTarget == null || targetCamera == null || tipImage == null)
+        {
+            SetIconState(IconTipEnum.Hidden);
+            return;
+        }
+
+        float distance = Vector3.Distance(targetCamera.transform.position, distanceTarget.position);
+
+        if (distance > hintDistance)
+        {
+            SetIconState(IconTipEnum.Hidden);
+        }
+        else if (distance > interactDistance)
+        {
+            SetIconState(IconTipEnum.Point);
+        }
+        else
+        {
+            SetIconState(IconTipEnum.Check);
+        }
+    }
+
+    public void FaceCamera()
+    {
+        if (targetCamera == null)
+        {
+            return;
+        }
+
+        // World-space Canvas draws on its -Z face; +Z must point away from the camera.
+        Vector3 awayFromCamera = transform.position - targetCamera.transform.position;
+        if (awayFromCamera.sqrMagnitude < 0.0001f)
+        {
+            awayFromCamera = targetCamera.transform.forward;
+        }
+
+        transform.rotation = Quaternion.LookRotation(awayFromCamera, targetCamera.transform.up);
+    }
+
+    public bool IsInCheckRange
+    {
+        get
+        {
+            if (distanceTarget == null || targetCamera == null)
+            {
+                return false;
+            }
+
+            float distance = Vector3.Distance(targetCamera.transform.position, distanceTarget.position);
+            return distance <= interactDistance;
+        }
+    }
+
+    public static IconUiImpl FindForInteractable(Transform interactableTransform)
+    {
+        if (interactableTransform == null)
+        {
+            return null;
+        }
+
+        IconUiImpl iconUi = interactableTransform.GetComponentInChildren<IconUiImpl>(true);
+        if (iconUi != null)
+        {
+            return iconUi;
+        }
+
+        for (int i = activeInstances.Count - 1; i >= 0; i--)
+        {
+            IconUiImpl candidate = activeInstances[i];
+            if (candidate != null && candidate.IsOwnedBy(interactableTransform))
+            {
+                return candidate;
+            }
+        }
+
+        return null;
     }
 
     // Interactions uses (60, 60, 1) scale. Unity cannot preserve world rotation on children
@@ -154,54 +195,6 @@ public class IconUiImpl : MonoBehaviour, IIconUi
         return false;
     }
 
-    void LateUpdate()
-    {
-        if (useDetachedBillboard && positionAnchor != null)
-        {
-            transform.position = positionAnchor.position + anchorOffset;
-        }
-
-        FaceCamera();
-
-        if (distanceTarget == null || targetCamera == null || tipImage == null)
-        {
-            SetIconState(TipState.Hidden);
-            return;
-        }
-
-        float distance = Vector3.Distance(targetCamera.transform.position, distanceTarget.position);
-
-        if (distance > hintDistance)
-        {
-            SetIconState(TipState.Hidden);
-        }
-        else if (distance > interactDistance)
-        {
-            SetIconState(TipState.Point);
-        }
-        else
-        {
-            SetIconState(TipState.Check);
-        }
-    }
-
-    public void FaceCamera()
-    {
-        if (targetCamera == null)
-        {
-            return;
-        }
-
-        // World-space Canvas draws on its -Z face; +Z must point away from the camera.
-        Vector3 awayFromCamera = transform.position - targetCamera.transform.position;
-        if (awayFromCamera.sqrMagnitude < 0.0001f)
-        {
-            awayFromCamera = targetCamera.transform.forward;
-        }
-
-        transform.rotation = Quaternion.LookRotation(awayFromCamera, targetCamera.transform.up);
-    }
-
     public bool IsOwnedBy(Transform root)
     {
         if (ownerRoot == null || root == null)
@@ -212,7 +205,7 @@ public class IconUiImpl : MonoBehaviour, IIconUi
         return ownerRoot == root || ownerRoot.IsChildOf(root);
     }
 
-    void SetIconState(TipState newState)
+    public void SetIconState(IconTipEnum newState)
     {
         if (currentState == newState)
         {
@@ -223,15 +216,15 @@ public class IconUiImpl : MonoBehaviour, IIconUi
 
         switch (newState)
         {
-            case TipState.Hidden:
+            case IconTipEnum.Hidden:
                 tipImage.enabled = false;
                 break;
-            case TipState.Point:
+            case IconTipEnum.Point:
                 tipImage.sprite = circleSprite;
                 tipImage.rectTransform.sizeDelta = smallsize;
                 tipImage.enabled = circleSprite != null;
                 break;
-            case TipState.Check:
+            case IconTipEnum.Check:
                 tipImage.sprite = checkSprite;
                 tipImage.rectTransform.sizeDelta = largeSize;
                 tipImage.enabled = checkSprite != null;
@@ -240,4 +233,3 @@ public class IconUiImpl : MonoBehaviour, IIconUi
     }
 
 }
-

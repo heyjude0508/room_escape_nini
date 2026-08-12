@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface ILockPuzzle: IBasePuzzle
+public interface IPuzzleLock: IPuzzleBase
 {
     void Unlock();
 

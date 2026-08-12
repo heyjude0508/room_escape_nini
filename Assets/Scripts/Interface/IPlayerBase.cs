@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public interface IBaseAction
+public interface IPlayerBase
 {
     void EventAimStart();
 
@@ -13,5 +11,4 @@ public interface IBaseAction
     string GetDescription();
 
     void Interact();
-
 }

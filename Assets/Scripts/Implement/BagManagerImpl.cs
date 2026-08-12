@@ -51,16 +51,6 @@ public class BagManagementImpl : MonoBehaviour, IBagManager
         OnBagUpdated?.Invoke();
     }
 
-    public void RemoveItem(ItemBase item)
-    {
-        if (item == null || string.IsNullOrEmpty(item.id))
-        {
-            return;
-        }
-
-        RemoveItem(item.id);
-    }
-
     public void RemoveItem(string itemId)
     {
         if (string.IsNullOrEmpty(itemId))
@@ -80,26 +70,6 @@ public class BagManagementImpl : MonoBehaviour, IBagManager
         OnBagUpdated?.Invoke();
     }
 
-    public List<string> GetItemIdList()
-    {
-        itemIdList.Clear();
-        foreach (ItemBase item in itemList)
-        {
-            itemIdList.Add(item.id);
-        }
-        return itemIdList;
-    }
-
-    public bool HasItem(ItemBase item)
-    {
-        if (item == null)
-        {
-            return false;
-        }
-
-        return HasItem(item.id);
-    }
-
     public bool HasItem(string itemId)
     {
         if (string.IsNullOrEmpty(itemId))
@@ -108,6 +78,16 @@ public class BagManagementImpl : MonoBehaviour, IBagManager
         }
 
         return itemList.Any(existingItem => existingItem.id == itemId);
+    }
+
+    public List<string> GetItemIdList()
+    {
+        itemIdList.Clear();
+        foreach (ItemBase item in itemList)
+        {
+            itemIdList.Add(item.id);
+        }
+        return itemIdList;
     }
 
 }

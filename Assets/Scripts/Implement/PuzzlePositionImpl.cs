@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
-public class ItemPuzzleImpl : MonoBehaviour, IItemPuzzle
+public class PuzzlePositionImpl : MonoBehaviour, IPuzzlePosition
 {
     //public GameEvent gameEventAimStart;
     //public GameEvent gameEventAimEnd;
@@ -14,30 +14,30 @@ public class ItemPuzzleImpl : MonoBehaviour, IItemPuzzle
 
     //public DOTweenAnimation dtAnim;
 
-    [SerializeField] ItemPuzzle itemPuzzle;
+    [SerializeField] PuzzlePosition puzzlePosition;
 
     BagManagementImpl bag;
 
     void Awake()
     {
-        if (itemPuzzle.animationSource == null)
+        if (puzzlePosition.animationSource == null)
         {
-            itemPuzzle.animationSource = GetComponent<Animation>();
+            puzzlePosition.animationSource = GetComponent<Animation>();
         }
 
-        if (itemPuzzle.audioSource == null)
+        if (puzzlePosition.audioSource == null)
         {
-            itemPuzzle.audioSource = GetComponent<AudioSource>();
+            puzzlePosition.audioSource = GetComponent<AudioSource>();
         }
 
-        if (itemPuzzle.puzzleCollider == null)
+        if (puzzlePosition.puzzleCollider == null)
         {
-            itemPuzzle.puzzleCollider = FindSolidCollider();
+            puzzlePosition.puzzleCollider = FindSolidCollider();
         }
 
         ResolvePlacedItemReference();
 
-        if (!itemPuzzle.isSolved)
+        if (!puzzlePosition.isSolved)
         {
             HidePlacedItem();
         }
@@ -49,7 +49,7 @@ public class ItemPuzzleImpl : MonoBehaviour, IItemPuzzle
         //dtAnim.DOPlay();
         bag = BagManagementImpl.Instance;
 
-        if (itemPuzzle.isSolved)
+        if (puzzlePosition.isSolved)
         {
             ShowPlacedItem();
         }
@@ -82,17 +82,17 @@ public class ItemPuzzleImpl : MonoBehaviour, IItemPuzzle
 
     public string GetDescription()
     {
-        if (itemPuzzle.isSolved)
+        if (puzzlePosition.isSolved)
         {
             return string.Empty;
         }
 
-        return CanSolve() ? itemPuzzle.placeDesc : itemPuzzle.puzzleDesc;
+        return CanSolve() ? puzzlePosition.placeDesc : puzzlePosition.puzzleDesc;
     }
 
     public void Interact()
     {
-        if (itemPuzzle.isSolved)
+        if (puzzlePosition.isSolved)
         {
             return;
         }
@@ -104,7 +104,7 @@ public class ItemPuzzleImpl : MonoBehaviour, IItemPuzzle
     {
         if (!CanSolve()) 
         {
-            PlaySound(itemPuzzle.unsolvedSound);
+            PlaySound(puzzlePosition.unsolvedSound);
             Debug.Log("Need to find the missing item!");
             return;
         }
@@ -115,40 +115,40 @@ public class ItemPuzzleImpl : MonoBehaviour, IItemPuzzle
             return;
         }
 
-        if (!itemPuzzle.isSolved && bag.HasItem(itemPuzzle.itemId))
+        if (!puzzlePosition.isSolved && bag.HasItem(puzzlePosition.itemId))
         {
-            bag.RemoveItem(itemPuzzle.itemId);
+            bag.RemoveItem(puzzlePosition.itemId);
             ShowPlacedItem();
             PlaySolveAnimation();
-            PlaySound(itemPuzzle.solvedSound);
+            PlaySound(puzzlePosition.solvedSound);
             MarkSolved();
-            Debug.Log($"Place item {itemPuzzle.itemId} into {itemPuzzle.id} successfully.");
+            Debug.Log($"Place item {puzzlePosition.itemId} into {puzzlePosition.id} successfully.");
         }
     }
 
     public void ShowPlacedItem()
     {
-        if (itemPuzzle.item == null)
+        if (puzzlePosition.item == null)
         {
             return;
         }
 
-        itemPuzzle.item.SetActive(true);
+        puzzlePosition.item.SetActive(true);
     }
 
     public void HidePlacedItem()
     {
-        if (itemPuzzle.item == null)
+        if (puzzlePosition.item == null)
         {
             return;
         }
 
-        itemPuzzle.item.SetActive(false);
+        puzzlePosition.item.SetActive(false);
     }
 
     void ResolvePlacedItemReference()
     {
-        if (itemPuzzle.item != null)
+        if (puzzlePosition.item != null)
         {
             return;
         }
@@ -156,40 +156,40 @@ public class ItemPuzzleImpl : MonoBehaviour, IItemPuzzle
         Transform placedItem = transform.Find("PicArrivalDay");
         if (placedItem != null)
         {
-            itemPuzzle.item = placedItem.gameObject;
+            puzzlePosition.item = placedItem.gameObject;
         }
     }
 
     public bool CanSolve()
     {
-        if (itemPuzzle.isSolved)
+        if (puzzlePosition.isSolved)
         {
             return true;
         }
 
-        if (bag == null || string.IsNullOrEmpty(itemPuzzle.itemId))
+        if (bag == null || string.IsNullOrEmpty(puzzlePosition.itemId))
         {
             return false;
         }
 
-        return bag.HasItem(itemPuzzle.itemId);
+        return bag.HasItem(puzzlePosition.itemId);
     }
 
     public void PlaySolveAnimation()
     {
-        if (itemPuzzle.animationSource == null)
+        if (puzzlePosition.animationSource == null)
         {
             Debug.LogWarning($"Animation is missing");
             return;
         }
 
-        if (!string.IsNullOrEmpty(itemPuzzle.solveAnimationName))
+        if (!string.IsNullOrEmpty(puzzlePosition.solveAnimationName))
         {
-            itemPuzzle.animationSource.Play(itemPuzzle.solveAnimationName);
+            puzzlePosition.animationSource.Play(puzzlePosition.solveAnimationName);
             return;
         }
 
-        itemPuzzle.animationSource.Play();
+        puzzlePosition.animationSource.Play();
     }
 
     public void PlaySound(AudioClip sound)
@@ -199,9 +199,9 @@ public class ItemPuzzleImpl : MonoBehaviour, IItemPuzzle
             return;
         }
 
-        if (itemPuzzle.audioSource != null)
+        if (puzzlePosition.audioSource != null)
         {
-            itemPuzzle.audioSource.PlayOneShot(sound);
+            puzzlePosition.audioSource.PlayOneShot(sound);
             return;
         }
 
@@ -224,13 +224,13 @@ public class ItemPuzzleImpl : MonoBehaviour, IItemPuzzle
 
     void MarkSolved()
     {
-        itemPuzzle.isSolved = true;
+        puzzlePosition.isSolved = true;
         DisableInteractionColliders();
         DisableIconTips();
 
-        if (itemPuzzle.puzzleCollider != null)
+        if (puzzlePosition.puzzleCollider != null)
         {
-            itemPuzzle.puzzleCollider.enabled = false;
+            puzzlePosition.puzzleCollider.enabled = false;
         }
 
         enabled = false;

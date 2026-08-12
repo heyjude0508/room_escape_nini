@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BaseItemImpl : MonoBehaviour, IBaseItem
+public class ItemSocketImpl : MonoBehaviour, IItemSocket
 {
     //public GameEvent gameEventAimStart;
     //public GameEvent gameEventAimEnd;
@@ -11,9 +11,7 @@ public class BaseItemImpl : MonoBehaviour, IBaseItem
 
     //public DOTweenAnimation dtAnim;
 
-    [SerializeField] KeyItem keyItem;
-
-    Renderer keyRenderer;
+    [SerializeField] ItemSocket itemSocket;
 
     BagManagementImpl bag;
 
@@ -52,7 +50,7 @@ public class BaseItemImpl : MonoBehaviour, IBaseItem
         //gameEventInteract.Raise();
     }
 
-    public string GetDescription() => keyItem.itemActionDesc;
+    public string GetDescription() => itemSocket.itemActionDesc;
 
     public void Interact()
     {
@@ -61,10 +59,9 @@ public class BaseItemImpl : MonoBehaviour, IBaseItem
 
     public void PickItem()
     {
-
         if (bag != null)
         {
-            bag.AddItem(keyItem.CreateCopy());
+            bag.AddItem(CreateCopy());
         }
         else
         {
@@ -75,9 +72,15 @@ public class BaseItemImpl : MonoBehaviour, IBaseItem
         Destroy(gameObject);
     }
 
-    public void OpenItem()
+    ItemSocket CreateCopy()
     {
-
+        ItemSocket copy = new ItemSocket();
+        copy.id = itemSocket.id;
+        copy.itemName = itemSocket.itemName;
+        copy.itemSprite = itemSocket.itemSprite;
+        copy.itemActionDesc = itemSocket.itemActionDesc;
+        copy.itemUsageDesc = itemSocket.itemUsageDesc;
+        return copy;
     }
 
 }

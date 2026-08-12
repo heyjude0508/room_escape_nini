@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public interface IItemPuzzle: IBasePuzzle
+public interface IPuzzlePosition: IPuzzleBase
 {
     void PlaceItem();
 

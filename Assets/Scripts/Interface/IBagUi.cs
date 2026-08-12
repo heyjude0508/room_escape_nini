@@ -2,12 +2,18 @@ using UnityEngine;
 
 public interface IBagUi
 {
-    public void AddItem(ItemBase item);
+    public void AutoFindReferences();
 
-    public int GetMinEmptySlotId();
+    public void InitItemSlots(); 
+    
+    public void RefreshAllSlots();
+
+    public void SetSlotItem(int slotId, ItemBase item);
 
     public bool IsBagOpen();
 
     public bool TrySelectItemAtScreenPoint(Vector2 screenPoint);
+
+    public void ToggleBag();
 
 }

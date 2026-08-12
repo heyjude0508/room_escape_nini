@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 
-public class LockPuzzleImpl : MonoBehaviour, ILockPuzzle
+public class LockPuzzleImpl : MonoBehaviour, IPuzzleLock
 {
     //public GameEvent gameEventAimStart;
     //public GameEvent gameEventAimEnd;
@@ -14,25 +14,25 @@ public class LockPuzzleImpl : MonoBehaviour, ILockPuzzle
 
     //public DOTweenAnimation dtAnim;
 
-    [SerializeField] LockPuzzle lockPuzzle;
+    [SerializeField] PuzzleLock puzzleLock;
 
     BagManagementImpl bag;
 
     void Awake()
     {
-        if (lockPuzzle.animationSource == null)
+        if (puzzleLock.animationSource == null)
         {
-            lockPuzzle.animationSource = GetComponent<Animation>();
+            puzzleLock.animationSource = GetComponent<Animation>();
         }
 
-        if (lockPuzzle.audioSource == null)
+        if (puzzleLock.audioSource == null)
         {
-            lockPuzzle.audioSource = GetComponent<AudioSource>();
+            puzzleLock.audioSource = GetComponent<AudioSource>();
         }
 
-        if (lockPuzzle.puzzleCollider == null)
+        if (puzzleLock.puzzleCollider == null)
         {
-            lockPuzzle.puzzleCollider = FindSolidCollider();
+            puzzleLock.puzzleCollider = FindSolidCollider();
         }
     }
 
@@ -66,17 +66,17 @@ public class LockPuzzleImpl : MonoBehaviour, ILockPuzzle
 
     public string GetDescription()
     {
-        if (lockPuzzle.isSolved)
+        if (puzzleLock.isSolved)
         {
             return string.Empty;
         }
 
-        return CanSolve() ? lockPuzzle.unlockDesc : lockPuzzle.puzzleDesc;
+        return CanSolve() ? puzzleLock.unlockDesc : puzzleLock.puzzleDesc;
     }
 
     public void Interact()
     {
-        if (lockPuzzle.isSolved)
+        if (puzzleLock.isSolved)
         {
             return;
         }
@@ -88,7 +88,7 @@ public class LockPuzzleImpl : MonoBehaviour, ILockPuzzle
     {
         if (!CanSolve()) 
         {
-            PlaySound(lockPuzzle.unsolvedSound);
+            PlaySound(puzzleLock.unsolvedSound);
             Debug.Log("Need to find the key!");
             return;
         }
@@ -99,46 +99,46 @@ public class LockPuzzleImpl : MonoBehaviour, ILockPuzzle
             return;
         }
 
-        if (!lockPuzzle.isSolved && bag.HasItem(lockPuzzle.keyId))
+        if (!puzzleLock.isSolved && bag.HasItem(puzzleLock.keyId))
         {
-            bag.RemoveItem(lockPuzzle.keyId);
+            bag.RemoveItem(puzzleLock.keyId);
             PlaySolveAnimation();
-            PlaySound(lockPuzzle.solvedSound);
+            PlaySound(puzzleLock.solvedSound);
             MarkSolved();
-            Debug.Log($"Unlock the lock {lockPuzzle.id} using the key {lockPuzzle.keyId} successfully.");
+            Debug.Log($"Unlock the lock {puzzleLock.id} using the key {puzzleLock.keyId} successfully.");
         }
     }
 
     public bool CanSolve()
     {
-        if (lockPuzzle.isSolved)
+        if (puzzleLock.isSolved)
         {
             return true;
         }
 
-        if (bag == null || string.IsNullOrEmpty(lockPuzzle.keyId))
+        if (bag == null || string.IsNullOrEmpty(puzzleLock.keyId))
         {
             return false;
         }
 
-        return bag.HasItem(lockPuzzle.keyId);
+        return bag.HasItem(puzzleLock.keyId);
     }
 
     public void PlaySolveAnimation()
     {
-        if (lockPuzzle.animationSource == null)
+        if (puzzleLock.animationSource == null)
         {
             Debug.LogWarning($"Animation is missing");
             return;
         }
 
-        if (!string.IsNullOrEmpty(lockPuzzle.solveAnimationName))
+        if (!string.IsNullOrEmpty(puzzleLock.solveAnimationName))
         {
-            lockPuzzle.animationSource.Play(lockPuzzle.solveAnimationName);
+            puzzleLock.animationSource.Play(puzzleLock.solveAnimationName);
             return;
         }
 
-        lockPuzzle.animationSource.Play();
+        puzzleLock.animationSource.Play();
     }
 
     public void PlaySound(AudioClip sound)
@@ -148,9 +148,9 @@ public class LockPuzzleImpl : MonoBehaviour, ILockPuzzle
             return;
         }
 
-        if (lockPuzzle.audioSource != null)
+        if (puzzleLock.audioSource != null)
         {
-            lockPuzzle.audioSource.PlayOneShot(sound);
+            puzzleLock.audioSource.PlayOneShot(sound);
             return;
         }
 
@@ -173,13 +173,13 @@ public class LockPuzzleImpl : MonoBehaviour, ILockPuzzle
 
     void MarkSolved()
     {
-        lockPuzzle.isSolved = true;
+        puzzleLock.isSolved = true;
         DisableInteractionColliders();
         DisableIconTips();
 
-        if (lockPuzzle.puzzleCollider != null)
+        if (puzzleLock.puzzleCollider != null)
         {
-            lockPuzzle.puzzleCollider.enabled = false;
+            puzzleLock.puzzleCollider.enabled = false;
         }
 
         enabled = false;

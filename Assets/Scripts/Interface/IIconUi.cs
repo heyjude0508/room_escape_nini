@@ -2,7 +2,12 @@ using UnityEngine;
 
 public interface IIconUi
 {
-    void FaceCamera();
+    public void FaceCamera();
 
-    bool IsInCheckRange { get; }
+    public bool IsInCheckRange { get; }
+
+    public bool IsOwnedBy(Transform root);
+
+    public void SetIconState(IconTipEnum newState);
+
 }
