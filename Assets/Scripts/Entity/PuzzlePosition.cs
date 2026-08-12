@@ -3,13 +3,13 @@ using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 [System.Serializable]
-public class ItemPuzzle: Puzzle
+public class PuzzlePosition: PuzzleBase
 {
     public string itemId;
     public string placeDesc;
     public GameObject item;
 
-    public ItemPuzzle()
+    public PuzzlePosition()
     {
         id = "DefaultSocket";
         puzzleName = "DefaultSocket";
@@ -28,6 +28,6 @@ public class ItemPuzzle: Puzzle
         solvedSound = null;
 
         puzzleCollider = null;
-}
+    }
 
 }

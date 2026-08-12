@@ -5,6 +5,6 @@ public interface IBaseItem: IBaseAction
 
     void PickItem();
 
-    void ChangeColor();
+    void OpenItem();
 
 }

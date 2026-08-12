@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [System.Serializable]
-public class Puzzle
+public class PuzzleBase
 {
     public string id;
     public string puzzleName;
@@ -18,7 +18,7 @@ public class Puzzle
 
     public Collider puzzleCollider;
 
-    public Puzzle(
+    public PuzzleBase(
     string id,
     string puzzleName,
     string puzzleDesc,
@@ -43,6 +43,6 @@ public class Puzzle
         this.puzzleCollider = puzzleCollider;
     }
 
-    public Puzzle() { }
+    public PuzzleBase() { }
 
 }

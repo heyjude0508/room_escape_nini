@@ -7,7 +7,7 @@ public class BagManagementImpl : MonoBehaviour, IBagManager
 {
     public const int MaxItemSlots = 8;
 
-    public List<Item> itemList = new List<Item>();
+    public List<ItemBase> itemList = new List<ItemBase>();
     public List<string> itemIdList = new List<string>();
 
     public static BagManagementImpl Instance { get; private set; }
@@ -27,7 +27,7 @@ public class BagManagementImpl : MonoBehaviour, IBagManager
         }
     }
 
-    public void AddItem(Item item)
+    public void AddItem(ItemBase item)
     {
         if (item == null)
         {
@@ -51,7 +51,7 @@ public class BagManagementImpl : MonoBehaviour, IBagManager
         OnBagUpdated?.Invoke();
     }
 
-    public void RemoveItem(Item item)
+    public void RemoveItem(ItemBase item)
     {
         if (item == null || string.IsNullOrEmpty(item.id))
         {
@@ -68,7 +68,7 @@ public class BagManagementImpl : MonoBehaviour, IBagManager
             return;
         }
 
-        Item existingItem = itemList.FirstOrDefault(existing => existing.id == itemId);
+        ItemBase existingItem = itemList.FirstOrDefault(existing => existing.id == itemId);
         if (existingItem == null)
         {
             return;
@@ -83,14 +83,14 @@ public class BagManagementImpl : MonoBehaviour, IBagManager
     public List<string> GetItemIdList()
     {
         itemIdList.Clear();
-        foreach (Item item in itemList)
+        foreach (ItemBase item in itemList)
         {
             itemIdList.Add(item.id);
         }
         return itemIdList;
     }
 
-    public bool HasItem(Item item)
+    public bool HasItem(ItemBase item)
     {
         if (item == null)
         {

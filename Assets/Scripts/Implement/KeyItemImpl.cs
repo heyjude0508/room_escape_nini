@@ -75,20 +75,9 @@ public class KeyItemImpl : MonoBehaviour, IKeyItem
         Destroy(gameObject);
     }
 
-    public void ChangeColor()
+    public void OpenItem()
     {
-        if (keyRenderer != null)
-        {
-            keyRenderer.material.color = new Color(Random.value, Random.value, Random.value);
-        }
-        else
-        {
-            keyRenderer = GetComponentInChildren<Renderer>();
-            if (keyRenderer != null)
-            {
-                keyRenderer.material.color = new Color(Random.value, Random.value, Random.value);
-            }
-        }
+
     }
 
 }

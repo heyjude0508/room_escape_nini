@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Item
+public class ItemBase
 {
     public string id;
     public string itemName;
@@ -11,7 +11,7 @@ public class Item
     public string itemActionDesc;
     public string itemUsageDesc = "Default Usage";
 
-    public Item(
+    public ItemBase(
         string id,
         string itemName,
         string itemActionDesc,
@@ -25,11 +25,6 @@ public class Item
         this.itemUsageDesc = itemUsageDesc;
     }
 
-    public Item() { }
-
-    public Item CreateCopy()
-    {
-        return new Item(id, itemName, itemActionDesc, itemSprite, itemUsageDesc);
-    }
+    public ItemBase() { }
 
 }

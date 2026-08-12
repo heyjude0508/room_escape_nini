@@ -2,7 +2,7 @@ using UnityEngine;
 
 public interface IBagUi
 {
-    public void AddItem(Item item);
+    public void AddItem(ItemBase item);
 
     public int GetMinEmptySlotId();
 

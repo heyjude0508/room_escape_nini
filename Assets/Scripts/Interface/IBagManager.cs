@@ -3,15 +3,15 @@ using UnityEngine;
 
 public interface IBagManager
 {
-    void AddItem(Item item);
+    void AddItem(ItemBase item);
 
-    void RemoveItem(Item item);
+    void RemoveItem(ItemBase item);
 
     void RemoveItem(string itemId);
 
     List<string> GetItemIdList();
 
-    bool HasItem(Item item);
+    public bool HasItem(ItemBase item);
 
     bool HasItem(string itemId);
 

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuestItemImpl : MonoBehaviour, IQuestItem
+public class BaseItemImpl : MonoBehaviour, IBaseItem
 {
     //public GameEvent gameEventAimStart;
     //public GameEvent gameEventAimEnd;
@@ -11,7 +11,7 @@ public class QuestItemImpl : MonoBehaviour, IQuestItem
 
     //public DOTweenAnimation dtAnim;
 
-    [SerializeField] QuestItem questItem;
+    [SerializeField] KeyItem keyItem;
 
     Renderer keyRenderer;
 
@@ -52,7 +52,7 @@ public class QuestItemImpl : MonoBehaviour, IQuestItem
         //gameEventInteract.Raise();
     }
 
-    public string GetDescription() => questItem.itemActionDesc;
+    public string GetDescription() => keyItem.itemActionDesc;
 
     public void Interact()
     {
@@ -64,7 +64,7 @@ public class QuestItemImpl : MonoBehaviour, IQuestItem
 
         if (bag != null)
         {
-            bag.AddItem(questItem.CreateCopy());
+            bag.AddItem(keyItem.CreateCopy());
         }
         else
         {

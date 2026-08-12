@@ -3,12 +3,12 @@ using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 [System.Serializable]
-public class LockPuzzle: Puzzle
+public class PuzzleLock: PuzzleBase
 {
     public string keyId;
     public string unlockDesc;
 
-    public LockPuzzle()
+    public PuzzleLock()
     {
         id = "DefaultLock";
         puzzleName = "DefaultLock";
@@ -26,6 +26,6 @@ public class LockPuzzle: Puzzle
         solvedSound = null;
 
         puzzleCollider = null;
-}
+    }
 
 }

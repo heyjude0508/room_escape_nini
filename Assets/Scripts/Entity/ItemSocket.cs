@@ -1,9 +1,9 @@
 using UnityEngine;
 
 [System.Serializable]
-public class QuestItem : Item
+public class ItemSocket : ItemBase
 {
-    public QuestItem() : base()
+    public ItemSocket(): base()
     {
         id = "Default Item";
         itemName = "Default Item";
