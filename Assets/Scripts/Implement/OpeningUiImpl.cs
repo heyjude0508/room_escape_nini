@@ -19,8 +19,9 @@ public class OpeningUiImpl : MonoBehaviour, IOpeningUi
     [SerializeField] string nextSceneName = "HouseChild";
     [SerializeField] float hoverScale = 1.08f;
     [SerializeField] float hoverAnimSpeed = 12f;
-    [SerializeField] Color normalLabelColor = Color.white;
-    [SerializeField] Color hoverLabelColor = new Color(1f, 1f, 1f, 1f);
+    [SerializeField] Color normalLabelColor = new Color(1f, 0.894f, 0.71f, 1f);
+    [SerializeField] Color hoverLabelColor = new Color(1f, 0.78f, 0.35f, 1f);
+    [SerializeField] Material readableTextMaterial;
 
     bool isStarting;
     Vector3 startGameBaseScale = Vector3.one;
@@ -29,8 +30,39 @@ public class OpeningUiImpl : MonoBehaviour, IOpeningUi
     void Awake()
     {
         AutoFindReferences();
+        ApplyReadableTextStyle();
         CacheStartGameBaseScale();
         BindStartGameButton();
+    }
+
+    void ApplyReadableTextStyle()
+    {
+        Material material = readableTextMaterial;
+        if (material == null)
+        {
+            material = Resources.Load<Material>("Fonts & Materials/LiberationSans SDF - Drop Shadow");
+        }
+
+        normalLabelColor = new Color(1f, 0.894f, 0.71f, 1f);
+        hoverLabelColor = new Color(1f, 0.78f, 0.35f, 1f);
+
+        ApplyTextStyle(titleText, new Color(1f, 0.965f, 0.91f, 1f), material);
+        ApplyTextStyle(startGameLabel, normalLabelColor, material);
+        ApplyTextStyle(copyrightText, new Color(1f, 0.965f, 0.91f, 0.9f), material);
+    }
+
+    static void ApplyTextStyle(TMP_Text text, Color color, Material material)
+    {
+        if (text == null)
+        {
+            return;
+        }
+
+        text.color = color;
+        if (material != null)
+        {
+            text.fontSharedMaterial = material;
+        }
     }
 
     void Update()
@@ -132,12 +164,6 @@ public class OpeningUiImpl : MonoBehaviour, IOpeningUi
             }
         }
 
-        if (startGameLabel != null)
-        {
-            normalLabelColor = startGameLabel.color;
-            // Soft warm tint reads better than brightening already-white text.
-            hoverLabelColor = new Color(1f, 0.92f, 0.72f, normalLabelColor.a);
-        }
     }
 
     public void BindStartGameButton()
