@@ -18,6 +18,11 @@ namespace NaughtyAttributes.Editor
 
         protected virtual void OnEnable()
         {
+            if (target == null)
+            {
+                return;
+            }
+
             _nonSerializedFields = ReflectionUtility.GetAllFields(
                 target, f => f.GetCustomAttributes(typeof(ShowNonSerializedFieldAttribute), true).Length > 0);
 
@@ -35,6 +40,12 @@ namespace NaughtyAttributes.Editor
 
         public override void OnInspectorGUI()
         {
+            if (target == null)
+            {
+                EditorGUILayout.HelpBox("Script is missing on this component.", MessageType.Error);
+                return;
+            }
+
             GetSerializedProperties(ref _serializedProperties);
 
             bool anyNaughtyAttribute = _serializedProperties.Any(p => PropertyUtility.GetAttribute<INaughtyAttribute>(p) != null);
