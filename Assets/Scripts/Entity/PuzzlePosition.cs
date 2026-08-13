@@ -5,9 +5,9 @@ using UnityEngine.Serialization;
 [System.Serializable]
 public class PuzzlePosition: PuzzleBase
 {
-    public string itemId;
+    public string socketId;
     public string placeDesc;
-    public GameObject item;
+    [HideInInspector] public GameObject originalItem;
 
     public PuzzlePosition()
     {
@@ -16,9 +16,9 @@ public class PuzzlePosition: PuzzleBase
         puzzleDesc = "Something is missing here.";                                  
         isSolved = false;
 
-        itemId = "Default Item";
+        socketId = "Default Socket";
         placeDesc = "Press E to place item.";
-        item = null;
+        originalItem = null;
 
         animationSource = null;
         solveAnimationName = null;

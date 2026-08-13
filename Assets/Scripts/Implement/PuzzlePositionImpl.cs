@@ -115,40 +115,40 @@ public class PuzzlePositionImpl : MonoBehaviour, IPuzzlePosition
             return;
         }
 
-        if (!puzzlePosition.isSolved && bag.HasItem(puzzlePosition.itemId))
+        if (!puzzlePosition.isSolved && bag.HasItem(puzzlePosition.socketId))
         {
-            bag.RemoveItem(puzzlePosition.itemId);
+            bag.RemoveItem(puzzlePosition.socketId);
             ShowPlacedItem();
             PlaySolveAnimation();
             PlaySound(puzzlePosition.solvedSound);
             MarkSolved();
-            Debug.Log($"Place item {puzzlePosition.itemId} into {puzzlePosition.id} successfully.");
+            Debug.Log($"Place item {puzzlePosition.socketId} into {puzzlePosition.id} successfully.");
         }
     }
 
     public void ShowPlacedItem()
     {
-        if (puzzlePosition.item == null)
+        if (puzzlePosition.originalItem == null)
         {
             return;
         }
 
-        puzzlePosition.item.SetActive(true);
+        puzzlePosition.originalItem.SetActive(true);
     }
 
     public void HidePlacedItem()
     {
-        if (puzzlePosition.item == null)
+        if (puzzlePosition.originalItem == null)
         {
             return;
         }
 
-        puzzlePosition.item.SetActive(false);
+        puzzlePosition.originalItem.SetActive(false);
     }
 
     void ResolvePlacedItemReference()
     {
-        if (puzzlePosition.item != null)
+        if (puzzlePosition.originalItem != null)
         {
             return;
         }
@@ -156,7 +156,7 @@ public class PuzzlePositionImpl : MonoBehaviour, IPuzzlePosition
         Transform placedItem = transform.Find("PicArrivalDay");
         if (placedItem != null)
         {
-            puzzlePosition.item = placedItem.gameObject;
+            puzzlePosition.originalItem = placedItem.gameObject;
         }
     }
 
@@ -167,12 +167,12 @@ public class PuzzlePositionImpl : MonoBehaviour, IPuzzlePosition
             return true;
         }
 
-        if (bag == null || string.IsNullOrEmpty(puzzlePosition.itemId))
+        if (bag == null || string.IsNullOrEmpty(puzzlePosition.socketId))
         {
             return false;
         }
 
-        return bag.HasItem(puzzlePosition.itemId);
+        return bag.HasItem(puzzlePosition.socketId);
     }
 
     public void PlaySolveAnimation()

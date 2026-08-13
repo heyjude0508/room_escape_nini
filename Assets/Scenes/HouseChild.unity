@@ -10314,18 +10314,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0eb9a8f29be401469695de65cee6604, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockPuzzle:
-    id: Lock_02
-    puzzleName: DoorSlildeLock_R
+  puzzleLock:
+    id: L002
+    puzzleName: Slide Door Right Lock
     puzzleDesc: It is locked.
     isSolved: 0
     animationSource: {fileID: 555915474}
     solveAnimationName: DoorSlide02_open
-    audioSource: {fileID: 0}
+    audioSource: {fileID: 555915476}
     unsolvedSound: {fileID: 8300000, guid: 0cddfa79ad4fe064d8c71699bab862ac, type: 3}
     solvedSound: {fileID: 8300000, guid: 6427f56e53a25cb4baad158c6bd6aa67, type: 3}
-    puzzleCollider: {fileID: 555915468}
-    keyId: Key_02
+    puzzleCollider: {fileID: 0}
+    keyId: K002
     unlockDesc: Press E to unlock.
 --- !u!1001 &416359207
 PrefabInstance:
@@ -13520,12 +13520,6 @@ Transform:
 --- !u!4 &555915466 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 495128, guid: 0b2cd981521c4034fac46674e0fdafdc,
-    type: 3}
-  m_PrefabInstance: {fileID: 1737624450}
-  m_PrefabAsset: {fileID: 0}
---- !u!64 &555915468 stripped
-MeshCollider:
-  m_CorrespondingSourceObject: {fileID: 6478604, guid: 0b2cd981521c4034fac46674e0fdafdc,
     type: 3}
   m_PrefabInstance: {fileID: 1737624450}
   m_PrefabAsset: {fileID: 0}
@@ -22877,10 +22871,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0eb9a8f29be401469695de65cee6604, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockPuzzle:
-    id: Lock_01
-    puzzleName: TvStamdLock
-    puzzleDesc: It's locked.
+  puzzleLock:
+    id: L001
+    puzzleName: TV Stand Lock
+    puzzleDesc: It is locked.
     isSolved: 0
     animationSource: {fileID: 498358418}
     solveAnimationName: TvStandLeftDoorOpen
@@ -22888,7 +22882,7 @@ MonoBehaviour:
     unsolvedSound: {fileID: 8300000, guid: 0cddfa79ad4fe064d8c71699bab862ac, type: 3}
     solvedSound: {fileID: 8300000, guid: 5d036f68d1afce346b68eaca16d6b6e8, type: 3}
     puzzleCollider: {fileID: 0}
-    keyId: Key_01
+    keyId: K001
     unlockDesc: Press E to unlock.
 --- !u!65 &912077854
 BoxCollider:
@@ -29011,12 +29005,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31ff700fb85080c4cb9f9a4b6e52a4c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questItem:
-    id: Default Item
-    itemName: Default Item
-    itemSprite: {fileID: 0}
-    itemActionDesc: Press E to pick up the item.
-    itemUsageDesc: Default Usage
+  itemSocket:
+    id: S001
+    itemName: Arrival Day Photo
+    itemSprite: {fileID: 21300000, guid: b7d4ee8c4cfee1744a2cc7ab5f130d6b, type: 3}
+    itemActionDesc: Press E to pick up the photo.
+    itemUsageDesc: A photo of my cat's first day home, but why is it in the cabinet?
 --- !u!1001 &1144294599
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33811,12 +33805,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccc3411d41a80e44faf82b96e3af83f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyItem:
-    id: Key_02
-    itemName: TvStandKey_R
+  itemKey:
+    id: K002
+    itemName: Slider Door Key
     itemSprite: {fileID: 21300000, guid: aabfea47419cc344895d267b8c812957, type: 3}
     itemActionDesc: Press E to pick up the key.
-    itemUsageDesc: Default Usage
+    itemUsageDesc: If I remember right, this's for the living room slide door.
 --- !u!135 &1326759604
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -43994,10 +43988,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd99bef8262385a4d8f0f28720bc8891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPuzzle:
-    id: DefaultSocket
-    puzzleName: DefaultSocket
-    puzzleDesc: Something is missing here.
+  puzzlePosition:
+    id: P001
+    puzzleName: Empty Photo Frame
+    puzzleDesc: Weird, an empty photo frame.
     isSolved: 0
     animationSource: {fileID: 0}
     solveAnimationName: 
@@ -44005,9 +43999,9 @@ MonoBehaviour:
     unsolvedSound: {fileID: 0}
     solvedSound: {fileID: 0}
     puzzleCollider: {fileID: 0}
-    itemId: Default Item
-    placeDesc: Press E to place item.
-    item: {fileID: 1026322192}
+    socketId: S001
+    placeDesc: Press E to put photo back into the frame.
+    originalItem: {fileID: 0}
 --- !u!65 &1716299160
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -47664,12 +47658,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccc3411d41a80e44faf82b96e3af83f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyItem:
-    id: Key_01
-    itemName: TvStandKey_R
+  itemKey:
+    id: K001
+    itemName: TV Stand Key
     itemSprite: {fileID: 21300000, guid: aabfea47419cc344895d267b8c812957, type: 3}
     itemActionDesc: Press E to pick up the key.
-    itemUsageDesc: A key of something.
+    itemUsageDesc: It looks like a key to a piece of furniture.
 --- !u!135 &1851778228
 SphereCollider:
   m_ObjectHideFlags: 0
