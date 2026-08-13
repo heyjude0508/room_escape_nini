@@ -17,12 +17,19 @@ public class OpeningUiImpl : MonoBehaviour, IOpeningUi
     [SerializeField] TMP_Text startGameLabel;
     [SerializeField] TMP_Text copyrightText;
     [SerializeField] string nextSceneName = "HouseChild";
+    [SerializeField] float hoverScale = 1.08f;
+    [SerializeField] float hoverAnimSpeed = 12f;
+    [SerializeField] Color normalLabelColor = Color.white;
+    [SerializeField] Color hoverLabelColor = new Color(1f, 1f, 1f, 1f);
 
     bool isStarting;
+    Vector3 startGameBaseScale = Vector3.one;
+    bool hasStartGameBaseScale;
 
     void Awake()
     {
         AutoFindReferences();
+        CacheStartGameBaseScale();
         BindStartGameButton();
     }
 
@@ -33,14 +40,46 @@ public class OpeningUiImpl : MonoBehaviour, IOpeningUi
             return;
         }
 
-        if (!Input.GetMouseButtonDown(0))
+        bool isHovered = RectTransformUtility.RectangleContainsScreenPoint(
+            startGameHitArea,
+            Input.mousePosition,
+            null);
+
+        UpdateStartGameHoverVisual(isHovered);
+
+        if (isHovered && Input.GetMouseButtonDown(0))
+        {
+            StartGame();
+        }
+    }
+
+    void CacheStartGameBaseScale()
+    {
+        if (startGameHitArea == null)
         {
             return;
         }
 
-        if (RectTransformUtility.RectangleContainsScreenPoint(startGameHitArea, Input.mousePosition, null))
+        startGameBaseScale = startGameHitArea.localScale;
+        hasStartGameBaseScale = true;
+    }
+
+    void UpdateStartGameHoverVisual(bool isHovered)
+    {
+        if (!hasStartGameBaseScale)
         {
-            StartGame();
+            CacheStartGameBaseScale();
+        }
+
+        float targetScaleFactor = isHovered ? hoverScale : 1f;
+        Vector3 targetScale = startGameBaseScale * targetScaleFactor;
+        float t = 1f - Mathf.Exp(-hoverAnimSpeed * Time.unscaledDeltaTime);
+        startGameHitArea.localScale = Vector3.Lerp(startGameHitArea.localScale, targetScale, t);
+
+        if (startGameLabel != null)
+        {
+            Color targetColor = isHovered ? hoverLabelColor : normalLabelColor;
+            startGameLabel.color = Color.Lerp(startGameLabel.color, targetColor, t);
         }
     }
 
@@ -92,11 +131,18 @@ public class OpeningUiImpl : MonoBehaviour, IOpeningUi
                 copyrightText = copyright.GetComponent<TMP_Text>();
             }
         }
+
+        if (startGameLabel != null)
+        {
+            normalLabelColor = startGameLabel.color;
+            // Soft warm tint reads better than brightening already-white text.
+            hoverLabelColor = new Color(1f, 0.92f, 0.72f, normalLabelColor.a);
+        }
     }
 
     public void BindStartGameButton()
     {
-        // Click is handled in Update via startGameHitArea; no Unity Button required.
+        // Click and hover are handled in Update via startGameHitArea.
     }
 
     public void StartGame()
