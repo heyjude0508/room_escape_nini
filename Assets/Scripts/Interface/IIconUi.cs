@@ -8,6 +8,6 @@ public interface IIconUi
 
     public bool IsOwnedBy(Transform root);
 
-    public void SetIconState(IconTipEnum newState);
+    public void SetIconState(IconTipStatusEnum newState);
 
 }

@@ -20,7 +20,7 @@ public class IconUiImpl : MonoBehaviour, IIconUi
     Vector3 anchorOffset;
     bool useDetachedBillboard;
 
-    IconTipEnum currentState = IconTipEnum.Hidden;
+    IconTipStatusEnum currentState = IconTipStatusEnum.ICON_TIP_HIDDEN;
 
     void Awake()
     {
@@ -49,7 +49,7 @@ public class IconUiImpl : MonoBehaviour, IIconUi
             canvas.worldCamera = targetCamera;
         }
 
-        SetIconState(IconTipEnum.Hidden);
+        SetIconState(IconTipStatusEnum.ICON_TIP_HIDDEN);
     }
 
     void OnEnable()
@@ -76,7 +76,7 @@ public class IconUiImpl : MonoBehaviour, IIconUi
 
         if (distanceTarget == null || targetCamera == null || tipImage == null)
         {
-            SetIconState(IconTipEnum.Hidden);
+            SetIconState(IconTipStatusEnum.ICON_TIP_HIDDEN);
             return;
         }
 
@@ -84,15 +84,15 @@ public class IconUiImpl : MonoBehaviour, IIconUi
 
         if (distance > hintDistance)
         {
-            SetIconState(IconTipEnum.Hidden);
+            SetIconState(IconTipStatusEnum.ICON_TIP_HIDDEN);
         }
         else if (distance > interactDistance)
         {
-            SetIconState(IconTipEnum.Point);
+            SetIconState(IconTipStatusEnum.ICON_TIP_POINT);
         }
         else
         {
-            SetIconState(IconTipEnum.Check);
+            SetIconState(IconTipStatusEnum.ICON_TIP_CHECK);
         }
     }
 
@@ -205,7 +205,7 @@ public class IconUiImpl : MonoBehaviour, IIconUi
         return ownerRoot == root || ownerRoot.IsChildOf(root);
     }
 
-    public void SetIconState(IconTipEnum newState)
+    public void SetIconState(IconTipStatusEnum newState)
     {
         if (currentState == newState)
         {
@@ -216,15 +216,15 @@ public class IconUiImpl : MonoBehaviour, IIconUi
 
         switch (newState)
         {
-            case IconTipEnum.Hidden:
+            case IconTipStatusEnum.ICON_TIP_HIDDEN:
                 tipImage.enabled = false;
                 break;
-            case IconTipEnum.Point:
+            case IconTipStatusEnum.ICON_TIP_POINT:
                 tipImage.sprite = circleSprite;
                 tipImage.rectTransform.sizeDelta = smallsize;
                 tipImage.enabled = circleSprite != null;
                 break;
-            case IconTipEnum.Check:
+            case IconTipStatusEnum.ICON_TIP_CHECK:
                 tipImage.sprite = checkSprite;
                 tipImage.rectTransform.sizeDelta = largeSize;
                 tipImage.enabled = checkSprite != null;

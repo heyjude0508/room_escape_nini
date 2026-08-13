@@ -9,14 +9,14 @@ public class ItemBase
     public string itemName;
     public Sprite itemSprite;
     public string itemActionDesc;
-    public string itemUsageDesc = "Default Usage";
+    public string itemUsageDesc;
 
     public ItemBase(
         string id,
         string itemName,
         string itemActionDesc,
         Sprite itemSprite,
-        string itemUsageDesc = "Default Usage")
+        string itemUsageDesc)
     {
         this.id = id;
         this.itemName = itemName;
