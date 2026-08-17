@@ -93,25 +93,46 @@ public class LockPuzzleImpl : MonoBehaviour, IPuzzleLock
             return;
         }
 
-        if (bag == null)
+        if (puzzleLock.isSolved)
         {
-            Debug.LogError("Cannot find the bag.");
             return;
         }
 
-        if (!puzzleLock.isSolved && bag.HasItem(puzzleLock.keyId))
+        if (!puzzleLock.bypassKeyRequirement)
         {
+            if (bag == null)
+            {
+                Debug.LogError("Cannot find the bag.");
+                return;
+            }
+
+            if (!bag.HasItem(puzzleLock.keyId))
+            {
+                PlaySound(puzzleLock.unsolvedSound);
+                return;
+            }
+
             bag.RemoveItem(puzzleLock.keyId);
-            PlaySolveAnimation();
-            PlaySound(puzzleLock.solvedSound);
-            MarkSolved();
             Debug.Log($"Unlock the lock {puzzleLock.id} using the key {puzzleLock.keyId} successfully.");
         }
+        else
+        {
+            Debug.Log($"Unlock the lock {puzzleLock.id} successfully.");
+        }
+
+        PlaySolveAnimation();
+        PlaySound(puzzleLock.solvedSound);
+        MarkSolved();
     }
 
     public bool CanSolve()
     {
         if (puzzleLock.isSolved)
+        {
+            return true;
+        }
+
+        if (puzzleLock.bypassKeyRequirement)
         {
             return true;
         }
@@ -180,6 +201,12 @@ public class LockPuzzleImpl : MonoBehaviour, IPuzzleLock
         if (puzzleLock.puzzleCollider != null)
         {
             puzzleLock.puzzleCollider.enabled = false;
+        }
+
+        GiftBoxImpl giftBox = GetComponentInParent<GiftBoxImpl>();
+        if (giftBox != null)
+        {
+            giftBox.OpenDrawer();
         }
 
         enabled = false;

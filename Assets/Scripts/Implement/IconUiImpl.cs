@@ -17,7 +17,7 @@ public class IconUiImpl : MonoBehaviour, IIconUi
     Transform distanceTarget;
     Transform positionAnchor;
     Transform ownerRoot;
-    Vector3 anchorOffset;
+    Vector3 localAnchorOffset;
     bool useDetachedBillboard;
 
     IconTipStatusEnum currentState = IconTipStatusEnum.ICON_TIP_HIDDEN;
@@ -69,7 +69,8 @@ public class IconUiImpl : MonoBehaviour, IIconUi
     {
         if (useDetachedBillboard && positionAnchor != null)
         {
-            transform.position = positionAnchor.position + anchorOffset;
+            // Follow anchor pose (incl. door rotation), not a frozen world offset.
+            transform.position = positionAnchor.TransformPoint(localAnchorOffset);
         }
 
         FaceCamera();
@@ -154,6 +155,7 @@ public class IconUiImpl : MonoBehaviour, IIconUi
 
     // Interactions uses (60, 60, 1) scale. Unity cannot preserve world rotation on children
     // of non-uniformly scaled parents, so billboards there only yaw instead of facing the camera.
+    // Detach to root, but keep a local-space offset so moving/rotating parents (e.g. Door_R) still carry the tip.
     void TryDetachFromSkewedHierarchy()
     {
         if (!HasNonUniformScaleInParents(transform))
@@ -163,7 +165,7 @@ public class IconUiImpl : MonoBehaviour, IIconUi
 
         if (positionAnchor != null)
         {
-            anchorOffset = transform.position - positionAnchor.position;
+            localAnchorOffset = positionAnchor.InverseTransformPoint(transform.position);
         }
 
         Vector3 worldPosition = transform.position;
@@ -174,7 +176,7 @@ public class IconUiImpl : MonoBehaviour, IIconUi
 
         if (positionAnchor != null)
         {
-            transform.position = positionAnchor.position + anchorOffset;
+            transform.position = positionAnchor.TransformPoint(localAnchorOffset);
         }
     }
 

@@ -7,6 +7,7 @@ public class PuzzleLock: PuzzleBase
 {
     public string keyId;
     public string unlockDesc;
+    public bool bypassKeyRequirement;
 
     public PuzzleLock()
     {
@@ -17,6 +18,7 @@ public class PuzzleLock: PuzzleBase
 
         keyId = "Default Key";
         unlockDesc = "Press E to unlock.";
+        bypassKeyRequirement = false;
 
         animationSource = null;
         solveAnimationName = null;

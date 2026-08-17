@@ -12,6 +12,7 @@ public class EnvPropImpl : MonoBehaviour, IEnvProp
     //public DOTweenAnimation dtAnim;
 
     [SerializeField] EnvProp envProp;
+    [SerializeField] Collider interactCollider;
 
     void Awake()
     {
@@ -29,6 +30,35 @@ public class EnvPropImpl : MonoBehaviour, IEnvProp
         {
             envProp.audioSource = GetComponent<AudioSource>();
         }
+
+        if (interactCollider == null)
+        {
+            interactCollider = FindInteractCollider();
+        }
+    }
+
+    Collider FindInteractCollider()
+    {
+        Transform zone = transform.Find("InteractZone");
+        if (zone != null)
+        {
+            Collider zoneCollider = zone.GetComponent<Collider>();
+            if (zoneCollider != null)
+            {
+                return zoneCollider;
+            }
+        }
+
+        Collider[] colliders = GetComponentsInChildren<Collider>(true);
+        foreach (Collider collider in colliders)
+        {
+            if (collider.isTrigger)
+            {
+                return collider;
+            }
+        }
+
+        return null;
     }
 
     // Start is called before the first frame update
@@ -90,17 +120,32 @@ public class EnvPropImpl : MonoBehaviour, IEnvProp
             return;
         }
 
+        // Open once: disable close interaction for now.
         if (envProp.propStatus == EnvPropStatusEnum.ENV_PROP_OPEN)
         {
-            envProp.propStatus = EnvPropStatusEnum.ENV_PROP_CLOSE;
-            PlayAnimation(envProp.closeAnimationName);
-            PlaySound(envProp.closeSound);
+            // envProp.propStatus = EnvPropStatusEnum.ENV_PROP_CLOSE;
+            // PlayAnimation(envProp.closeAnimationName);
+            // PlaySound(envProp.closeSound);
             return;
         }
 
         envProp.propStatus = EnvPropStatusEnum.ENV_PROP_OPEN;
         PlayAnimation(envProp.openAnimationName);
         PlaySound(envProp.openSound);
+        SetInteractColliderEnabled(false);
+    }
+
+    void SetInteractColliderEnabled(bool enabled)
+    {
+        if (interactCollider == null)
+        {
+            interactCollider = FindInteractCollider();
+        }
+
+        if (interactCollider != null)
+        {
+            interactCollider.enabled = enabled;
+        }
     }
 
     public void PlayAnimation(string animationName)
