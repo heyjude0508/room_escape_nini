@@ -26,4 +26,5 @@ public class Slot
         this.emptySlotSprite = emptySlotSprite;
     }
 
+    public Slot() { }
 }

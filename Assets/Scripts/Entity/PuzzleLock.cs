@@ -5,14 +5,15 @@ using UnityEngine.Serialization;
 [System.Serializable]
 public class PuzzleLock: PuzzleBase
 {
+    public string puzzleDesc;
     public string keyId;
     public string unlockDesc;
     public bool bypassKeyRequirement;
 
-    public PuzzleLock()
+    public PuzzleLock() : base()
     {
-        id = "DefaultLock";
-        puzzleName = "DefaultLock";
+        id = "Default Lock";
+        puzzleName = "Default Lock";
         puzzleDesc = "It is locked.";                                  
         isSolved = false;
 

@@ -5,30 +5,20 @@ using UnityEngine.UI;
 
 public class OpeningUiImpl : MonoBehaviour, IOpeningUi
 {
-    const string BackgroundName = "Background";
-    const string TitleTextName = "TitleText";
-    const string StartGameButtonName = "StartGameButton";
-    const string StartGameLabelName = "StartGameLabel";
-    const string CopyrightTextName = "CopyrightText";
+    [SerializeField] OpeningUi openingUi;
 
-    [SerializeField] Image backgroundImage;
-    [SerializeField] TMP_Text titleText;
-    [SerializeField] RectTransform startGameHitArea;
-    [SerializeField] TMP_Text startGameLabel;
-    [SerializeField] TMP_Text copyrightText;
-    [SerializeField] string nextSceneName = "HouseChild";
-    [SerializeField] float hoverScale = 1.08f;
-    [SerializeField] float hoverAnimSpeed = 12f;
-    [SerializeField] Color normalLabelColor = new Color(1f, 0.894f, 0.71f, 1f);
-    [SerializeField] Color hoverLabelColor = new Color(1f, 0.78f, 0.35f, 1f);
-    [SerializeField] Material readableTextMaterial;
-
+    Material readableTextMaterial;
     bool isStarting;
     Vector3 startGameBaseScale = Vector3.one;
     bool hasStartGameBaseScale;
 
     void Awake()
     {
+        if (openingUi == null)
+        {
+            openingUi = new OpeningUi();
+        }
+
         AutoFindReferences();
         ApplyReadableTextStyle();
         CacheStartGameBaseScale();
@@ -43,12 +33,12 @@ public class OpeningUiImpl : MonoBehaviour, IOpeningUi
             material = Resources.Load<Material>("Fonts & Materials/LiberationSans SDF - Drop Shadow");
         }
 
-        normalLabelColor = new Color(1f, 0.894f, 0.71f, 1f);
-        hoverLabelColor = new Color(1f, 0.78f, 0.35f, 1f);
+        openingUi.normalLabelColor = new Color(1f, 0.894f, 0.71f, 1f);
+        openingUi.hoverLabelColor = new Color(1f, 0.78f, 0.35f, 1f);
 
-        ApplyTextStyle(titleText, new Color(1f, 0.965f, 0.91f, 1f), material);
-        ApplyTextStyle(startGameLabel, normalLabelColor, material);
-        ApplyTextStyle(copyrightText, new Color(1f, 0.965f, 0.91f, 0.9f), material);
+        ApplyTextStyle(openingUi.titleText, new Color(1f, 0.965f, 0.91f, 1f), material);
+        ApplyTextStyle(openingUi.startGameLabel, openingUi.normalLabelColor, material);
+        ApplyTextStyle(openingUi.copyrightText, new Color(1f, 0.965f, 0.91f, 0.9f), material);
     }
 
     static void ApplyTextStyle(TMP_Text text, Color color, Material material)
@@ -67,13 +57,13 @@ public class OpeningUiImpl : MonoBehaviour, IOpeningUi
 
     void Update()
     {
-        if (isStarting || startGameHitArea == null)
+        if (isStarting || openingUi == null || openingUi.startGameHitArea == null)
         {
             return;
         }
 
         bool isHovered = RectTransformUtility.RectangleContainsScreenPoint(
-            startGameHitArea,
+            openingUi.startGameHitArea,
             Input.mousePosition,
             null);
 
@@ -87,12 +77,12 @@ public class OpeningUiImpl : MonoBehaviour, IOpeningUi
 
     void CacheStartGameBaseScale()
     {
-        if (startGameHitArea == null)
+        if (openingUi == null || openingUi.startGameHitArea == null)
         {
             return;
         }
 
-        startGameBaseScale = startGameHitArea.localScale;
+        startGameBaseScale = openingUi.startGameHitArea.localScale;
         hasStartGameBaseScale = true;
     }
 
@@ -103,67 +93,79 @@ public class OpeningUiImpl : MonoBehaviour, IOpeningUi
             CacheStartGameBaseScale();
         }
 
-        float targetScaleFactor = isHovered ? hoverScale : 1f;
-        Vector3 targetScale = startGameBaseScale * targetScaleFactor;
-        float t = 1f - Mathf.Exp(-hoverAnimSpeed * Time.unscaledDeltaTime);
-        startGameHitArea.localScale = Vector3.Lerp(startGameHitArea.localScale, targetScale, t);
-
-        if (startGameLabel != null)
+        if (openingUi.startGameHitArea == null)
         {
-            Color targetColor = isHovered ? hoverLabelColor : normalLabelColor;
-            startGameLabel.color = Color.Lerp(startGameLabel.color, targetColor, t);
+            return;
+        }
+
+        float targetScaleFactor = isHovered ? openingUi.hoverScale : 1f;
+        Vector3 targetScale = startGameBaseScale * targetScaleFactor;
+        float t = 1f - Mathf.Exp(-openingUi.hoverAnimSpeed * Time.unscaledDeltaTime);
+        openingUi.startGameHitArea.localScale = Vector3.Lerp(
+            openingUi.startGameHitArea.localScale,
+            targetScale,
+            t);
+
+        if (openingUi.startGameLabel != null)
+        {
+            Color targetColor = isHovered ? openingUi.hoverLabelColor : openingUi.normalLabelColor;
+            openingUi.startGameLabel.color = Color.Lerp(openingUi.startGameLabel.color, targetColor, t);
         }
     }
 
     public void AutoFindReferences()
     {
-        if (backgroundImage == null)
+        if (openingUi == null)
         {
-            Transform background = transform.Find(BackgroundName);
+            openingUi = new OpeningUi();
+        }
+
+        if (openingUi.backgroundImage == null)
+        {
+            Transform background = transform.Find(openingUi.backgroundName);
             if (background != null)
             {
-                backgroundImage = background.GetComponent<Image>();
+                openingUi.backgroundImage = background.GetComponent<Image>();
             }
         }
 
-        if (titleText == null)
+        if (openingUi.titleText == null)
         {
-            Transform title = transform.Find(TitleTextName);
+            Transform title = transform.Find(openingUi.titleTextName);
             if (title != null)
             {
-                titleText = title.GetComponent<TMP_Text>();
+                openingUi.titleText = title.GetComponent<TMP_Text>();
             }
         }
 
-        if (startGameHitArea == null)
+        if (openingUi.startGameHitArea == null)
         {
-            Transform startButton = transform.Find(StartGameButtonName);
+            Transform startButton = transform.Find(openingUi.startGameButtonName);
             if (startButton != null)
             {
-                startGameHitArea = startButton as RectTransform;
+                openingUi.startGameHitArea = startButton as RectTransform;
             }
         }
 
-        if (startGameLabel == null)
+        if (openingUi.startGameLabel == null)
         {
-            Transform startLabel = startGameHitArea != null
-                ? startGameHitArea.Find(StartGameLabelName)
-                : transform.Find(StartGameButtonName + "/" + StartGameLabelName);
+            Transform startLabel = openingUi.startGameHitArea != null
+                ? openingUi.startGameHitArea.Find(openingUi.startGameLabelName)
+                : transform.Find(openingUi.startGameButtonName + "/" + openingUi.startGameLabelName);
             if (startLabel != null)
             {
-                startGameLabel = startLabel.GetComponent<TMP_Text>();
+                openingUi.startGameLabel = startLabel.GetComponent<TMP_Text>();
             }
         }
 
-        if (copyrightText == null)
+        if (openingUi.copyrightText == null)
         {
-            Transform copyright = transform.Find(CopyrightTextName);
+            Transform copyright = transform.Find(openingUi.copyrightTextName);
             if (copyright != null)
             {
-                copyrightText = copyright.GetComponent<TMP_Text>();
+                openingUi.copyrightText = copyright.GetComponent<TMP_Text>();
             }
         }
-
     }
 
     public void BindStartGameButton()
@@ -173,18 +175,18 @@ public class OpeningUiImpl : MonoBehaviour, IOpeningUi
 
     public void StartGame()
     {
-        if (isStarting)
+        if (isStarting || openingUi == null)
         {
             return;
         }
 
-        if (string.IsNullOrEmpty(nextSceneName))
+        if (string.IsNullOrEmpty(openingUi.nextSceneName))
         {
             Debug.LogError("Next scene name is empty.");
             return;
         }
 
         isStarting = true;
-        SceneManager.LoadScene(nextSceneName);
+        SceneManager.LoadScene(openingUi.nextSceneName);
     }
 }

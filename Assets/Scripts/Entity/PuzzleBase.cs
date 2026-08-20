@@ -6,7 +6,6 @@ public class PuzzleBase
 {
     public string id;
     public string puzzleName;
-    public string puzzleDesc;
     public bool isSolved;
     
     public Animation animationSource;
@@ -21,7 +20,6 @@ public class PuzzleBase
     public PuzzleBase(
     string id,
     string puzzleName,
-    string puzzleDesc,
     bool isSolved,
     Animation animationSource,
     string solveAnimationName,
@@ -33,7 +31,6 @@ public class PuzzleBase
     {
         this.id = id;
         this.puzzleName = puzzleName;
-        this.puzzleDesc = puzzleDesc;
         this.isSolved = isSolved;
         this.solveAnimationName = solveAnimationName;
         this.animationSource = animationSource;

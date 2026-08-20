@@ -153,7 +153,7 @@ public class PuzzlePositionImpl : MonoBehaviour, IPuzzlePosition
             return;
         }
 
-        Transform placedItem = transform.Find("PicArrivalDay");
+        Transform placedItem = transform.Find(puzzlePosition.id);
         if (placedItem != null)
         {
             puzzlePosition.originalItem = placedItem.gameObject;

@@ -203,12 +203,6 @@ public class LockPuzzleImpl : MonoBehaviour, IPuzzleLock
             puzzleLock.puzzleCollider.enabled = false;
         }
 
-        GiftBoxImpl giftBox = GetComponentInParent<GiftBoxImpl>();
-        if (giftBox != null)
-        {
-            giftBox.OpenDrawer();
-        }
-
         enabled = false;
     }
 

@@ -451,17 +451,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7e4c2a91f3d4e5a8b6c7d8e9f0a1b2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backgroundImage: {fileID: 2100000013}
-  titleText: {fileID: 2100000023}
-  startGameHitArea: {fileID: 2100000032}
-  startGameLabel: {fileID: 2100000043}
-  copyrightText: {fileID: 2100000053}
-  nextSceneName: HouseChild
-  hoverScale: 1.08
-  hoverAnimSpeed: 12
-  normalLabelColor: {r: 1, g: 0.894, b: 0.71, a: 1}
-  hoverLabelColor: {r: 1, g: 0.78, b: 0.35, a: 1}
-  readableTextMaterial: {fileID: 0}
+  openingUi:
+    backgroundName: Background
+    titleTextName: TitleText
+    startGameButtonName: StartGameButton
+    startGameLabelName: StartGameLabel
+    copyrightTextName: CopyrightText
+    backgroundImage: {fileID: 2100000013}
+    titleText: {fileID: 2100000023}
+    startGameHitArea: {fileID: 2100000032}
+    startGameLabel: {fileID: 2100000043}
+    copyrightText: {fileID: 2100000053}
+    nextSceneName: HouseChild
+    hoverScale: 1.08
+    hoverAnimSpeed: 12
+    normalLabelColor: {r: 1, g: 0.894, b: 0.71, a: 1}
+    hoverLabelColor: {r: 1, g: 0.78, b: 0.35, a: 1}
 --- !u!1 &2100000011
 GameObject:
   m_ObjectHideFlags: 0
