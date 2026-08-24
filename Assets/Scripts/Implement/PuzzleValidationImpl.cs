@@ -100,7 +100,7 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
             MarkSolved();
             if (puzzleValidateUi != null)
             {
-                puzzleValidateUi.Close();
+                puzzleValidateUi.ShowCorrectThenClose();
             }
 
             Debug.Log($"Input {puzzleValidation.validationCode} correctly.");
@@ -108,6 +108,11 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
         }
 
         PlaySound(puzzleValidation.unsolvedSound);
+        if (puzzleValidateUi != null)
+        {
+            puzzleValidateUi.ShowErrorThenReset();
+        }
+
         Debug.Log($"Wrong code: {inputCode}");
     }
 

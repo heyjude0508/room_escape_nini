@@ -15,4 +15,8 @@ public interface IPuzzleValidateUi
     void ChangeDigit(int index, int delta);
 
     string GetEnteredCode();
+
+    void ShowCorrectThenClose();
+
+    void ShowErrorThenReset();
 }

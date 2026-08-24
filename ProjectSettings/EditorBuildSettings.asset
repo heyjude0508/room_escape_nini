@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Opening.unity
     guid: 5085a060ddd3a454983846e2caae7ffb
   - enabled: 1
+    path: Assets/Scenes/Prologue.unity
+    guid: eb828cb86477ca246a28cb6ecf2f188a
+  - enabled: 1
     path: Assets/Scenes/HouseChild.unity
     guid: e073d8392c969b946a6f9427ab5996d9
   m_configObjects: {}

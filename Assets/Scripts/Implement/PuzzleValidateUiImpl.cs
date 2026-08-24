@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +7,7 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
 {
     const string PanelName = "Panel";
     const string DigitRowName = "DigitRow";
+    const string HintName = "Hint";
     const string CloseButtonName = "CloseButton";
     const string ResetButtonName = "ResetButton";
     const string UnlockButtonName = "UnlockButton";
@@ -21,11 +23,14 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
     Button resetButton;
     Button unlockButton;
     Transform digitRow;
+    TMP_Text hintText;
     Button[] upButtons;
     Button[] downButtons;
     TMP_Text[] digitTexts;
     int[] currentDigits;
     bool buttonsBound;
+    bool isFeedbackPlaying;
+    Coroutine hintRoutine;
 
     void Awake()
     {
@@ -37,6 +42,7 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
         AutoFindReferences();
         BindButtons();
         ResetDigits();
+        ShowTipHint();
     }
 
     public void AutoFindReferences()
@@ -59,6 +65,9 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
         closeButton = FindButton(searchRoot, CloseButtonName);
         resetButton = FindButton(searchRoot, ResetButtonName);
         unlockButton = FindButton(searchRoot, UnlockButtonName);
+
+        Transform hintTransform = FindChildRecursive(searchRoot, HintName);
+        hintText = hintTransform != null ? hintTransform.GetComponent<TMP_Text>() : null;
 
         EnsureDigitArrays();
 
@@ -141,6 +150,9 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
             puzzleValidateUi = new PuzzleValidateUi();
         }
 
+        StopHintRoutine();
+        isFeedbackPlaying = false;
+
         if (!gameObject.activeSelf)
         {
             gameObject.SetActive(true);
@@ -149,11 +161,14 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
         AutoFindReferences();
         BindButtons();
         ResetDigits();
+        ShowTipHint();
         SetCursorForUi(true);
     }
 
     public void Close()
     {
+        StopHintRoutine();
+        isFeedbackPlaying = false;
         gameObject.SetActive(false);
         SetCursorForUi(false);
     }
@@ -176,7 +191,7 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
 
     public void ChangeDigit(int index, int delta)
     {
-        if (puzzleValidateUi == null)
+        if (puzzleValidateUi == null || isFeedbackPlaying)
         {
             return;
         }
@@ -215,6 +230,18 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
         return new string(chars);
     }
 
+    public void ShowCorrectThenClose()
+    {
+        StopHintRoutine();
+        hintRoutine = StartCoroutine(CorrectHintRoutine());
+    }
+
+    public void ShowErrorThenReset()
+    {
+        StopHintRoutine();
+        hintRoutine = StartCoroutine(ErrorHintRoutine());
+    }
+
     void OnCloseClicked()
     {
         Close();
@@ -222,11 +249,22 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
 
     void OnResetClicked()
     {
+        if (isFeedbackPlaying)
+        {
+            return;
+        }
+
         ResetDigits();
+        ShowTipHint();
     }
 
     void OnUnlockClicked()
     {
+        if (isFeedbackPlaying)
+        {
+            return;
+        }
+
         PuzzleValidationImpl validation = GetComponentInParent<PuzzleValidationImpl>();
         if (validation == null)
         {
@@ -235,6 +273,49 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
         }
 
         validation.ValidateCode(GetEnteredCode());
+    }
+
+    void ShowTipHint()
+    {
+        SetHintText(puzzleValidateUi != null ? puzzleValidateUi.hintTip : string.Empty);
+    }
+
+    void SetHintText(string text)
+    {
+        if (hintText != null)
+        {
+            hintText.text = text ?? string.Empty;
+        }
+    }
+
+    IEnumerator CorrectHintRoutine()
+    {
+        isFeedbackPlaying = true;
+        SetHintText(puzzleValidateUi.hintCorrect);
+        yield return new WaitForSecondsRealtime(Mathf.Max(0f, puzzleValidateUi.duration));
+        isFeedbackPlaying = false;
+        hintRoutine = null;
+        Close();
+    }
+
+    IEnumerator ErrorHintRoutine()
+    {
+        isFeedbackPlaying = true;
+        SetHintText(puzzleValidateUi.hintError);
+        yield return new WaitForSecondsRealtime(Mathf.Max(0f, puzzleValidateUi.duration));
+        ResetDigits();
+        ShowTipHint();
+        isFeedbackPlaying = false;
+        hintRoutine = null;
+    }
+
+    void StopHintRoutine()
+    {
+        if (hintRoutine != null)
+        {
+            StopCoroutine(hintRoutine);
+            hintRoutine = null;
+        }
     }
 
     static void ApplyHoverDarkStyle(Button button)

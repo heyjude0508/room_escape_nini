@@ -108,9 +108,17 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
 
     public void DiscoverImpItem()
     {
+        if (mainCamera == null)
+        {
+            return;
+        }
+
         Ray ray = mainCamera.ViewportPointToRay(Vector3.one / 2);
         bool IsHit = false;
-        UiInteraction.SetActive(false);
+        if (UiInteraction != null)
+        {
+            UiInteraction.SetActive(false);
+        }
 
         if (Physics.Raycast(ray, out RaycastHit hitInfo, interactionRaycastRange))
         {
@@ -118,8 +126,15 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
             if (interactable != null && CanInteract(interactable))
             {
                 IsHit = true;
-                UiInteraction.SetActive(IsHit);
-                UiInteractionText.text = interactable.GetDescription();
+                if (UiInteraction != null)
+                {
+                    UiInteraction.SetActive(IsHit);
+                }
+
+                if (UiInteractionText != null)
+                {
+                    UiInteractionText.text = interactable.GetDescription();
+                }
 
                 interactable.EventAimStart();
 
@@ -129,7 +144,7 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
                 }
             }
         }
-        else
+        else if (UiInteraction != null)
         {
             UiInteraction.SetActive(IsHit);
         }

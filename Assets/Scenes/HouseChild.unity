@@ -28259,9 +28259,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   puzzleValidateUi:
     digitCount: 5
-    hintTip: 
-    hintCorrect: 
-    hintError: 
+    duration: 1
+    hintTip: Click arrows to set the code
+    hintCorrect: CORRECT CODE
+    hintError: ERROR! TRY AGAIN
 --- !u!1001 &969398280
 PrefabInstance:
   m_ObjectHideFlags: 0
