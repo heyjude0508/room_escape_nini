@@ -1,25 +1,13 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PrologueUiImpl : MonoBehaviour, IPrologueUi
 {
-    const string SubtitlePanelName = "SubtitlePanel";
-    const string LinesName = "Lines";
-    const string KeyName = "Key";
-    const string ContinueKeyText = "Enter";
+    const string AvatarResourcePath = "UI/Avatar/";
+    const float EnterKeyPulseScale = 1.2f;
 
-    [SerializeField] PrologueUi prologueUi;
-    [SerializeField] TMP_Text linesText;
-    [SerializeField] RectTransform subtitlePanel;
-    [SerializeField] Light cubeSpotlight;
-
-    TMP_Text keyText;
-    FirstPersonController firstPersonController;
-    PlayerActionImpl playerAction;
-    int currentLineIndex;
-    bool isAdvancing;
+    PrologueUi prologueUi;
 
     void Awake()
     {
@@ -28,25 +16,8 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
             prologueUi = new PrologueUi();
         }
 
-        currentLineIndex = 0;
-        isAdvancing = false;
         AutoFindReferences();
-        if (cubeSpotlight != null)
-        {
-            cubeSpotlight.enabled = false;
-        }
-
-        ApplySubtitle();
-    }
-
-    void Update()
-    {
-        if (!IsSubtitleVisible() || isAdvancing || !WasContinuePressed())
-        {
-            return;
-        }
-
-        NextLine();
+        SetSubtitlePanelActive(false);
     }
 
     public void AutoFindReferences()
@@ -56,332 +27,177 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
             prologueUi = new PrologueUi();
         }
 
-        if (subtitlePanel == null)
+        if (string.IsNullOrEmpty(prologueUi.linesName))
         {
-            Transform panelTransform = FindChildRecursive(transform, SubtitlePanelName);
-            subtitlePanel = panelTransform != null
-                ? panelTransform.GetComponent<RectTransform>()
-                : null;
+            prologueUi.linesName = "Lines";
         }
 
-        if (linesText == null)
+        if (string.IsNullOrEmpty(prologueUi.subtitlePanelName))
         {
-            Transform linesTransform = FindChildRecursive(transform, LinesName);
-            linesText = linesTransform != null
-                ? linesTransform.GetComponent<TMP_Text>()
-                : null;
+            prologueUi.subtitlePanelName = "SubtitlePanel";
         }
 
-        if (cubeSpotlight == null)
+        if (string.IsNullOrEmpty(prologueUi.avatarName))
         {
-            GameObject spotlightObject = GameObject.Find("CubeSpotlight");
-            if (spotlightObject != null)
+            prologueUi.avatarName = "Avatar";
+        }
+
+        if (string.IsNullOrEmpty(prologueUi.enterKeyName))
+        {
+            prologueUi.enterKeyName = "EnterKey";
+        }
+
+        if (prologueUi.linesText == null)
+        {
+            Transform linesTransform = FindChildRecursive(transform, prologueUi.linesName);
+            if (linesTransform != null)
             {
-                cubeSpotlight = spotlightObject.GetComponent<Light>();
+                prologueUi.linesText = linesTransform.GetComponent<TMP_Text>();
             }
         }
 
-        if (firstPersonController == null)
+        if (prologueUi.avatarImage == null)
         {
-            firstPersonController = FindObjectOfType<FirstPersonController>();
-        }
-
-        if (playerAction == null)
-        {
-            playerAction = FindObjectOfType<PlayerActionImpl>();
-        }
-
-        Transform keyTransform = FindChildRecursive(transform, KeyName);
-        keyText = keyTransform != null
-            ? keyTransform.GetComponent<TMP_Text>()
-            : null;
-
-        if (keyText != null)
-        {
-            keyText.text = ContinueKeyText;
-            keyText.enableWordWrapping = false;
-            keyText.overflowMode = TextOverflowModes.Overflow;
-            if (linesText != null)
+            Transform avatarTransform = FindChildRecursive(transform, prologueUi.avatarName);
+            if (avatarTransform != null)
             {
-                keyText.fontSize = linesText.fontSize;
+                prologueUi.avatarImage = avatarTransform.GetComponent<Image>();
             }
         }
 
-        if (linesText != null)
+        if (prologueUi.enterKey == null)
         {
-            linesText.enableWordWrapping = false;
-            linesText.overflowMode = TextOverflowModes.Overflow;
-            if (keyText != null)
+            Transform enterKeyTransform = FindChildRecursive(transform, prologueUi.enterKeyName);
+            if (enterKeyTransform != null)
             {
-                keyText.fontSize = linesText.fontSize;
+                prologueUi.enterKey = enterKeyTransform as RectTransform;
+                if (prologueUi.enterKey == null)
+                {
+                    prologueUi.enterKey = enterKeyTransform.GetComponent<RectTransform>();
+                }
+
+                if (prologueUi.enterKey != null)
+                {
+                    prologueUi.enterKeyBaseScale = prologueUi.enterKey.localScale;
+                }
             }
         }
 
-        if (linesText == null)
+        if (prologueUi.linesText == null)
         {
             Debug.LogError("Lines TMP_Text not found under " + name);
         }
 
-        if (subtitlePanel == null)
+        if (prologueUi.avatarImage == null)
         {
-            Debug.LogError("SubtitlePanel not found under " + name);
+            Debug.LogError("Avatar Image not found under " + name);
+        }
+
+        if (prologueUi.enterKey == null)
+        {
+            Debug.LogError("EnterKey not found under " + name);
         }
     }
 
-    public void ApplySubtitle()
+    public void PlayLines(string line, string avatar)
     {
         if (prologueUi == null)
         {
             prologueUi = new PrologueUi();
         }
 
-        EnsureLines();
-
-        if (linesText == null || subtitlePanel == null)
+        if (prologueUi.linesText == null || prologueUi.avatarImage == null || prologueUi.enterKey == null)
         {
             AutoFindReferences();
         }
 
-        if (linesText == null)
+        if (prologueUi.linesText == null)
         {
             return;
         }
 
-        if (prologueUi.prologueLines.lines.Count == 0)
-        {
-            ClearSubtitle();
-            return;
-        }
-
-        if (currentLineIndex < 0 || currentLineIndex >= prologueUi.prologueLines.lines.Count)
-        {
-            ClearSubtitle();
-            return;
-        }
-
-        PrologueLine line = prologueUi.prologueLines.lines[currentLineIndex];
-        linesText.text = line != null ? (line.text ?? string.Empty) : string.Empty;
-        RefreshSubtitlePanel();
-        SetContinuePromptVisible(true);
-        SyncPlayerInputLock();
+        SetSubtitlePanelActive(true);
+        prologueUi.linesText.text = line ?? string.Empty;
+        ApplyAvatar(avatar);
     }
 
-    public void NextLine()
+    public void PulseEnterKey()
     {
-        if (isAdvancing || !IsSubtitleVisible())
-        {
-            return;
-        }
-
-        EnsureLines();
-        if (prologueUi.prologueLines.lines.Count == 0)
-        {
-            return;
-        }
-
-        if (currentLineIndex < 0 || currentLineIndex >= prologueUi.prologueLines.lines.Count)
-        {
-            return;
-        }
-
-        StartCoroutine(CompleteCurrentLineThenAdvance());
-    }
-
-    IEnumerator CompleteCurrentLineThenAdvance()
-    {
-        isAdvancing = true;
-        SetContinuePromptVisible(false);
-        SyncPlayerInputLock();
-
-        PrologueLine line = prologueUi.prologueLines.lines[currentLineIndex];
-        if (line != null && line.onComplete != null)
-        {
-            for (int i = 0; i < line.onComplete.Count; i++)
-            {
-                yield return ExecuteCommand(line.onComplete[i]);
-            }
-        }
-
-        if (currentLineIndex >= prologueUi.prologueLines.lines.Count - 1)
-        {
-            ClearSubtitle();
-            isAdvancing = false;
-            SyncPlayerInputLock();
-            yield break;
-        }
-
-        currentLineIndex++;
-        ApplySubtitle();
-        isAdvancing = false;
-        SyncPlayerInputLock();
-    }
-
-    IEnumerator ExecuteCommand(PrologueCommand command)
-    {
-        if (command == null || string.IsNullOrEmpty(command.id))
-        {
-            yield break;
-        }
-
-        switch (command.id)
-        {
-            case PrologueLines.CommandWait:
-                yield return new WaitForSecondsRealtime(Mathf.Max(0f, command.value));
-                break;
-
-            case PrologueLines.CommandSpotlightOn:
-                if (cubeSpotlight == null)
-                {
-                    AutoFindReferences();
-                }
-
-                if (cubeSpotlight != null)
-                {
-                    cubeSpotlight.enabled = true;
-                    cubeSpotlight.intensity = 12f;
-                }
-                else
-                {
-                    Debug.LogError("CubeSpotlight not found for SpotlightOn command");
-                }
-
-                break;
-
-            default:
-                Debug.LogWarning("Unknown prologue command: " + command.id);
-                break;
-        }
-    }
-
-    void EnsureLines()
-    {
-        if (prologueUi == null)
-        {
-            prologueUi = new PrologueUi();
-        }
-
-        if (prologueUi.prologueLines == null || prologueUi.prologueLines.lines == null
-            || prologueUi.prologueLines.lines.Count == 0)
-        {
-            prologueUi.prologueLines = new PrologueLines();
-        }
-    }
-
-    bool WasContinuePressed()
-    {
-        return Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter);
-    }
-
-    bool IsSubtitleVisible()
-    {
-        return linesText != null
-            && !string.IsNullOrEmpty(linesText.text)
-            && subtitlePanel != null
-            && subtitlePanel.gameObject.activeSelf;
-    }
-
-    void ClearSubtitle()
-    {
-        if (linesText != null)
-        {
-            linesText.text = string.Empty;
-        }
-
-        SetContinuePromptVisible(false);
-        RefreshSubtitlePanel();
-        SyncPlayerInputLock();
-    }
-
-    void SyncPlayerInputLock()
-    {
-        SetPlayerInputLocked(isAdvancing || IsSubtitleVisible());
-    }
-
-    void SetPlayerInputLocked(bool locked)
-    {
-        if (firstPersonController == null || playerAction == null)
+        if (prologueUi == null || prologueUi.enterKey == null)
         {
             AutoFindReferences();
         }
 
-        if (firstPersonController != null)
-        {
-            firstPersonController.playerCanMove = !locked;
-            firstPersonController.cameraCanMove = !locked;
-
-            if (locked)
-            {
-                Rigidbody rb = firstPersonController.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    Vector3 velocity = rb.velocity;
-                    rb.velocity = new Vector3(0f, velocity.y, 0f);
-                }
-            }
-        }
-
-        if (playerAction != null)
-        {
-            playerAction.enabled = !locked;
-        }
-    }
-
-    void SetContinuePromptVisible(bool visible)
-    {
-        if (keyText == null)
+        if (prologueUi == null || prologueUi.enterKey == null)
         {
             return;
         }
 
-        Transform icon = keyText.transform.parent;
-        if (icon != null)
+        prologueUi.enterKey.localScale = prologueUi.enterKeyBaseScale * EnterKeyPulseScale;
+    }
+
+    public void ResetEnterKeyScale()
+    {
+        if (prologueUi == null || prologueUi.enterKey == null)
         {
-            icon.gameObject.SetActive(visible);
+            AutoFindReferences();
         }
-        else
+
+        if (prologueUi != null && prologueUi.enterKey != null)
         {
-            keyText.gameObject.SetActive(visible);
+            prologueUi.enterKey.localScale = prologueUi.enterKeyBaseScale;
         }
     }
 
-    void RefreshSubtitlePanel()
+    void SetSubtitlePanelActive(bool active)
     {
-        if (subtitlePanel == null || linesText == null)
+        Transform subtitlePanel = FindChildRecursive(transform, prologueUi.subtitlePanelName);
+        if (subtitlePanel != null)
+        {
+            subtitlePanel.gameObject.SetActive(active);
+        }
+    }
+
+    void ApplyAvatar(string avatar)
+    {
+        if (prologueUi.avatarImage == null)
         {
             return;
         }
 
-        if (string.IsNullOrEmpty(linesText.text))
+        if (string.IsNullOrEmpty(avatar))
         {
-            subtitlePanel.gameObject.SetActive(false);
+            prologueUi.avatarImage.sprite = null;
+            prologueUi.avatarImage.color = new Color(1f, 1f, 1f, 0.15f);
             return;
         }
 
-        if (!subtitlePanel.gameObject.activeSelf)
+        Sprite sprite = Resources.Load<Sprite>(AvatarResourcePath + avatar);
+        if (sprite == null)
         {
-            subtitlePanel.gameObject.SetActive(true);
+            Debug.LogError("Avatar sprite not found: " + AvatarResourcePath + avatar);
+            return;
         }
 
-        Canvas.ForceUpdateCanvases();
-        linesText.ForceMeshUpdate(true);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(subtitlePanel);
+        prologueUi.avatarImage.sprite = sprite;
+        prologueUi.avatarImage.color = Color.white;
     }
 
-    static Transform FindChildRecursive(Transform parent, string name)
+    static Transform FindChildRecursive(Transform parent, string childName)
     {
-        if (parent == null)
+        if (parent == null || string.IsNullOrEmpty(childName))
         {
             return null;
         }
 
-        if (parent.name == name)
+        if (parent.name == childName)
         {
             return parent;
         }
 
         for (int i = 0; i < parent.childCount; i++)
         {
-            Transform found = FindChildRecursive(parent.GetChild(i), name);
+            Transform found = FindChildRecursive(parent.GetChild(i), childName);
             if (found != null)
             {
                 return found;

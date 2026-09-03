@@ -70,6 +70,7 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
         hintText = hintTransform != null ? hintTransform.GetComponent<TMP_Text>() : null;
 
         EnsureDigitArrays();
+        SyncDigitColumnVisibility(searchRoot);
 
         for (int i = 0; i < puzzleValidateUi.digitCount; i++)
         {
@@ -93,6 +94,32 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
             {
                 digitTexts[i] = textTransform.GetComponent<TMP_Text>();
             }
+        }
+    }
+
+    void SyncDigitColumnVisibility(Transform searchRoot)
+    {
+        if (digitRow == null && searchRoot == null)
+        {
+            return;
+        }
+
+        Transform row = digitRow != null ? digitRow : searchRoot;
+        for (int i = 0; i < row.childCount; i++)
+        {
+            Transform child = row.GetChild(i);
+            if (child == null || !child.name.StartsWith(DigitColumnPrefix))
+            {
+                continue;
+            }
+
+            string suffix = child.name.Substring(DigitColumnPrefix.Length);
+            if (!int.TryParse(suffix, out int index))
+            {
+                continue;
+            }
+
+            child.gameObject.SetActive(index >= 0 && index < puzzleValidateUi.digitCount);
         }
     }
 

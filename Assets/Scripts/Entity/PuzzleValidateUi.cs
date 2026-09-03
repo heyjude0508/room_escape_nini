@@ -21,7 +21,7 @@ public class PuzzleValidateUi
 
     public PuzzleValidateUi()
     {
-        digitCount = 5;
+        digitCount = 4;
         duration = 0.5f;
         hintTip = "Click arrows to set the code";
         hintCorrect = "CORRECT CODE";

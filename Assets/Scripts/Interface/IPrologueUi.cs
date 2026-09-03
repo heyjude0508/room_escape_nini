@@ -2,7 +2,9 @@ public interface IPrologueUi
 {
     void AutoFindReferences();
 
-    void ApplySubtitle();
+    void PlayLines(string line, string avatar);
 
-    void NextLine();
+    void PulseEnterKey();
+
+    void ResetEnterKeyScale();
 }
