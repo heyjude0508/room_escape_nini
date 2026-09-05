@@ -7,4 +7,8 @@ public interface IPrologueUi
     void PulseEnterKey();
 
     void ResetEnterKeyScale();
+
+    bool IsEnterPressed();
+
+    void HideLines();
 }

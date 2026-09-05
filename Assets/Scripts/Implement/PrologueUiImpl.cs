@@ -8,6 +8,7 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
     const float EnterKeyPulseScale = 1.2f;
 
     PrologueUi prologueUi;
+    FirstPersonController firstPersonController;
 
     void Awake()
     {
@@ -25,6 +26,11 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
         if (prologueUi == null)
         {
             prologueUi = new PrologueUi();
+        }
+
+        if (firstPersonController == null)
+        {
+            firstPersonController = FindObjectOfType<FirstPersonController>();
         }
 
         if (string.IsNullOrEmpty(prologueUi.linesName))
@@ -97,6 +103,11 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
         {
             Debug.LogError("EnterKey not found under " + name);
         }
+
+        if (firstPersonController == null)
+        {
+            Debug.LogError("FirstPersonController not found in scene.");
+        }
     }
 
     public void PlayLines(string line, string avatar)
@@ -106,7 +117,7 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
             prologueUi = new PrologueUi();
         }
 
-        if (prologueUi.linesText == null || prologueUi.avatarImage == null || prologueUi.enterKey == null)
+        if (prologueUi.linesText == null || prologueUi.avatarImage == null || prologueUi.enterKey == null || firstPersonController == null)
         {
             AutoFindReferences();
         }
@@ -116,6 +127,7 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
             return;
         }
 
+        SetPlayerLocked(true);
         SetSubtitlePanelActive(true);
         prologueUi.linesText.text = line ?? string.Empty;
         ApplyAvatar(avatar);
@@ -146,6 +158,57 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
         if (prologueUi != null && prologueUi.enterKey != null)
         {
             prologueUi.enterKey.localScale = prologueUi.enterKeyBaseScale;
+        }
+    }
+
+    public bool IsEnterPressed()
+    {
+        return Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter);
+    }
+
+    public void HideLines()
+    {
+        if (prologueUi == null)
+        {
+            prologueUi = new PrologueUi();
+        }
+
+        ResetEnterKeyScale();
+        SetSubtitlePanelActive(false);
+        SetPlayerLocked(false);
+    }
+
+    void SetPlayerLocked(bool locked)
+    {
+        if (firstPersonController == null)
+        {
+            firstPersonController = FindObjectOfType<FirstPersonController>();
+        }
+
+        if (firstPersonController == null)
+        {
+            return;
+        }
+
+        firstPersonController.playerCanMove = !locked;
+        firstPersonController.cameraCanMove = !locked;
+
+        if (locked)
+        {
+            Rigidbody rigidbody = firstPersonController.GetComponent<Rigidbody>();
+            if (rigidbody != null)
+            {
+                Vector3 velocity = rigidbody.velocity;
+                velocity.x = 0f;
+                velocity.z = 0f;
+                rigidbody.velocity = velocity;
+            }
+
+            AudioSource walkAudioSource = firstPersonController.GetComponent<AudioSource>();
+            if (walkAudioSource != null && walkAudioSource.isPlaying)
+            {
+                walkAudioSource.Stop();
+            }
         }
     }
 

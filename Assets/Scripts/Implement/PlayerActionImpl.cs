@@ -203,6 +203,12 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
             return;
         }
 
+        if (firstPersonController != null && !firstPersonController.playerCanMove)
+        {
+            walkStepTimer = 0f;
+            return;
+        }
+
         if (!IsMovementKeyHeld() || !IsGrounded())
         {
             walkStepTimer = 0f;
