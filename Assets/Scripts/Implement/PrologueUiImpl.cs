@@ -110,7 +110,7 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
         }
     }
 
-    public void PlayLines(string line, string avatar)
+    public void PlayLines(string avatar, string line)
     {
         if (prologueUi == null)
         {
