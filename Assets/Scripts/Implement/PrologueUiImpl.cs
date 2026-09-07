@@ -19,6 +19,7 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
 
         AutoFindReferences();
         SetSubtitlePanelActive(false);
+        SetTipPanelActive(false);
     }
 
     public void AutoFindReferences()
@@ -41,6 +42,11 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
         if (string.IsNullOrEmpty(prologueUi.subtitlePanelName))
         {
             prologueUi.subtitlePanelName = "SubtitlePanel";
+        }
+
+        if (string.IsNullOrEmpty(prologueUi.tipPanelName))
+        {
+            prologueUi.tipPanelName = "TipPanel";
         }
 
         if (string.IsNullOrEmpty(prologueUi.avatarName))
@@ -133,6 +139,38 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
         ApplyAvatar(avatar);
     }
 
+    public void PlayTip()
+    {
+        if (prologueUi == null)
+        {
+            prologueUi = new PrologueUi();
+        }
+
+        if (string.IsNullOrEmpty(prologueUi.tipPanelName))
+        {
+            AutoFindReferences();
+        }
+
+        Transform tipPanel = FindChildRecursive(transform, prologueUi.tipPanelName);
+        if (tipPanel == null)
+        {
+            Debug.LogError("TipPanel not found under " + name);
+            return;
+        }
+
+        tipPanel.gameObject.SetActive(true);
+    }
+
+    public void HideTip()
+    {
+        if (prologueUi == null)
+        {
+            prologueUi = new PrologueUi();
+        }
+
+        SetTipPanelActive(false);
+    }
+
     public void PulseEnterKey()
     {
         if (prologueUi == null || prologueUi.enterKey == null)
@@ -218,6 +256,20 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
         if (subtitlePanel != null)
         {
             subtitlePanel.gameObject.SetActive(active);
+        }
+    }
+
+    void SetTipPanelActive(bool active)
+    {
+        if (prologueUi == null || string.IsNullOrEmpty(prologueUi.tipPanelName))
+        {
+            return;
+        }
+
+        Transform tipPanel = FindChildRecursive(transform, prologueUi.tipPanelName);
+        if (tipPanel != null)
+        {
+            tipPanel.gameObject.SetActive(active);
         }
     }
 

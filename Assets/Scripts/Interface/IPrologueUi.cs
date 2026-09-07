@@ -4,6 +4,10 @@ public interface IPrologueUi
 
     void PlayLines(string line, string avatar);
 
+    void PlayTip();
+
+    void HideTip();
+
     void PulseEnterKey();
 
     void ResetEnterKeyScale();

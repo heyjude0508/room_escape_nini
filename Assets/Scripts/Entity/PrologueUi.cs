@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class PrologueUi
 {
     public string subtitlePanelName;
+    public string tipPanelName;
     public string linesName;
     public string avatarName;
     public string enterKeyName;
@@ -18,6 +19,7 @@ public class PrologueUi
     public PrologueUi()
     {
         subtitlePanelName = "SubtitlePanel";
+        tipPanelName = "TipPanel";
         linesName = "Lines";
         avatarName = "Avatar";
         enterKeyName = "EnterKey";
