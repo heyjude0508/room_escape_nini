@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PrologueSequencer : MonoBehaviour
@@ -17,6 +18,14 @@ public class PrologueSequencer : MonoBehaviour
     string meAvatar = "Me";
     string pieAvatar = "Pie";
     string rossAvatar = "Ross";
+
+    List<string> storyTextList = new List<string>
+    {
+        "Pie was a Silver Shaded British Shorthair I bought as a child.",
+        "And ross was a stray Ragdoll cat that my son found in the yard."
+    };
+
+    public IReadOnlyList<string> StoryTextList => storyTextList;
 
     Coroutine prologueCoroutine;
     Coroutine enterKeyPulseCoroutine;
