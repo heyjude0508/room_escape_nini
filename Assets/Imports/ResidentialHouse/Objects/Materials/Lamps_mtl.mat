@@ -18,7 +18,7 @@ Material:
   - _SPECGLOSSMAP
   - _SPECULAR_SETUP
   m_InvalidKeywords: []
-  m_LightmapFlags: 1
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -123,7 +123,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 5, g: 3.6334121, b: 2.1691775, a: 5}
+    - _EmissionColor: {r: 2.9960785, g: 2.1771975, b: 1.2998052, a: 5}
     - _EmissionColorUI: {r: 1, g: 0.7266787, b: 0.43382955, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   m_BuildTextureStacks: []
