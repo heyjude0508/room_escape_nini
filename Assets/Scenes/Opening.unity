@@ -462,7 +462,7 @@ MonoBehaviour:
     startGameHitArea: {fileID: 2100000032}
     startGameLabel: {fileID: 2100000043}
     copyrightText: {fileID: 2100000053}
-    nextSceneName: HouseChild
+    nextSceneName: Prologue
     hoverScale: 1.08
     hoverAnimSpeed: 12
     normalLabelColor: {r: 1, g: 0.894, b: 0.71, a: 1}

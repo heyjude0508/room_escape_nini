@@ -66,7 +66,7 @@ public class OpeningUi
         startGameLabelName = "StartGameLabel";
         copyrightTextName = "CopyrightText";
 
-        nextSceneName = "HouseChild";
+        nextSceneName = "Prologue";
         hoverScale = 1.08f;
         hoverAnimSpeed = 12f;
         normalLabelColor = new Color(1f, 0.894f, 0.71f, 1f);
