@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PrologueStoryImpl : MonoBehaviour, IPrologueStory
@@ -17,6 +18,11 @@ public class PrologueStoryImpl : MonoBehaviour, IPrologueStory
     Vector3 closeButtonBaseScale = Vector3.one;
     bool hasCachedButtonScales;
 
+    Sprite nextButtonSprite;
+    Sprite escapeButtonSprite;
+    Vector2 nextButtonBaseSize = new Vector2(180f, 170f);
+    bool nextButtonShowsEscape;
+
     void Awake()
     {
         if (prologueStory == null)
@@ -26,6 +32,7 @@ public class PrologueStoryImpl : MonoBehaviour, IPrologueStory
 
         AutoFindReferences();
         CacheButtonBaseScales();
+        CacheNextButtonVisuals();
         SetStoryPanelActive(false);
     }
 
@@ -185,6 +192,7 @@ public class PrologueStoryImpl : MonoBehaviour, IPrologueStory
         }
 
         CacheButtonBaseScales();
+        CacheNextButtonVisuals();
     }
 
     public void EventAimStart()
@@ -258,6 +266,8 @@ public class PrologueStoryImpl : MonoBehaviour, IPrologueStory
 
         ResetButtonScales();
         prologueStory.cnt = -1;
+        nextButtonShowsEscape = false;
+        UpdateNextOrEscapeButton();
         SetStoryPanelActive(false);
         SetPlayerLocked(false);
     }
@@ -279,14 +289,29 @@ public class PrologueStoryImpl : MonoBehaviour, IPrologueStory
             return;
         }
 
-        int nextCnt = prologueStory.cnt + 1;
-        if (!HasStorySprite(nextCnt))
+        if (IsLastStoryPage())
+        {
+            GoToNextScene();
+            return;
+        }
+
+        prologueStory.cnt++;
+        RefreshStoryPage();
+    }
+
+    void GoToNextScene()
+    {
+        if (prologueStory == null)
         {
             return;
         }
 
-        prologueStory.cnt = nextCnt;
-        RefreshStoryPage();
+        if (string.IsNullOrEmpty(prologueStory.nextSceneName))
+        {
+            prologueStory.nextSceneName = "HouseChild";
+        }
+
+        SceneManager.LoadScene(prologueStory.nextSceneName);
     }
 
     public void ShowPrevPage()
@@ -330,6 +355,90 @@ public class PrologueStoryImpl : MonoBehaviour, IPrologueStory
 
         RefreshStoryText();
         UpdatePrevButtonVisibility();
+        UpdateNextOrEscapeButton();
+    }
+
+    bool IsLastStoryPage()
+    {
+        if (prologueStory == null || prologueStory.storytotal <= 0)
+        {
+            return false;
+        }
+
+        return prologueStory.cnt == prologueStory.storytotal - 1;
+    }
+
+    void CacheNextButtonVisuals()
+    {
+        if (prologueStory != null && prologueStory.nextButton != null)
+        {
+            RectTransform nextRect = prologueStory.nextButton.transform as RectTransform;
+            if (nextRect != null)
+            {
+                nextButtonBaseSize = nextRect.sizeDelta;
+            }
+
+            Image nextImage = prologueStory.nextButton.GetComponent<Image>();
+            if (nextImage != null && nextImage.sprite != null)
+            {
+                nextButtonSprite = nextImage.sprite;
+            }
+        }
+
+        if (escapeButtonSprite == null)
+        {
+            escapeButtonSprite = Resources.Load<Sprite>("UI/KeyIcon/Escape");
+        }
+    }
+
+    void UpdateNextOrEscapeButton()
+    {
+        if (prologueStory == null || prologueStory.nextButton == null)
+        {
+            return;
+        }
+
+        if (nextButtonSprite == null || escapeButtonSprite == null)
+        {
+            CacheNextButtonVisuals();
+        }
+
+        bool showEscape = IsLastStoryPage();
+        nextButtonShowsEscape = showEscape;
+
+        Image nextImage = prologueStory.nextButton.GetComponent<Image>();
+        RectTransform nextRect = prologueStory.nextButton.transform as RectTransform;
+        if (nextImage == null || nextRect == null)
+        {
+            return;
+        }
+
+        if (showEscape)
+        {
+            if (escapeButtonSprite != null)
+            {
+                nextImage.sprite = escapeButtonSprite;
+            }
+
+            float height = nextButtonBaseSize.y * 0.8f;
+            float width = height;
+            if (escapeButtonSprite != null && escapeButtonSprite.rect.height > 0.01f)
+            {
+                width = height * (escapeButtonSprite.rect.width / escapeButtonSprite.rect.height);
+            }
+
+            nextRect.sizeDelta = new Vector2(width, height);
+            prologueStory.nextButton.transform.localScale = nextButtonBaseScale;
+        }
+        else
+        {
+            if (nextButtonSprite != null)
+            {
+                nextImage.sprite = nextButtonSprite;
+            }
+
+            nextRect.sizeDelta = nextButtonBaseSize;
+        }
     }
 
     void RefreshStoryText()
@@ -489,11 +598,8 @@ public class PrologueStoryImpl : MonoBehaviour, IPrologueStory
 
             storySprites[index] = sprite;
         }
-    }
 
-    bool HasStorySprite(int index)
-    {
-        return storySprites != null && storySprites.ContainsKey(index);
+        prologueStory.storytotal = storySprites.Count;
     }
 
     void BindButtons()

@@ -14,6 +14,7 @@ public class PrologueStory
     public string closeKeyName;
     public string storyResourcePath;
     public string storyDesc;
+    public string nextSceneName;
 
     public Transform storyPanel;
     public Image storyImage;
@@ -26,6 +27,7 @@ public class PrologueStory
     public float hoverAnimSpeed;
 
     public int cnt;
+    public int storytotal;
 
     public PrologueStory()
     {
@@ -37,6 +39,7 @@ public class PrologueStory
         closeKeyName = "CloseKey";
         storyResourcePath = "Materials/PrologueStory";
         storyDesc = "Press E to look at the drawings";
+        nextSceneName = "HouseChild";
 
         storyPanel = null;
         storyImage = null;
@@ -49,5 +52,6 @@ public class PrologueStory
         hoverAnimSpeed = 12f;
 
         cnt = -1;
+        storytotal = 0;
     }
 }
