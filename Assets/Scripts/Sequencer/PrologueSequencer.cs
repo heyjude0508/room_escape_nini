@@ -21,8 +21,16 @@ public class PrologueSequencer : MonoBehaviour
 
     List<string> storyTextList = new List<string>
     {
-        "Pie was a Silver Shaded British Shorthair I bought as a child.",
-        "And ross was a stray Ragdoll cat that my son found in the yard."
+        "I'm Pie. And I am a Silver Shaded British Shorthair bought by this family.",
+        "This's my bro, ross. He am a stray Ragdoll cat found by the same family in the yard and got adopted by them.",
+        "Here, we encountered loved ones who were kind, diligent, and responsible. We thought we would have a happy family.",
+        "But, in this family, I don't know why there's always a man never knew how to appreciate what he had.",
+        "This man is arrogant, irritable, lazy, and greedy. And he hurts others over and over again though he's a husband, a dad and our owner.",
+        "Today, his poor kid merely drew a crayon pic of the family to show this scumbag, and it disturbed his day trading.",
+        "He completely lost it, tore up the drawing, slapped the kid, had a huge fight with his wife, and even shattered our food bowls with a kick!!",
+        "We couldn't take it anymore!! Couldn't!! So, we brought this bastard here. The cage of home. I know that's what it's always been to you. Yeah, this bastard is YOU!",
+        "If you wanna go back to reality, back to your family... then piece crayon drawing back together. Take a look at the stupid things you've done. That is the only way to escape here!"
+
     };
 
     public IReadOnlyList<string> StoryTextList => storyTextList;
