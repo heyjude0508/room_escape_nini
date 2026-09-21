@@ -8,7 +8,7 @@ public class PrologueSequencer : MonoBehaviour
     const float SpotLightHeightOffset = 3f;
     const float OpeningWaitingTime = 1f;
     const float LinesIntervalTime = 0.6f;
-    const float ShowTipTime = 3f;
+    const float ShowTipTime = 5f;
 
     PrologueUiImpl prologueUi;
     Light spotLight;
@@ -119,7 +119,15 @@ public class PrologueSequencer : MonoBehaviour
         yield return WaitForContinue();
 
         yield return new WaitForSeconds(LinesIntervalTime);
-        prologueUi.PlayLines(rossAvatar, "And, press E to interact with interactable objects.");
+        prologueUi.PlayLines(rossAvatar, "Press E to interact with interactable objects.");
+        yield return WaitForContinue();
+
+        yield return new WaitForSeconds(LinesIntervalTime);
+        prologueUi.PlayLines(rossAvatar, "Hold Shift to crouch.");
+        yield return WaitForContinue();
+
+        yield return new WaitForSeconds(LinesIntervalTime);
+        prologueUi.PlayLines(rossAvatar, "Move the Mouse to look around.");
         yield return WaitForContinue();
 
         yield return new WaitForSeconds(LinesIntervalTime);
