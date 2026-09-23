@@ -12,12 +12,14 @@ public class IconUiImpl : MonoBehaviour, IIconUi
     [SerializeField] float hintDistance = 1.2f;
     [SerializeField] float interactDistance = 0.6f;
     [SerializeField] float worldScale = 1f;
+    [SerializeField] float cameraPull = 0.06f;
     Vector2 smallsize = new Vector2(0.0005f, 0.0005f);
     Vector2 largeSize = new Vector2(0.01f, 0.01f);
     Transform distanceTarget;
     Transform positionAnchor;
     Transform ownerRoot;
     Vector3 localAnchorOffset;
+    Vector3 authoredLocalPosition;
     bool useDetachedBillboard;
 
     IconTipStatusEnum currentState = IconTipStatusEnum.ICON_TIP_HIDDEN;
@@ -41,6 +43,7 @@ public class IconUiImpl : MonoBehaviour, IIconUi
 
         positionAnchor = distanceTarget != null ? distanceTarget : transform.parent;
         ownerRoot = transform.parent;
+        authoredLocalPosition = transform.localPosition;
         TryDetachFromSkewedHierarchy();
 
         Canvas canvas = GetComponent<Canvas>();
@@ -67,12 +70,7 @@ public class IconUiImpl : MonoBehaviour, IIconUi
 
     void LateUpdate()
     {
-        if (useDetachedBillboard && positionAnchor != null)
-        {
-            // Follow anchor pose (incl. door rotation), not a frozen world offset.
-            transform.position = positionAnchor.TransformPoint(localAnchorOffset);
-        }
-
+        ApplyWorldPosition();
         FaceCamera();
 
         if (distanceTarget == null || targetCamera == null || tipImage == null)
@@ -95,6 +93,36 @@ public class IconUiImpl : MonoBehaviour, IIconUi
         {
             SetIconState(IconTipStatusEnum.ICON_TIP_CHECK);
         }
+    }
+
+    void ApplyWorldPosition()
+    {
+        Vector3 basePosition;
+        if (useDetachedBillboard && positionAnchor != null)
+        {
+            // Follow anchor pose (incl. door rotation), not a frozen world offset.
+            basePosition = positionAnchor.TransformPoint(localAnchorOffset);
+        }
+        else if (transform.parent != null)
+        {
+            basePosition = transform.parent.TransformPoint(authoredLocalPosition);
+        }
+        else
+        {
+            basePosition = transform.position;
+        }
+
+        // Pull toward camera so world-space tips stay in front of nearby meshes.
+        if (targetCamera != null && cameraPull > 0f)
+        {
+            Vector3 toCamera = targetCamera.transform.position - basePosition;
+            if (toCamera.sqrMagnitude > 0.0001f)
+            {
+                basePosition += toCamera.normalized * cameraPull;
+            }
+        }
+
+        transform.position = basePosition;
     }
 
     public void FaceCamera()

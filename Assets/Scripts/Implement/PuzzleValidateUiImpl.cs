@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
 {
-    const string PanelName = "Panel";
+    const string PanelName = "DigitInput";
     const string DigitRowName = "DigitRow";
     const string HintName = "Hint";
     const string CloseButtonName = "CloseButton";
@@ -31,6 +31,7 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
     bool buttonsBound;
     bool isFeedbackPlaying;
     Coroutine hintRoutine;
+    PuzzleValidationImpl boundValidation;
 
     void Awake()
     {
@@ -170,6 +171,12 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
         buttonsBound = true;
     }
 
+    public void ShowFor(PuzzleValidationImpl validation)
+    {
+        boundValidation = validation;
+        Show();
+    }
+
     public void Show()
     {
         if (puzzleValidateUi == null)
@@ -196,6 +203,7 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
     {
         StopHintRoutine();
         isFeedbackPlaying = false;
+        boundValidation = null;
         gameObject.SetActive(false);
         SetCursorForUi(false);
     }
@@ -292,7 +300,12 @@ public class PuzzleValidateUiImpl : MonoBehaviour, IPuzzleValidateUi
             return;
         }
 
-        PuzzleValidationImpl validation = GetComponentInParent<PuzzleValidationImpl>();
+        PuzzleValidationImpl validation = boundValidation;
+        if (validation == null)
+        {
+            validation = GetComponentInParent<PuzzleValidationImpl>();
+        }
+
         if (validation == null)
         {
             Debug.LogError("PuzzleValidationImpl not found for Unlock on " + name);

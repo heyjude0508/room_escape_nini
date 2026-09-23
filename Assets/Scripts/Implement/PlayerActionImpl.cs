@@ -75,12 +75,21 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
         {
             HandleBagItemSelection();
         }
+        else if (IsAnyStoryOpen())
+        {
+            // StoryPanel is open: do not raycast world interactables.
+        }
         else
         {
             DiscoverImpItem();
         }
 
         HandleWalkSound();
+    }
+
+    bool IsAnyStoryOpen()
+    {
+        return ItemStoryImpl.IsAnyStoryOpen();
     }
 
     void OnDisable()

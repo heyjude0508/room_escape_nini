@@ -79,11 +79,11 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
 
         if (puzzleValidateUi == null)
         {
-            Debug.LogError("InputCanvas / PuzzleValidateUiImpl not found under " + name);
+            Debug.LogError("CombLockPanel / PuzzleValidateUiImpl not found for " + name);
             return;
         }
 
-        puzzleValidateUi.Show();
+        puzzleValidateUi.ShowFor(this);
     }
 
     public void ValidateCode(string inputCode)
@@ -174,7 +174,24 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
 
     PuzzleValidateUiImpl FindPuzzleValidateUi()
     {
-        return GetComponentInChildren<PuzzleValidateUiImpl>(true);
+        PuzzleValidateUiImpl local = GetComponentInChildren<PuzzleValidateUiImpl>(true);
+        if (local != null)
+        {
+            return local;
+        }
+
+        GameObject panel = GameObject.Find("CombLockPanel");
+        if (panel != null)
+        {
+            PuzzleValidateUiImpl ui = panel.GetComponent<PuzzleValidateUiImpl>();
+            if (ui != null)
+            {
+                return ui;
+            }
+        }
+
+        // CombLockPanel starts inactive; includeInactive finds it under Canvas.
+        return FindObjectOfType<PuzzleValidateUiImpl>(true);
     }
 
     void MarkSolved()
@@ -196,7 +213,7 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
         Collider[] colliders = GetComponentsInChildren<Collider>(true);
         foreach (Collider collider in colliders)
         {
-            // Keep UI raycasts on InputCanvas intact.
+            // Keep UI raycasts on CombLockPanel intact.
             if (collider.GetComponentInParent<Canvas>() != null)
             {
                 continue;

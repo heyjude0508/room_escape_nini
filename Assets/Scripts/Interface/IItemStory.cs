@@ -1,18 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class IItemStory : MonoBehaviour
+public interface IItemStory : IPlayerBase
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    void AutoFindReferences();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    void ReadStory();
+
+    void HideStory();
+
+    bool IsStoryOpen();
 }
