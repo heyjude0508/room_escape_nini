@@ -6,7 +6,11 @@ public class ItemStory
 {
     public string id;
     public string itemName;
+
+    [TextArea(8, 24)]
+    [Tooltip("Supports newlines and TextMeshPro rich text, e.g. <b>bold</b> <i>italic</i> <align=\"right\">签名</align>")]
     public string storyContent;
+
     public string itemActionDesc;
 
     public ItemStory()
