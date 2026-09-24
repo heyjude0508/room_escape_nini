@@ -6,8 +6,11 @@ public class ItemStoryImpl : MonoBehaviour, IItemStory
 {
     const string DefaultStoryText = "default text";
     const string StoryPanelName = "StoryPanel";
+    const string PaperName = "Paper";
     const string StoryTextName = "StoryText";
     const string CloseButtonName = "CloseButton";
+    const string PaperResourcePath = "UI/Story/StoryPaper";
+    const float PaperScreenRatio = 0.9f;
 
     static int openStoryCount;
 
@@ -70,6 +73,9 @@ public class ItemStoryImpl : MonoBehaviour, IItemStory
             return;
         }
 
+        EnsureOpaqueFullscreenBackground();
+        EnsurePaperBackground();
+
         storyCanvasGroup = storyPanel.GetComponent<CanvasGroup>();
         if (storyCanvasGroup == null)
         {
@@ -89,6 +95,8 @@ public class ItemStoryImpl : MonoBehaviour, IItemStory
         {
             closeButton = FindButton(storyPanel, CloseButtonName);
         }
+
+        ParentStoryContentToPaper();
 
         if (storyText == null)
         {
@@ -233,6 +241,90 @@ public class ItemStoryImpl : MonoBehaviour, IItemStory
         closeButton.onClick.RemoveListener(HideStory);
         closeButton.onClick.AddListener(HideStory);
         closeButtonBound = true;
+    }
+
+    void EnsureOpaqueFullscreenBackground()
+    {
+        RectTransform panelRect = storyPanel as RectTransform;
+        if (panelRect != null)
+        {
+            panelRect.anchorMin = Vector2.zero;
+            panelRect.anchorMax = Vector2.one;
+            panelRect.pivot = new Vector2(0.5f, 0.5f);
+            panelRect.anchoredPosition = Vector2.zero;
+            panelRect.sizeDelta = Vector2.zero;
+            panelRect.offsetMin = Vector2.zero;
+            panelRect.offsetMax = Vector2.zero;
+        }
+
+        // Built-in UISprite/Knob have soft alpha edges; null sprite draws a solid quad.
+        Image background = storyPanel.GetComponent<Image>();
+        if (background == null)
+        {
+            background = storyPanel.gameObject.AddComponent<Image>();
+        }
+
+        background.sprite = null;
+        background.type = Image.Type.Simple;
+        background.color = Color.black;
+        background.raycastTarget = true;
+    }
+
+    void EnsurePaperBackground()
+    {
+        Transform paper = FindChildRecursive(storyPanel, PaperName);
+        if (paper == null)
+        {
+            GameObject paperObject = new GameObject(PaperName, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            paper = paperObject.transform;
+            paper.SetParent(storyPanel, false);
+            paperObject.layer = storyPanel.gameObject.layer;
+        }
+
+        RectTransform paperRect = paper as RectTransform;
+        if (paperRect != null)
+        {
+            float margin = (1f - PaperScreenRatio) * 0.5f;
+            paperRect.anchorMin = new Vector2(margin, margin);
+            paperRect.anchorMax = new Vector2(1f - margin, 1f - margin);
+            paperRect.pivot = new Vector2(0.5f, 0.5f);
+            paperRect.anchoredPosition = Vector2.zero;
+            paperRect.sizeDelta = Vector2.zero;
+            paperRect.offsetMin = Vector2.zero;
+            paperRect.offsetMax = Vector2.zero;
+            paperRect.SetAsFirstSibling();
+        }
+
+        Image paperImage = paper.GetComponent<Image>();
+        if (paperImage == null)
+        {
+            paperImage = paper.gameObject.AddComponent<Image>();
+        }
+
+        Sprite paperSprite = Resources.Load<Sprite>(PaperResourcePath);
+        if (paperSprite != null)
+        {
+            paperImage.sprite = paperSprite;
+        }
+
+        paperImage.type = Image.Type.Simple;
+        paperImage.preserveAspect = true;
+        paperImage.color = Color.white;
+        paperImage.raycastTarget = true;
+    }
+
+    void ParentStoryContentToPaper()
+    {
+        Transform paper = FindChildRecursive(storyPanel, PaperName);
+        if (paper == null)
+        {
+            return;
+        }
+
+        if (storyText != null && storyText.transform.parent != paper)
+        {
+            storyText.transform.SetParent(paper, false);
+        }
     }
 
     void SetStoryPanelVisible(bool visible)
