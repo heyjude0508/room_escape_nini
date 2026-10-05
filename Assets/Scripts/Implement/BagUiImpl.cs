@@ -20,46 +20,41 @@ public class BagUiImpl : MonoBehaviour, IBagUi
     [SerializeField] float usageFontSize = 24f;
     [SerializeField] Color usageFontColor = Color.white;
 
+    public KeyCode ToggleKey => toggleKey;
+
     readonly List<Slot> slotList = new List<Slot>(MaxItemSlots);
     BagManagementImpl bag;
-    CanvasGroup canvasGroup;
     Canvas bagCanvas;
     bool isOpen;
+    bool initialized;
 
     void Awake()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
-        if (canvasGroup == null)
-        {
-            canvasGroup = gameObject.AddComponent<CanvasGroup>();
-        }
+        EnsureInitialized();
+    }
 
-        AutoFindReferences();
-        InitItemSlots();
-        SetBagVisible(false);
+    void OnEnable()
+    {
+        EnsureInitialized();
+        isOpen = true;
+        BindBagEvents();
+        RefreshAllSlots();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
 
-        bagCanvas = GetComponentInParent<Canvas>();
+    void OnDisable()
+    {
+        isOpen = false;
+        ClearDetailPanel();
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     void Start()
     {
-        bag = BagManagementImpl.Instance;
-        if (bag == null)
-        {
-            Debug.LogError("Cannot find BagManagementImpl.");
-            return;
-        }
-
-        bag.OnBagUpdated += RefreshAllSlots;
+        BindBagEvents();
         RefreshAllSlots();
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(toggleKey))
-        {
-            ToggleBag();
-        }
     }
 
     void OnDestroy()
@@ -68,6 +63,36 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         {
             bag.OnBagUpdated -= RefreshAllSlots;
         }
+    }
+
+    void EnsureInitialized()
+    {
+        if (initialized)
+        {
+            return;
+        }
+
+        AutoFindReferences();
+        InitItemSlots();
+        bagCanvas = GetComponentInParent<Canvas>();
+        initialized = true;
+    }
+
+    void BindBagEvents()
+    {
+        if (bag != null)
+        {
+            return;
+        }
+
+        bag = BagManagementImpl.Instance;
+        if (bag == null)
+        {
+            Debug.LogError("Cannot find BagManagementImpl.");
+            return;
+        }
+
+        bag.OnBagUpdated += RefreshAllSlots;
     }
 
     public void AutoFindReferences()
@@ -172,7 +197,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
 
     public bool IsBagOpen()
     {
-        return isOpen;
+        return isOpen && gameObject.activeSelf;
     }
 
     public bool TrySelectItemAtScreenPoint(Vector2 screenPoint)
@@ -378,27 +403,19 @@ public class BagUiImpl : MonoBehaviour, IBagUi
 
     public void ToggleBag()
     {
-        SetBagVisible(!isOpen);
+        SetBagVisible(!gameObject.activeSelf);
     }
 
     void SetBagVisible(bool visible)
     {
-        isOpen = visible;
-        canvasGroup.alpha = visible ? 1f : 0f;
-        canvasGroup.interactable = visible;
-        canvasGroup.blocksRaycasts = visible;
+        // Visibility is driven by GameObject active state (BagPanel starts inactive).
+        if (gameObject.activeSelf == visible)
+        {
+            isOpen = visible;
+            return;
+        }
 
-        if (visible)
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else
-        {
-            ClearDetailPanel();
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
+        gameObject.SetActive(visible);
     }
 
 }

@@ -61,15 +61,13 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
         walkAudioSource.loop = false;
         walkAudioSource.spatialBlend = 0f;
 
-        if (bagUi == null)
-        {
-            bagUi = FindObjectOfType<BagUiImpl>();
-        }
+        EnsureBagUiReference();
     }
 
     void Update()
     {
         HandleCrouch();
+        HandleBagToggleInput();
 
         if (bagUi != null && bagUi.IsBagOpen())
         {
@@ -85,6 +83,34 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
         }
 
         HandleWalkSound();
+    }
+
+    void EnsureBagUiReference()
+    {
+        if (bagUi != null)
+        {
+            return;
+        }
+
+        // BagPanel starts inactive, so include inactive objects.
+        bagUi = FindObjectOfType<BagUiImpl>(true);
+    }
+
+    void HandleBagToggleInput()
+    {
+        KeyCode key = bagUi != null ? bagUi.ToggleKey : KeyCode.I;
+        if (!Input.GetKeyDown(key))
+        {
+            return;
+        }
+
+        EnsureBagUiReference();
+        if (bagUi == null)
+        {
+            return;
+        }
+
+        bagUi.ToggleBag();
     }
 
     bool IsAnyStoryOpen()

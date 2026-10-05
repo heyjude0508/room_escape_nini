@@ -8,7 +8,7 @@ public class PuzzlePosition: PuzzleBase
     public string puzzleDesc;
     public string socketId;
     public string placeDesc;
-    [HideInInspector] public GameObject originalItem;
+    public GameObject originalItem;
 
     public PuzzlePosition() : base()
     {
