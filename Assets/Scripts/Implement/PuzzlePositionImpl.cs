@@ -122,28 +122,56 @@ public class PuzzlePositionImpl : MonoBehaviour, IPuzzlePosition
             PlaySolveAnimation();
             PlaySound(puzzlePosition.solvedSound);
             MarkSolved();
+            // MarkSolved disables socket tips/colliders; keep the placed item readable/interactable.
+            ShowPlacedItem();
+            EnableOriginalItemColliders();
             Debug.Log($"Place item {puzzlePosition.socketId} into {puzzlePosition.id} successfully.");
         }
     }
 
     public void ShowPlacedItem()
     {
-        if (puzzlePosition.originalItem == null)
-        {
-            return;
-        }
-
-        puzzlePosition.originalItem.SetActive(true);
+        SetPlacedItemActive(true);
     }
 
     public void HidePlacedItem()
+    {
+        SetPlacedItemActive(false);
+    }
+
+    void SetPlacedItemActive(bool active)
     {
         if (puzzlePosition.originalItem == null)
         {
             return;
         }
 
-        puzzlePosition.originalItem.SetActive(false);
+        Transform itemRoot = puzzlePosition.originalItem.transform;
+
+        // IconTips under Interactions detach to scene root; parent SetActive won't reach them.
+        SetOwnedIconTipsActive(itemRoot, active);
+
+        for (int i = 0; i < itemRoot.childCount; i++)
+        {
+            itemRoot.GetChild(i).gameObject.SetActive(active);
+        }
+
+        puzzlePosition.originalItem.SetActive(active);
+    }
+
+    void SetOwnedIconTipsActive(Transform owner, bool active)
+    {
+        IconUiImpl[] iconTips = FindObjectsOfType<IconUiImpl>(true);
+        foreach (IconUiImpl iconTip in iconTips)
+        {
+            if (!iconTip.IsOwnedBy(owner))
+            {
+                continue;
+            }
+
+            iconTip.enabled = active;
+            iconTip.gameObject.SetActive(active);
+        }
     }
 
     void ResolvePlacedItemReference()
@@ -210,13 +238,15 @@ public class PuzzlePositionImpl : MonoBehaviour, IPuzzlePosition
 
     public Collider FindSolidCollider()
     {
-        Collider[] colliders = GetComponentsInChildren<Collider>();
+        Collider[] colliders = GetComponentsInChildren<Collider>(true);
         foreach (Collider collider in colliders)
         {
-            if (!collider.isTrigger)
+            if (collider.isTrigger || IsUnderOriginalItem(collider.transform))
             {
-                return collider;
+                continue;
             }
+
+            return collider;
         }
 
         return null;
@@ -228,7 +258,7 @@ public class PuzzlePositionImpl : MonoBehaviour, IPuzzlePosition
         DisableInteractionColliders();
         DisableIconTips();
 
-        if (puzzlePosition.puzzleCollider != null)
+        if (puzzlePosition.puzzleCollider != null && !IsUnderOriginalItem(puzzlePosition.puzzleCollider.transform))
         {
             puzzlePosition.puzzleCollider.enabled = false;
         }
@@ -241,7 +271,26 @@ public class PuzzlePositionImpl : MonoBehaviour, IPuzzlePosition
         Collider[] colliders = GetComponentsInChildren<Collider>(true);
         foreach (Collider collider in colliders)
         {
+            if (IsUnderOriginalItem(collider.transform))
+            {
+                continue;
+            }
+
             collider.enabled = false;
+        }
+    }
+
+    void EnableOriginalItemColliders()
+    {
+        if (puzzlePosition.originalItem == null)
+        {
+            return;
+        }
+
+        Collider[] colliders = puzzlePosition.originalItem.GetComponentsInChildren<Collider>(true);
+        foreach (Collider collider in colliders)
+        {
+            collider.enabled = true;
         }
     }
 
@@ -250,6 +299,13 @@ public class PuzzlePositionImpl : MonoBehaviour, IPuzzlePosition
         IconUiImpl[] iconTips = FindObjectsOfType<IconUiImpl>(true);
         foreach (IconUiImpl iconTip in iconTips)
         {
+            // Keep tips that belong to the placed photo (story interact), not the empty socket.
+            if (puzzlePosition.originalItem != null &&
+                iconTip.IsOwnedBy(puzzlePosition.originalItem.transform))
+            {
+                continue;
+            }
+
             if (!iconTip.IsOwnedBy(transform))
             {
                 continue;
@@ -258,6 +314,17 @@ public class PuzzlePositionImpl : MonoBehaviour, IPuzzlePosition
             iconTip.enabled = false;
             iconTip.gameObject.SetActive(false);
         }
+    }
+
+    bool IsUnderOriginalItem(Transform target)
+    {
+        if (puzzlePosition.originalItem == null || target == null)
+        {
+            return false;
+        }
+
+        Transform itemRoot = puzzlePosition.originalItem.transform;
+        return target == itemRoot || target.IsChildOf(itemRoot);
     }
 
 }

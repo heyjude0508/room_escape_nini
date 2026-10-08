@@ -155,33 +155,41 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
             UiInteraction.SetActive(false);
         }
 
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, interactionRaycastRange))
+        RaycastHit[] hits = Physics.RaycastAll(ray, interactionRaycastRange);
+        System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+        for (int i = 0; i < hits.Length; i++)
         {
-            IPlayerBase interactable = hitInfo.collider.GetComponentInParent<IPlayerBase>();
-            if (interactable != null && CanInteract(interactable))
+            IPlayerBase interactable = hits[i].collider.GetComponentInParent<IPlayerBase>();
+            if (interactable == null || !CanInteract(interactable))
             {
-                IsHit = true;
-                if (UiInteraction != null)
-                {
-                    UiInteraction.SetActive(IsHit);
-                }
-
-                if (UiInteractionText != null)
-                {
-                    UiInteractionText.text = interactable.GetDescription();
-                }
-
-                interactable.EventAimStart();
-
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    interactable.Interact();
-                }
+                continue;
             }
+
+            IsHit = true;
+            if (UiInteraction != null)
+            {
+                UiInteraction.SetActive(IsHit);
+            }
+
+            if (UiInteractionText != null)
+            {
+                UiInteractionText.text = interactable.GetDescription();
+            }
+
+            interactable.EventAimStart();
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                interactable.Interact();
+            }
+
+            break;
         }
-        else if (UiInteraction != null)
+
+        if (!IsHit && UiInteraction != null)
         {
-            UiInteraction.SetActive(IsHit);
+            UiInteraction.SetActive(false);
         }
     }
 
