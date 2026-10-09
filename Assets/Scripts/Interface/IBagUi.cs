@@ -4,7 +4,9 @@ public interface IBagUi
 {
     public void AutoFindReferences();
 
-    public void InitItemSlots(); 
+    public void InitItemSlots();
+
+    public void InitFragmentSlots();
     
     public void RefreshAllSlots();
 

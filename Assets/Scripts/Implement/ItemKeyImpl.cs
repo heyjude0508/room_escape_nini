@@ -1,53 +1,26 @@
-﻿//using DG.Tweening;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ItemKeyImpl : MonoBehaviour, IItemKey
 {
-    //public GameEvent gameEventAimStart;
-    //public GameEvent gameEventAimEnd;
-    //public GameEvent gameEventInteract;
-
-    //public DOTweenAnimation dtAnim;
-
     [SerializeField] ItemKey itemKey;
 
     BagManagementImpl bag;
 
-    // Start is called before the first frame update
     void Start()
     {
         bag = BagManagementImpl.Instance;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void EventAimStart()
     {
-        //if (gameEventAimStart != null)
-        //{
-        //    gameEventAimStart.Raise();
-        //}
-
-        //if (dtAnim != null)
-        //{
-        //    dtAnim.DOPlay();
-        //}
     }
 
     public void EventAimEnd()
     {
-        //gameEventAimEnd.Raise();
     }
 
     public void EventInteract()
     {
-        //gameEventInteract.Raise();
     }
 
     public string GetDescription() => itemKey.itemActionDesc;
@@ -59,14 +32,20 @@ public class ItemKeyImpl : MonoBehaviour, IItemKey
 
     public void PickItem()
     {
-        if (bag != null)
-        {
-            bag.AddItem(CreateCopy());
-        }
-        else
+        if (bag == null)
         {
             Debug.LogError("Cannot find the bag.");
             return;
+        }
+
+        ItemKey copy = CreateCopy();
+        if (BagManagementImpl.IsFragmentId(copy.id))
+        {
+            bag.AddFragment(copy);
+        }
+        else
+        {
+            bag.AddItem(copy);
         }
 
         Destroy(gameObject);

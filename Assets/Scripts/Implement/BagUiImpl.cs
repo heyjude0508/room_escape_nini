@@ -7,7 +7,9 @@ using UnityEngine.UI;
 public class BagUiImpl : MonoBehaviour, IBagUi
 {
     public const int MaxItemSlots = BagManagementImpl.MaxItemSlots;
+    public const int MaxFragmentSlots = BagManagementImpl.MaxFragmentSlots;
     const string ItemSlotPrefix = "ItemSlot_";
+    const string FragmentSlotPrefix = "FragmentSlot_";
     const string ItemIconName = "ItemIcon";
     const string UsageTextName = "UsageText";
     const string DefaultUsageDesc = "Default Usage";
@@ -16,6 +18,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
     [SerializeField] TMP_Text itemDescText;
     [SerializeField] KeyCode toggleKey = KeyCode.I;
     [SerializeField][Range(0.3f, 0.9f)] float itemIconFillRatio = 0.65f;
+    [SerializeField][Range(0.3f, 0.9f)] float fragmentIconFillRatio = 0.65f;
     [SerializeField] TMP_FontAsset usageFont;
     [SerializeField] float usageFontSize = 24f;
     [SerializeField] Color usageFontColor = Color.white;
@@ -23,6 +26,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
     public KeyCode ToggleKey => toggleKey;
 
     readonly List<Slot> slotList = new List<Slot>(MaxItemSlots);
+    readonly List<Slot> fragmentSlotList = new List<Slot>(MaxFragmentSlots);
     BagManagementImpl bag;
     Canvas bagCanvas;
     bool isOpen;
@@ -74,6 +78,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
 
         AutoFindReferences();
         InitItemSlots();
+        InitFragmentSlots();
         bagCanvas = GetComponentInParent<Canvas>();
         initialized = true;
     }
@@ -111,7 +116,22 @@ public class BagUiImpl : MonoBehaviour, IBagUi
 
     public void InitItemSlots()
     {
-        slotList.Clear();
+        InitSlotsByPrefix(ItemSlotPrefix, MaxItemSlots, slotList, "item", itemIconFillRatio);
+    }
+
+    public void InitFragmentSlots()
+    {
+        InitSlotsByPrefix(FragmentSlotPrefix, MaxFragmentSlots, fragmentSlotList, "fragment", fragmentIconFillRatio);
+    }
+
+    void InitSlotsByPrefix(
+        string prefix,
+        int maxSlots,
+        List<Slot> targetList,
+        string label,
+        float iconFillRatio)
+    {
+        targetList.Clear();
 
         if (itemSlotListRoot == null)
         {
@@ -119,22 +139,22 @@ public class BagUiImpl : MonoBehaviour, IBagUi
             return;
         }
 
-        List<Transform> itemSlotTransforms = new List<Transform>();
+        List<Transform> slotTransforms = new List<Transform>();
         for (int i = 0; i < itemSlotListRoot.childCount; i++)
         {
             Transform child = itemSlotListRoot.GetChild(i);
-            if (child.name.StartsWith(ItemSlotPrefix, StringComparison.Ordinal))
+            if (child.name.StartsWith(prefix, StringComparison.Ordinal))
             {
-                itemSlotTransforms.Add(child);
+                slotTransforms.Add(child);
             }
         }
 
-        itemSlotTransforms.Sort((left, right) =>
+        slotTransforms.Sort((left, right) =>
             string.Compare(left.name, right.name, StringComparison.Ordinal));
 
-        for (int i = 0; i < itemSlotTransforms.Count && slotList.Count < MaxItemSlots; i++)
+        for (int i = 0; i < slotTransforms.Count && targetList.Count < maxSlots; i++)
         {
-            Transform slotTransform = itemSlotTransforms[i];
+            Transform slotTransform = slotTransforms[i];
             Image frameImage = slotTransform.GetComponent<Image>();
             if (frameImage == null)
             {
@@ -142,15 +162,15 @@ public class BagUiImpl : MonoBehaviour, IBagUi
                 continue;
             }
 
-            Image iconImage = GetOrCreateItemIconImage(slotTransform);
+            Image iconImage = GetOrCreateItemIconImage(slotTransform, iconFillRatio);
             Sprite emptySlotSprite = frameImage.sprite;
-            slotList.Add(new Slot("", "", frameImage, iconImage, emptySlotSprite));
-            ClearSlotVisual(slotList[slotList.Count - 1]);
+            targetList.Add(new Slot("", "", frameImage, iconImage, emptySlotSprite));
+            ClearSlotVisual(targetList[targetList.Count - 1]);
         }
 
-        if (slotList.Count != MaxItemSlots)
+        if (targetList.Count != maxSlots)
         {
-            Debug.LogWarning($"Bag UI expects {MaxItemSlots} item slots, but initialized {slotList.Count}.");
+            Debug.LogWarning($"Bag UI expects {maxSlots} {label} slots, but initialized {targetList.Count}.");
         }
     }
 
@@ -159,6 +179,11 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         for (int i = 0; i < slotList.Count; i++)
         {
             ClearSlotVisual(slotList[i]);
+        }
+
+        for (int i = 0; i < fragmentSlotList.Count; i++)
+        {
+            ClearSlotVisual(fragmentSlotList[i]);
         }
 
         ClearDetailPanel();
@@ -170,13 +195,28 @@ public class BagUiImpl : MonoBehaviour, IBagUi
 
         for (int i = 0; i < bag.itemList.Count && i < slotList.Count; i++)
         {
-            SetSlotItem(i, bag.itemList[i]);
+            SetSlotItem(slotList, i, bag.itemList[i]);
+        }
+
+        for (int i = 0; i < bag.fragmentList.Count && i < fragmentSlotList.Count; i++)
+        {
+            SetSlotItem(fragmentSlotList, i, bag.fragmentList[i]);
         }
     }
 
     public void SetSlotItem(int slotId, ItemBase item)
     {
-        Slot slot = slotList[slotId];
+        SetSlotItem(slotList, slotId, item);
+    }
+
+    void SetSlotItem(List<Slot> targetList, int slotId, ItemBase item)
+    {
+        if (slotId < 0 || slotId >= targetList.Count || item == null)
+        {
+            return;
+        }
+
+        Slot slot = targetList[slotId];
         slot.itemId = item.id;
         slot.itemName = item.itemName;
         slot.itemSprite = item.itemSprite;
@@ -213,21 +253,35 @@ public class BagUiImpl : MonoBehaviour, IBagUi
             eventCamera = bagCanvas.worldCamera;
         }
 
-        for (int i = 0; i < slotList.Count; i++)
+        if (TrySelectFromSlotList(slotList, screenPoint, eventCamera, false))
         {
-            RectTransform slotRect = slotList[i].frameImage.rectTransform;
+            return true;
+        }
+
+        return TrySelectFromSlotList(fragmentSlotList, screenPoint, eventCamera, true);
+    }
+
+    bool TrySelectFromSlotList(
+        List<Slot> targetList,
+        Vector2 screenPoint,
+        Camera eventCamera,
+        bool isFragment)
+    {
+        for (int i = 0; i < targetList.Count; i++)
+        {
+            RectTransform slotRect = targetList[i].frameImage.rectTransform;
             if (!RectTransformUtility.RectangleContainsScreenPoint(slotRect, screenPoint, eventCamera))
             {
                 continue;
             }
 
-            if (slotList[i].itemId.IsEmpty())
+            if (targetList[i].itemId.IsEmpty())
             {
                 ClearDetailPanel();
             }
             else
             {
-                SelectSlot(i);
+                SelectSlot(targetList, i, isFragment);
             }
 
             return true;
@@ -236,23 +290,26 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         return false;
     }
 
-    void SelectSlot(int index)
+    void SelectSlot(List<Slot> targetList, int index, bool isFragment)
     {
-        if (index < 0 || index >= slotList.Count)
+        if (index < 0 || index >= targetList.Count)
         {
             return;
         }
 
-        Slot slot = slotList[index];
+        Slot slot = targetList[index];
         if (slot.itemId.IsEmpty())
         {
             ClearDetailPanel();
             return;
         }
 
-        ItemBase item = bag != null
-            ? bag.itemList.Find(existingItem => existingItem.id == slot.itemId)
-            : null;
+        ItemBase item = null;
+        if (bag != null)
+        {
+            List<ItemBase> sourceList = isFragment ? bag.fragmentList : bag.itemList;
+            item = sourceList.Find(existingItem => existingItem.id == slot.itemId);
+        }
 
         if (itemDescText != null)
         {
@@ -306,7 +363,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         return item.itemUsageDesc;
     }
 
-    Image GetOrCreateItemIconImage(Transform slotTransform)
+    Image GetOrCreateItemIconImage(Transform slotTransform, float iconFillRatio)
     {
         Transform existingIcon = slotTransform.Find(ItemIconName);
         if (existingIcon != null)
@@ -314,7 +371,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
             Image existingImage = existingIcon.GetComponent<Image>();
             if (existingImage != null)
             {
-                ApplyItemIconLayout(existingIcon, slotTransform);
+                ApplyItemIconLayout(existingIcon, slotTransform, iconFillRatio);
                 return existingImage;
             }
         }
@@ -326,7 +383,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
             typeof(Image));
 
         iconObject.transform.SetParent(slotTransform, false);
-        ApplyItemIconLayout(iconObject.transform, slotTransform);
+        ApplyItemIconLayout(iconObject.transform, slotTransform, iconFillRatio);
 
         Image iconImage = iconObject.GetComponent<Image>();
         iconImage.raycastTarget = false;
@@ -362,7 +419,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         return usageText;
     }
 
-    void ApplyItemIconLayout(Transform iconTransform, Transform slotTransform)
+    void ApplyItemIconLayout(Transform iconTransform, Transform slotTransform, float iconFillRatio)
     {
         RectTransform rectTransform = iconTransform as RectTransform;
         RectTransform slotRectTransform = slotTransform as RectTransform;
@@ -376,7 +433,7 @@ public class BagUiImpl : MonoBehaviour, IBagUi
         float scaleY = Mathf.Approximately(slotScale.y, 0f) ? 1f : slotScale.y;
         float slotScreenWidth = slotRectTransform.sizeDelta.x * scaleX;
         float slotScreenHeight = slotRectTransform.sizeDelta.y * scaleY;
-        float iconScreenSize = Mathf.Min(slotScreenWidth, slotScreenHeight) * itemIconFillRatio;
+        float iconScreenSize = Mathf.Min(slotScreenWidth, slotScreenHeight) * iconFillRatio;
 
         rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
         rectTransform.anchorMax = new Vector2(0.5f, 0.5f);

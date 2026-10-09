@@ -119,15 +119,11 @@ public class PrologueSequencer : MonoBehaviour
         yield return WaitForContinue();
 
         yield return new WaitForSeconds(LinesIntervalTime);
-        plotUiImpl.PlayLines(rossAvatar, "Press E to interact with interactable objects.");
-        yield return WaitForContinue();
-
-        yield return new WaitForSeconds(LinesIntervalTime);
-        plotUiImpl.PlayLines(rossAvatar, "Hold Shift to crouch.");
-        yield return WaitForContinue();
-
-        yield return new WaitForSeconds(LinesIntervalTime);
         plotUiImpl.PlayLines(rossAvatar, "Move the Mouse to look around.");
+        yield return WaitForContinue();
+
+        yield return new WaitForSeconds(LinesIntervalTime);
+        plotUiImpl.PlayLines(rossAvatar, "Press E to interact with interactable objects.");
         yield return WaitForContinue();
 
         yield return new WaitForSeconds(LinesIntervalTime);

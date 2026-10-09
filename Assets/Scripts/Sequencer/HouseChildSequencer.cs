@@ -7,6 +7,7 @@ public class HouseChildSequencer : MonoBehaviour
     const float EnterKeyPulseInterval = 0.6f;
     const float OpeningWaitingTime = 1f;
     const float LinesIntervalTime = 0.6f;
+    const float ShowTipTime = 5f;
 
     PlotUiImpl plotUiImpl;
 
@@ -47,6 +48,18 @@ public class HouseChildSequencer : MonoBehaviour
         plotUiImpl.PlayLines(rossAvatar, "Find out the key of living room and one fragment of torn drawings, then you can leave from this room.");
         yield return WaitForContinue();
 
+        yield return new WaitForSeconds(LinesIntervalTime);
+        plotUiImpl.PlayLines(rossAvatar, "Listen carefully, hold Shift to crouch.");
+        yield return WaitForContinue();
+
+        yield return new WaitForSeconds(LinesIntervalTime);
+        plotUiImpl.PlayLines(rossAvatar, "Press I to open and close your bag.");
+        yield return WaitForContinue();
+
+        yield return new WaitForSeconds(LinesIntervalTime);
+        plotUiImpl.PlayTip();
+        yield return new WaitForSeconds(ShowTipTime);
+        plotUiImpl.HideTip();
     }
 
     static Transform FindChildRecursive(Transform parent, string childName)

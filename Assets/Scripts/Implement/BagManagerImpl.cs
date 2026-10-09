@@ -6,13 +6,21 @@ using System.Linq;
 public class BagManagementImpl : MonoBehaviour, IBagManager
 {
     public const int MaxItemSlots = 8;
+    public const int MaxFragmentSlots = 6;
 
     public List<ItemBase> itemList = new List<ItemBase>();
+    public List<ItemBase> fragmentList = new List<ItemBase>();
     public List<string> itemIdList = new List<string>();
 
     public static BagManagementImpl Instance { get; private set; }
 
     public event Action OnBagUpdated;
+
+    public static bool IsFragmentId(string itemId)
+    {
+        return !string.IsNullOrEmpty(itemId)
+            && itemId.StartsWith("F", StringComparison.Ordinal);
+    }
 
     private void Awake()
     {
@@ -34,7 +42,13 @@ public class BagManagementImpl : MonoBehaviour, IBagManager
             return;
         }
 
-        if (itemList.Any(existingItem => existingItem.id == item.id))
+        if (IsFragmentId(item.id))
+        {
+            AddFragment(item);
+            return;
+        }
+
+        if (HasItem(item.id))
         {
             return;
         }
@@ -51,6 +65,30 @@ public class BagManagementImpl : MonoBehaviour, IBagManager
         OnBagUpdated?.Invoke();
     }
 
+    public void AddFragment(ItemBase item)
+    {
+        if (item == null)
+        {
+            return;
+        }
+
+        if (HasItem(item.id))
+        {
+            return;
+        }
+
+        if (fragmentList.Count >= MaxFragmentSlots)
+        {
+            Debug.LogWarning("The fragment slots are full!");
+            return;
+        }
+
+        fragmentList.Add(item);
+        Debug.Log($"Put fragment {item.id} into the bag successfully, total fragments: {fragmentList.Count}.");
+
+        OnBagUpdated?.Invoke();
+    }
+
     public void RemoveItem(string itemId)
     {
         if (string.IsNullOrEmpty(itemId))
@@ -59,14 +97,22 @@ public class BagManagementImpl : MonoBehaviour, IBagManager
         }
 
         ItemBase existingItem = itemList.FirstOrDefault(existing => existing.id == itemId);
-        if (existingItem == null)
+        if (existingItem != null)
+        {
+            itemList.Remove(existingItem);
+            Debug.Log($"Get item {itemId} out of the bag successfully, total number of items: {itemList.Count}.");
+            OnBagUpdated?.Invoke();
+            return;
+        }
+
+        ItemBase existingFragment = fragmentList.FirstOrDefault(existing => existing.id == itemId);
+        if (existingFragment == null)
         {
             return;
         }
 
-        itemList.Remove(existingItem);
-        Debug.Log($"Get item {itemId} out of the bag successfully, total number of items: {itemList.Count}.");
-
+        fragmentList.Remove(existingFragment);
+        Debug.Log($"Get fragment {itemId} out of the bag successfully, total fragments: {fragmentList.Count}.");
         OnBagUpdated?.Invoke();
     }
 
@@ -77,7 +123,8 @@ public class BagManagementImpl : MonoBehaviour, IBagManager
             return false;
         }
 
-        return itemList.Any(existingItem => existingItem.id == itemId);
+        return itemList.Any(existingItem => existingItem.id == itemId)
+            || fragmentList.Any(existingItem => existingItem.id == itemId);
     }
 
     public List<string> GetItemIdList()
@@ -87,6 +134,12 @@ public class BagManagementImpl : MonoBehaviour, IBagManager
         {
             itemIdList.Add(item.id);
         }
+
+        foreach (ItemBase fragment in fragmentList)
+        {
+            itemIdList.Add(fragment.id);
+        }
+
         return itemIdList;
     }
 
