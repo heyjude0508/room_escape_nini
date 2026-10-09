@@ -10,7 +10,7 @@ public class PrologueSequencer : MonoBehaviour
     const float LinesIntervalTime = 0.6f;
     const float ShowTipTime = 5f;
 
-    PrologueUiImpl prologueUi;
+    PlotUiImpl plotUiImpl;
     Light spotLight;
     Transform desk;
     GameObject iconTip;
@@ -40,10 +40,10 @@ public class PrologueSequencer : MonoBehaviour
 
     void Start()
     {
-        prologueUi = FindObjectOfType<PrologueUiImpl>();
-        if (prologueUi == null)
+        plotUiImpl = FindObjectOfType<PlotUiImpl>();
+        if (plotUiImpl == null)
         {
-            Debug.LogError("PrologueUiImpl not found in scene.");
+            Debug.LogError("PlotUiImpl not found in scene.");
             return;
         }
 
@@ -87,7 +87,7 @@ public class PrologueSequencer : MonoBehaviour
     public IEnumerator PorologuePlot()
     {
         yield return new WaitForSeconds(OpeningWaitingTime);
-        prologueUi.PlayLines(meAvatar, "What... What's happening? Where am I?");
+        plotUiImpl.PlayLines(meAvatar, "What... What's happening? Where am I?");
         yield return WaitForContinue();
 
         yield return new WaitForSeconds(LinesIntervalTime);
@@ -95,45 +95,45 @@ public class PrologueSequencer : MonoBehaviour
         EnableIconTip();
 
         yield return new WaitForSeconds(LinesIntervalTime);
-        prologueUi.PlayLines(meAvatar, "What's there? Some drawings?");
+        plotUiImpl.PlayLines(meAvatar, "What's there? Some drawings?");
         yield return WaitForContinue();
 
         yield return new WaitForSeconds(LinesIntervalTime);
-        prologueUi.PlayLines(pieAvatar, "Don't know what it is? Of courese, man like you never cares.");
+        plotUiImpl.PlayLines(pieAvatar, "Don't know what it is? Of courese, man like you never cares.");
         yield return WaitForContinue();
 
         yield return new WaitForSeconds(LinesIntervalTime);
-        prologueUi.PlayLines(rossAvatar, "Yeah, he only cares about himself.");
+        plotUiImpl.PlayLines(rossAvatar, "Yeah, he only cares about himself.");
         yield return WaitForContinue();
 
         yield return new WaitForSeconds(LinesIntervalTime);
-        prologueUi.PlayLines(meAvatar, "You guys? Pie and Ross? Wait! You can talk!?");
+        plotUiImpl.PlayLines(meAvatar, "You guys? Pie and Ross? Wait! You can talk!?");
         yield return WaitForContinue();
 
         yield return new WaitForSeconds(LinesIntervalTime);
-        prologueUi.PlayLines(pieAvatar, "Wanna know what's happening? Go to the table and have a look by yourself.");
+        plotUiImpl.PlayLines(pieAvatar, "Wanna know what's happening? Go to the table and have a look by yourself.");
         yield return WaitForContinue();
 
         yield return new WaitForSeconds(LinesIntervalTime);
-        prologueUi.PlayLines(rossAvatar, "Listen carefully, hold A, W, S, D to move.");
+        plotUiImpl.PlayLines(rossAvatar, "Listen carefully, hold A, W, S, D to move.");
         yield return WaitForContinue();
 
         yield return new WaitForSeconds(LinesIntervalTime);
-        prologueUi.PlayLines(rossAvatar, "Press E to interact with interactable objects.");
+        plotUiImpl.PlayLines(rossAvatar, "Press E to interact with interactable objects.");
         yield return WaitForContinue();
 
         yield return new WaitForSeconds(LinesIntervalTime);
-        prologueUi.PlayLines(rossAvatar, "Hold Shift to crouch.");
+        plotUiImpl.PlayLines(rossAvatar, "Hold Shift to crouch.");
         yield return WaitForContinue();
 
         yield return new WaitForSeconds(LinesIntervalTime);
-        prologueUi.PlayLines(rossAvatar, "Move the Mouse to look around.");
+        plotUiImpl.PlayLines(rossAvatar, "Move the Mouse to look around.");
         yield return WaitForContinue();
 
         yield return new WaitForSeconds(LinesIntervalTime);
-        prologueUi.PlayTip();
+        plotUiImpl.PlayTip();
         yield return new WaitForSeconds(ShowTipTime);
-        prologueUi.HideTip();
+        plotUiImpl.HideTip();
     }
 
     void ShineSpotLightOnDesk()
@@ -224,7 +224,7 @@ public class PrologueSequencer : MonoBehaviour
     {
         enterKeyPulseCoroutine = StartCoroutine(EnterkeyReminder());
 
-        while (!prologueUi.IsEnterPressed())
+        while (!plotUiImpl.IsEnterPressed())
         {
             yield return null;
         }
@@ -235,16 +235,16 @@ public class PrologueSequencer : MonoBehaviour
             enterKeyPulseCoroutine = null;
         }
 
-        prologueUi.HideLines();
+        plotUiImpl.HideLines();
     }
 
     IEnumerator EnterkeyReminder()
     {
         while (true)
         {
-            prologueUi.PulseEnterKey();
+            plotUiImpl.PulseEnterKey();
             yield return new WaitForSeconds(EnterKeyPulseInterval);
-            prologueUi.ResetEnterKeyScale();
+            plotUiImpl.ResetEnterKeyScale();
             yield return new WaitForSeconds(EnterKeyPulseInterval);
         }
     }

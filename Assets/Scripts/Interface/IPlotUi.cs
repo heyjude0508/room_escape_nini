@@ -1,4 +1,4 @@
-public interface IPrologueUi
+public interface IPlotUi
 {
     void AutoFindReferences();
 

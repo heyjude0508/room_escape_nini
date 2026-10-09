@@ -2,19 +2,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PrologueUiImpl : MonoBehaviour, IPrologueUi
+public class PlotUiImpl : MonoBehaviour, IPlotUi
 {
     const string AvatarResourcePath = "UI/Avatar/";
     const float EnterKeyPulseScale = 1.2f;
 
-    PrologueUi prologueUi;
+    PlotUi plotUi;
     FirstPersonController firstPersonController;
 
     void Awake()
     {
-        if (prologueUi == null)
+        if (plotUi == null)
         {
-            prologueUi = new PrologueUi();
+            plotUi = new PlotUi();
         }
 
         AutoFindReferences();
@@ -24,9 +24,9 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
 
     public void AutoFindReferences()
     {
-        if (prologueUi == null)
+        if (plotUi == null)
         {
-            prologueUi = new PrologueUi();
+            plotUi = new PlotUi();
         }
 
         if (firstPersonController == null)
@@ -34,78 +34,78 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
             firstPersonController = FindObjectOfType<FirstPersonController>();
         }
 
-        if (string.IsNullOrEmpty(prologueUi.linesName))
+        if (string.IsNullOrEmpty(plotUi.linesName))
         {
-            prologueUi.linesName = "Lines";
+            plotUi.linesName = "Lines";
         }
 
-        if (string.IsNullOrEmpty(prologueUi.subtitlePanelName))
+        if (string.IsNullOrEmpty(plotUi.subtitlePanelName))
         {
-            prologueUi.subtitlePanelName = "SubtitlePanel";
+            plotUi.subtitlePanelName = "SubtitlePanel";
         }
 
-        if (string.IsNullOrEmpty(prologueUi.tipPanelName))
+        if (string.IsNullOrEmpty(plotUi.tipPanelName))
         {
-            prologueUi.tipPanelName = "TipPanel";
+            plotUi.tipPanelName = "TipPanel";
         }
 
-        if (string.IsNullOrEmpty(prologueUi.avatarName))
+        if (string.IsNullOrEmpty(plotUi.avatarName))
         {
-            prologueUi.avatarName = "Avatar";
+            plotUi.avatarName = "Avatar";
         }
 
-        if (string.IsNullOrEmpty(prologueUi.enterKeyName))
+        if (string.IsNullOrEmpty(plotUi.enterKeyName))
         {
-            prologueUi.enterKeyName = "EnterKey";
+            plotUi.enterKeyName = "EnterKey";
         }
 
-        if (prologueUi.linesText == null)
+        if (plotUi.linesText == null)
         {
-            Transform linesTransform = FindChildRecursive(transform, prologueUi.linesName);
+            Transform linesTransform = FindChildRecursive(transform, plotUi.linesName);
             if (linesTransform != null)
             {
-                prologueUi.linesText = linesTransform.GetComponent<TMP_Text>();
+                plotUi.linesText = linesTransform.GetComponent<TMP_Text>();
             }
         }
 
-        if (prologueUi.avatarImage == null)
+        if (plotUi.avatarImage == null)
         {
-            Transform avatarTransform = FindChildRecursive(transform, prologueUi.avatarName);
+            Transform avatarTransform = FindChildRecursive(transform, plotUi.avatarName);
             if (avatarTransform != null)
             {
-                prologueUi.avatarImage = avatarTransform.GetComponent<Image>();
+                plotUi.avatarImage = avatarTransform.GetComponent<Image>();
             }
         }
 
-        if (prologueUi.enterKey == null)
+        if (plotUi.enterKey == null)
         {
-            Transform enterKeyTransform = FindChildRecursive(transform, prologueUi.enterKeyName);
+            Transform enterKeyTransform = FindChildRecursive(transform, plotUi.enterKeyName);
             if (enterKeyTransform != null)
             {
-                prologueUi.enterKey = enterKeyTransform as RectTransform;
-                if (prologueUi.enterKey == null)
+                plotUi.enterKey = enterKeyTransform as RectTransform;
+                if (plotUi.enterKey == null)
                 {
-                    prologueUi.enterKey = enterKeyTransform.GetComponent<RectTransform>();
+                    plotUi.enterKey = enterKeyTransform.GetComponent<RectTransform>();
                 }
 
-                if (prologueUi.enterKey != null)
+                if (plotUi.enterKey != null)
                 {
-                    prologueUi.enterKeyBaseScale = prologueUi.enterKey.localScale;
+                    plotUi.enterKeyBaseScale = plotUi.enterKey.localScale;
                 }
             }
         }
 
-        if (prologueUi.linesText == null)
+        if (plotUi.linesText == null)
         {
             Debug.LogError("Lines TMP_Text not found under " + name);
         }
 
-        if (prologueUi.avatarImage == null)
+        if (plotUi.avatarImage == null)
         {
             Debug.LogError("Avatar Image not found under " + name);
         }
 
-        if (prologueUi.enterKey == null)
+        if (plotUi.enterKey == null)
         {
             Debug.LogError("EnterKey not found under " + name);
         }
@@ -118,40 +118,40 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
 
     public void PlayLines(string avatar, string line)
     {
-        if (prologueUi == null)
+        if (plotUi == null)
         {
-            prologueUi = new PrologueUi();
+            plotUi = new PlotUi();
         }
 
-        if (prologueUi.linesText == null || prologueUi.avatarImage == null || prologueUi.enterKey == null || firstPersonController == null)
+        if (plotUi.linesText == null || plotUi.avatarImage == null || plotUi.enterKey == null || firstPersonController == null)
         {
             AutoFindReferences();
         }
 
-        if (prologueUi.linesText == null)
+        if (plotUi.linesText == null)
         {
             return;
         }
 
         SetPlayerLocked(true);
         SetSubtitlePanelActive(true);
-        prologueUi.linesText.text = line ?? string.Empty;
+        plotUi.linesText.text = line ?? string.Empty;
         ApplyAvatar(avatar);
     }
 
     public void PlayTip()
     {
-        if (prologueUi == null)
+        if (plotUi == null)
         {
-            prologueUi = new PrologueUi();
+            plotUi = new PlotUi();
         }
 
-        if (string.IsNullOrEmpty(prologueUi.tipPanelName))
+        if (string.IsNullOrEmpty(plotUi.tipPanelName))
         {
             AutoFindReferences();
         }
 
-        Transform tipPanel = FindChildRecursive(transform, prologueUi.tipPanelName);
+        Transform tipPanel = FindChildRecursive(transform, plotUi.tipPanelName);
         if (tipPanel == null)
         {
             Debug.LogError("TipPanel not found under " + name);
@@ -163,9 +163,9 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
 
     public void HideTip()
     {
-        if (prologueUi == null)
+        if (plotUi == null)
         {
-            prologueUi = new PrologueUi();
+            plotUi = new PlotUi();
         }
 
         SetTipPanelActive(false);
@@ -173,29 +173,29 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
 
     public void PulseEnterKey()
     {
-        if (prologueUi == null || prologueUi.enterKey == null)
+        if (plotUi == null || plotUi.enterKey == null)
         {
             AutoFindReferences();
         }
 
-        if (prologueUi == null || prologueUi.enterKey == null)
+        if (plotUi == null || plotUi.enterKey == null)
         {
             return;
         }
 
-        prologueUi.enterKey.localScale = prologueUi.enterKeyBaseScale * EnterKeyPulseScale;
+        plotUi.enterKey.localScale = plotUi.enterKeyBaseScale * EnterKeyPulseScale;
     }
 
     public void ResetEnterKeyScale()
     {
-        if (prologueUi == null || prologueUi.enterKey == null)
+        if (plotUi == null || plotUi.enterKey == null)
         {
             AutoFindReferences();
         }
 
-        if (prologueUi != null && prologueUi.enterKey != null)
+        if (plotUi != null && plotUi.enterKey != null)
         {
-            prologueUi.enterKey.localScale = prologueUi.enterKeyBaseScale;
+            plotUi.enterKey.localScale = plotUi.enterKeyBaseScale;
         }
     }
 
@@ -206,9 +206,9 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
 
     public void HideLines()
     {
-        if (prologueUi == null)
+        if (plotUi == null)
         {
-            prologueUi = new PrologueUi();
+            plotUi = new PlotUi();
         }
 
         ResetEnterKeyScale();
@@ -252,7 +252,7 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
 
     void SetSubtitlePanelActive(bool active)
     {
-        Transform subtitlePanel = FindChildRecursive(transform, prologueUi.subtitlePanelName);
+        Transform subtitlePanel = FindChildRecursive(transform, plotUi.subtitlePanelName);
         if (subtitlePanel != null)
         {
             subtitlePanel.gameObject.SetActive(active);
@@ -261,12 +261,12 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
 
     void SetTipPanelActive(bool active)
     {
-        if (prologueUi == null || string.IsNullOrEmpty(prologueUi.tipPanelName))
+        if (plotUi == null || string.IsNullOrEmpty(plotUi.tipPanelName))
         {
             return;
         }
 
-        Transform tipPanel = FindChildRecursive(transform, prologueUi.tipPanelName);
+        Transform tipPanel = FindChildRecursive(transform, plotUi.tipPanelName);
         if (tipPanel != null)
         {
             tipPanel.gameObject.SetActive(active);
@@ -275,15 +275,15 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
 
     void ApplyAvatar(string avatar)
     {
-        if (prologueUi.avatarImage == null)
+        if (plotUi.avatarImage == null)
         {
             return;
         }
 
         if (string.IsNullOrEmpty(avatar))
         {
-            prologueUi.avatarImage.sprite = null;
-            prologueUi.avatarImage.color = new Color(1f, 1f, 1f, 0.15f);
+            plotUi.avatarImage.sprite = null;
+            plotUi.avatarImage.color = new Color(1f, 1f, 1f, 0.15f);
             return;
         }
 
@@ -294,8 +294,8 @@ public class PrologueUiImpl : MonoBehaviour, IPrologueUi
             return;
         }
 
-        prologueUi.avatarImage.sprite = sprite;
-        prologueUi.avatarImage.color = Color.white;
+        plotUi.avatarImage.sprite = sprite;
+        plotUi.avatarImage.color = Color.white;
     }
 
     static Transform FindChildRecursive(Transform parent, string childName)

@@ -12,7 +12,6 @@ public class PrologueStory
     public string prevKeyName;
     public string nextKeyName;
     public string closeKeyName;
-    public string storyResourcePath;
     public string storyDesc;
     public string nextSceneName;
 
@@ -37,7 +36,6 @@ public class PrologueStory
         prevKeyName = "PrevKey";
         nextKeyName = "NextKey";
         closeKeyName = "CloseKey";
-        storyResourcePath = "Materials/PrologueStory";
         storyDesc = "Press E to look at the drawings";
         nextSceneName = "HouseChild";
 

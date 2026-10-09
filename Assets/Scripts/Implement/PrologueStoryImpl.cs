@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class PrologueStoryImpl : MonoBehaviour, IPrologueStory
 {
+    [SerializeField] Sprite[] storySpriteAssets;
+
     PrologueStory prologueStory;
 
     FirstPersonController firstPersonController;
@@ -93,11 +95,6 @@ public class PrologueStoryImpl : MonoBehaviour, IPrologueStory
         if (string.IsNullOrEmpty(prologueStory.closeKeyName))
         {
             prologueStory.closeKeyName = "CloseKey";
-        }
-
-        if (string.IsNullOrEmpty(prologueStory.storyResourcePath))
-        {
-            prologueStory.storyResourcePath = "Materials/PrologueStory";
         }
 
         if (string.IsNullOrEmpty(prologueStory.storyDesc))
@@ -575,10 +572,16 @@ public class PrologueStoryImpl : MonoBehaviour, IPrologueStory
             storySprites.Clear();
         }
 
-        Sprite[] sprites = Resources.LoadAll<Sprite>(prologueStory.storyResourcePath);
-        for (int i = 0; i < sprites.Length; i++)
+        if (storySpriteAssets == null || storySpriteAssets.Length == 0)
         {
-            Sprite sprite = sprites[i];
+            Debug.LogError("PrologueStoryImpl: storySpriteAssets is empty. Assign sprites from Assets/Materials/PrologueStory.");
+            prologueStory.storytotal = 0;
+            return;
+        }
+
+        for (int i = 0; i < storySpriteAssets.Length; i++)
+        {
+            Sprite sprite = storySpriteAssets[i];
             if (sprite == null || string.IsNullOrEmpty(sprite.name))
             {
                 continue;

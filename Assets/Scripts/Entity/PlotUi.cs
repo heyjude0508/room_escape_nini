@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [Serializable]
-public class PrologueUi
+public class PlotUi
 {
     public string subtitlePanelName;
     public string tipPanelName;
@@ -16,7 +16,7 @@ public class PrologueUi
     public RectTransform enterKey;
     public Vector3 enterKeyBaseScale;
 
-    public PrologueUi()
+    public PlotUi()
     {
         subtitlePanelName = "SubtitlePanel";
         tipPanelName = "TipPanel";
