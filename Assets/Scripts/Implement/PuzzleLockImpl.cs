@@ -52,6 +52,7 @@ public class LockPuzzleImpl : MonoBehaviour, IPuzzleLock
     public void EventAimStart()
     {
         //gameEventAimStart.Raise();
+        ActPanelKeyUi.SetCanInteract(CanSolve());
     }
 
     public void EventAimEnd()

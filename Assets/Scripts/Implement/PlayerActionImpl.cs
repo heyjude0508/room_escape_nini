@@ -177,6 +177,7 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
                 UiInteractionText.text = interactable.GetDescription();
             }
 
+            ActPanelKeyUi.ShowDefaultEKey();
             interactable.EventAimStart();
 
             if (Input.GetKeyDown(KeyCode.E))
