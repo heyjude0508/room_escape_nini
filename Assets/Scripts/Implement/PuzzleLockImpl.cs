@@ -91,6 +91,13 @@ public class LockPuzzleImpl : MonoBehaviour, IPuzzleLock
         {
             PlaySound(puzzleLock.unsolvedSound);
             Debug.Log("Need to find the key!");
+
+            HouseChildSequencer sequencer = FindObjectOfType<HouseChildSequencer>();
+            if (sequencer != null)
+            {
+                sequencer.NotifyLockInteracted(puzzleLock.id, false);
+            }
+
             return;
         }
 

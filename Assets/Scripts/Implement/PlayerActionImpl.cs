@@ -42,11 +42,13 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
     bool isCrouched;
     bool sprintEnabledBeforeCrouch = true;
     FirstPersonController firstPersonController;
+    HouseChildSequencer houseChildSequencer;
 
     void Awake()
     {
         originalScale = transform.localScale;
         firstPersonController = GetComponent<FirstPersonController>();
+        houseChildSequencer = FindObjectOfType<HouseChildSequencer>();
 
         if (walkAudioSource == null)
         {
@@ -148,6 +150,16 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
             return;
         }
 
+        if (IsPlotBlockingInteractionUi())
+        {
+            if (UiInteraction != null)
+            {
+                UiInteraction.SetActive(false);
+            }
+
+            return;
+        }
+
         Ray ray = mainCamera.ViewportPointToRay(Vector3.one / 2);
         bool IsHit = false;
         if (UiInteraction != null)
@@ -192,6 +204,16 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
         {
             UiInteraction.SetActive(false);
         }
+    }
+
+    bool IsPlotBlockingInteractionUi()
+    {
+        if (houseChildSequencer == null)
+        {
+            houseChildSequencer = FindObjectOfType<HouseChildSequencer>();
+        }
+
+        return houseChildSequencer != null && houseChildSequencer.IsBlockingInteractionUi;
     }
 
     public void HandleCrouch()
