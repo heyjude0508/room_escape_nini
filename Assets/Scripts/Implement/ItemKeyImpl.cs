@@ -48,6 +48,12 @@ public class ItemKeyImpl : MonoBehaviour, IItemKey
             bag.AddItem(copy);
         }
 
+        HouseChildSequencer sequencer = FindObjectOfType<HouseChildSequencer>();
+        if (sequencer != null)
+        {
+            sequencer.NotifyItemPicked(copy.id);
+        }
+
         Destroy(gameObject);
     }
 

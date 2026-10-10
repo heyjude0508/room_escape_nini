@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class PrologueSequencer : MonoBehaviour
 {
-    const float EnterKeyPulseInterval = 0.6f;
-    const float SpotLightHeightOffset = 3f;
     const float OpeningWaitingTime = 1f;
-    const float LinesIntervalTime = 0.6f;
+    const float SpotLightHeightOffset = 3f;
     const float ShowTipTime = 5f;
 
+    const float EnterKeyPulseInterval = 0.6f;
+    const float LinesIntervalTime = 0.6f;
+    
     PlotUiImpl plotUiImpl;
     Light spotLight;
     Transform desk;
