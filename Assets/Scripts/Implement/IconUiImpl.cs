@@ -81,7 +81,7 @@ public class IconUiImpl : MonoBehaviour, IIconUi
 
         float distance = Vector3.Distance(targetCamera.transform.position, distanceTarget.position);
 
-        if (distance > hintDistance)
+        if (distance > hintDistance || IsOccludedBySolidGeometry())
         {
             SetIconState(IconTipStatusEnum.ICON_TIP_HIDDEN);
         }
@@ -93,6 +93,52 @@ public class IconUiImpl : MonoBehaviour, IIconUi
         {
             SetIconState(IconTipStatusEnum.ICON_TIP_CHECK);
         }
+    }
+
+    bool IsOccludedBySolidGeometry()
+    {
+        if (targetCamera == null || distanceTarget == null)
+        {
+            return false;
+        }
+
+        Vector3 origin = targetCamera.transform.position;
+        Vector3 toTarget = distanceTarget.position - origin;
+        float distance = toTarget.magnitude;
+        if (distance <= 0.0001f)
+        {
+            return false;
+        }
+
+        if (!Physics.Raycast(
+                origin,
+                toTarget / distance,
+                out RaycastHit hit,
+                distance,
+                Physics.DefaultRaycastLayers,
+                QueryTriggerInteraction.Ignore))
+        {
+            return false;
+        }
+
+        Transform hitTransform = hit.transform;
+        if (ownerRoot != null
+            && (hitTransform == ownerRoot
+                || hitTransform.IsChildOf(ownerRoot)
+                || ownerRoot.IsChildOf(hitTransform)))
+        {
+            return false;
+        }
+
+        if (distanceTarget != null
+            && (hitTransform == distanceTarget
+                || hitTransform.IsChildOf(distanceTarget)
+                || distanceTarget.IsChildOf(hitTransform)))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     void ApplyWorldPosition()

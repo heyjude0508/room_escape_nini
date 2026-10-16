@@ -13,6 +13,7 @@ public class HouseChildSequencer : MonoBehaviour
     const float FragmentPlotTime = 0.6f;
     const string FragmentTlItemId = "F001";
     const string MainDoorPuzzleId = "MainLock";
+    const string KitchenTriggerId = "Tri001";
 
     const string ActPanelName = "ActPanel";
 
@@ -26,9 +27,14 @@ public class HouseChildSequencer : MonoBehaviour
     Coroutine houseCoroutine;
     Coroutine fragmentPlotCoroutine;
     Coroutine mainDoorPlotCoroutine;
+    Coroutine kitchenPlotCoroutine;
+    Coroutine chefAssigCoroutine;
+    Coroutine chefReactPlotCoroutine;
     Coroutine enterKeyPulseCoroutine;
     bool fragmentTlPlotPlayed;
     bool mainDoorPlotPlayed;
+    bool kitchenPlotPlayed;
+    bool chefReactPlotPlayed;
     bool plotBlockingInteractionUi;
 
     public bool IsBlockingInteractionUi => plotBlockingInteractionUi;
@@ -106,6 +112,93 @@ public class HouseChildSequencer : MonoBehaviour
         }
 
         mainDoorPlotCoroutine = StartCoroutine(MainDoorPlot());
+    }
+
+    public void NotifyTriggerEntered(string triggerId)
+    {
+        if (kitchenPlotPlayed || string.IsNullOrEmpty(triggerId))
+        {
+            return;
+        }
+
+        if (!string.Equals(triggerId, KitchenTriggerId, System.StringComparison.Ordinal))
+        {
+            return;
+        }
+
+        if (plotUiImpl == null)
+        {
+            plotUiImpl = FindObjectOfType<PlotUiImpl>();
+            if (plotUiImpl == null)
+            {
+                Debug.LogError("PlotUiImpl not found in scene.");
+                return;
+            }
+        }
+
+        kitchenPlotPlayed = true;
+        if (kitchenPlotCoroutine != null)
+        {
+            StopCoroutine(kitchenPlotCoroutine);
+        }
+
+        kitchenPlotCoroutine = StartCoroutine(KitchenPlot());
+    }
+
+    public void NotifyNpcInteracted(Npc npc)
+    {
+        if (npc == null || string.IsNullOrEmpty(npc.npcAvatarName))
+        {
+            return;
+        }
+
+        if (plotBlockingInteractionUi)
+        {
+            return;
+        }
+
+        if (plotUiImpl == null)
+        {
+            plotUiImpl = FindObjectOfType<PlotUiImpl>();
+            if (plotUiImpl == null)
+            {
+                Debug.LogError("PlotUiImpl not found in scene.");
+                return;
+            }
+        }
+
+        if (chefAssigCoroutine != null)
+        {
+            StopCoroutine(chefAssigCoroutine);
+        }
+
+        chefAssigCoroutine = StartCoroutine(ChefAssigThenReact(npc.npcAvatarName));
+    }
+
+    IEnumerator ChefAssigThenReact(string npcAvatarName)
+    {
+        try
+        {
+            yield return ChefAssig(npcAvatarName);
+
+            if (chefReactPlotPlayed)
+            {
+                yield break;
+            }
+
+            chefReactPlotPlayed = true;
+            if (chefReactPlotCoroutine != null)
+            {
+                StopCoroutine(chefReactPlotCoroutine);
+            }
+
+            chefReactPlotCoroutine = StartCoroutine(ChefReactPlot());
+            yield return chefReactPlotCoroutine;
+        }
+        finally
+        {
+            chefAssigCoroutine = null;
+        }
     }
 
     public IEnumerator PorologuePlot()
@@ -192,6 +285,101 @@ public class HouseChildSequencer : MonoBehaviour
         finally
         {
             mainDoorPlotCoroutine = null;
+            EndPlotBlocking();
+        }
+    }
+
+    public IEnumerator KitchenPlot()
+    {
+        BeginPlotBlocking();
+        try
+        {
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(meAvatar, "Um... the kitchen is straight out of my childhood, but the dining room is from the present.");
+            yield return WaitForContinue();
+
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(meAvatar, "It's weird.");
+            yield return WaitForContinue();
+        }
+        finally
+        {
+            kitchenPlotCoroutine = null;
+            EndPlotBlocking();
+        }
+    }
+
+    public IEnumerator ChefAssig(string npcAvatarName)
+    {
+        BeginPlotBlocking();
+        try
+        {
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(npcAvatarName, "I'm Chef Cat. I've been waiting a long time for you! Come help me out!");
+            yield return WaitForContinue();
+
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(npcAvatarName, "I need to prepare food for your parents, but I don't know what their favorites are.");
+            yield return WaitForContinue();
+
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(npcAvatarName, "You're their son, so you must know.");
+            yield return WaitForContinue();
+
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(npcAvatarName, "Help me gather the ingredients for their favorite dish and put them on the cart. I'll cook for them.");
+            yield return WaitForContinue();
+        }
+        finally
+        {
+            EndPlotBlocking();
+        }
+    }
+
+    public IEnumerator ChefReactPlot()
+    {
+        BeginPlotBlocking();
+        try
+        {
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(meAvatar, "This black cat was my childhood plushie. I used to always make it play chef or waiter.");
+            yield return WaitForContinue();
+
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(meAvatar, "First Pie and Ross, now this. Oh well, I'm used to it.");
+            yield return WaitForContinue();
+
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(pieAvatar, "It's a plushie, but our friend.");
+            yield return WaitForContinue();
+
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(meAvatar, "Look, I regret what happened this morning, but I have a family to feed! Can you just let me go back?");
+            yield return WaitForContinue();
+
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(meAvatar, "Now I have to figure out what my parents' favorite food is? How could I not know that? I don't have time for this!");
+            yield return WaitForContinue();
+
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(meAvatar, "......");
+            yield return WaitForContinue();
+
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(meAvatar, "Wait......");
+            yield return WaitForContinue();
+
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(pieAvatar, "Looks like you noticed.");
+            yield return WaitForContinue();
+
+            yield return new WaitForSeconds(FragmentPlotTime);
+            plotUiImpl.PlayLines(rossAvatar, "You have absolutely no idea what they like. So be a good boy and stay right here.");
+            yield return WaitForContinue();
+        }
+        finally
+        {
+            chefReactPlotCoroutine = null;
             EndPlotBlocking();
         }
     }

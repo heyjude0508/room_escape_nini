@@ -172,32 +172,41 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
 
         for (int i = 0; i < hits.Length; i++)
         {
-            IPlayerBase interactable = hits[i].collider.GetComponentInParent<IPlayerBase>();
-            if (interactable == null || !CanInteract(interactable))
+            Collider hitCollider = hits[i].collider;
+            IPlayerBase interactable = hitCollider.GetComponentInParent<IPlayerBase>();
+            MonoBehaviour interactableBehaviour = interactable as MonoBehaviour;
+            if (interactable != null
+                && interactableBehaviour != null
+                && CanInteract(interactable)
+                && IsAimingAtInteractable(hits[i], interactableBehaviour))
             {
-                continue;
+                IsHit = true;
+                if (UiInteraction != null)
+                {
+                    UiInteraction.SetActive(IsHit);
+                }
+
+                if (UiInteractionText != null)
+                {
+                    UiInteractionText.text = interactable.GetDescription();
+                }
+
+                ActPanelKeyUi.ShowDefaultEKey();
+                interactable.EventAimStart();
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    interactable.Interact();
+                }
+
+                break;
             }
 
-            IsHit = true;
-            if (UiInteraction != null)
+            // Non-trigger colliders (doors, walls, furniture) occlude items behind them.
+            if (!hitCollider.isTrigger)
             {
-                UiInteraction.SetActive(IsHit);
+                break;
             }
-
-            if (UiInteractionText != null)
-            {
-                UiInteractionText.text = interactable.GetDescription();
-            }
-
-            ActPanelKeyUi.ShowDefaultEKey();
-            interactable.EventAimStart();
-
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                interactable.Interact();
-            }
-
-            break;
         }
 
         if (!IsHit && UiInteraction != null)
@@ -348,6 +357,34 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
 
         float distance = Vector3.Distance(mainCamera.transform.position, interactableBehaviour.transform.position);
         return distance <= InteractionRange;
+    }
+
+    // Oversized trigger volumes can stick through walls; only accept aim hits near the visible mesh.
+    bool IsAimingAtInteractable(RaycastHit hit, MonoBehaviour interactableBehaviour)
+    {
+        const float padding = 0.08f;
+        Renderer[] renderers = interactableBehaviour.GetComponentsInChildren<Renderer>();
+        if (renderers == null || renderers.Length == 0)
+        {
+            return Vector3.Distance(hit.point, interactableBehaviour.transform.position) <= 0.25f;
+        }
+
+        Bounds bounds = renderers[0].bounds;
+        for (int i = 1; i < renderers.Length; i++)
+        {
+            if (renderers[i] != null && renderers[i].enabled)
+            {
+                bounds.Encapsulate(renderers[i].bounds);
+            }
+        }
+
+        bounds.Expand(padding);
+        if (bounds.Contains(hit.point))
+        {
+            return true;
+        }
+
+        return Vector3.Distance(hit.point, bounds.ClosestPoint(hit.point)) <= padding;
     }
 
     public void PlayRandomWalkSound()
