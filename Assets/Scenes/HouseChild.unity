@@ -11960,7 +11960,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 615dcd6f65f0cdd41a0ea7df7bc206e5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0157
+      value: 0.0171
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 615dcd6f65f0cdd41a0ea7df7bc206e5,
         type: 3}
@@ -11970,7 +11970,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 615dcd6f65f0cdd41a0ea7df7bc206e5,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.0004
+      value: -0.0179
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 615dcd6f65f0cdd41a0ea7df7bc206e5,
         type: 3}
@@ -12026,11 +12026,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DoorSideKey_L
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 615dcd6f65f0cdd41a0ea7df7bc206e5,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -46610,8 +46605,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.05144739
-  m_Center: {x: 0.0124311885, y: 0.036022708, z: 0.007932801}
+  m_Radius: 0.031083535
+  m_Center: {x: -6.305334e-10, y: 0.03602336, z: 0.00000005258169}
 --- !u!1001 &1326898023
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50165,7 +50160,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
