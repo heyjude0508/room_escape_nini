@@ -202,6 +202,14 @@ public class IconUiImpl : MonoBehaviour, IIconUi
         }
     }
 
+    public bool BelongsToItemKey
+    {
+        get
+        {
+            return ownerRoot != null && ownerRoot.GetComponent<ItemKeyImpl>() != null;
+        }
+    }
+
     public static IconUiImpl FindForInteractable(Transform interactableTransform)
     {
         if (interactableTransform == null)
@@ -209,16 +217,83 @@ public class IconUiImpl : MonoBehaviour, IIconUi
             return null;
         }
 
-        IconUiImpl iconUi = interactableTransform.GetComponentInChildren<IconUiImpl>(true);
-        if (iconUi != null)
+        // ItemKey pickup must use its own tip (dot → magnifier), not a parent Lock tip.
+        ItemKeyImpl itemKey = interactableTransform.GetComponent<ItemKeyImpl>();
+        if (itemKey == null)
         {
-            return iconUi;
+            itemKey = interactableTransform.GetComponentInParent<ItemKeyImpl>();
+        }
+
+        if (itemKey != null)
+        {
+            return FindTipForItemKey(itemKey.transform);
+        }
+
+        IconUiImpl preferredLockTip = null;
+        IconUiImpl fallbackTip = null;
+        IconUiImpl[] tips = interactableTransform.GetComponentsInChildren<IconUiImpl>(true);
+        for (int i = 0; i < tips.Length; i++)
+        {
+            IconUiImpl tip = tips[i];
+            if (tip == null || tip.BelongsToItemKey)
+            {
+                continue;
+            }
+
+            if (tip.ownerRoot != null && tip.ownerRoot.name == "Lock")
+            {
+                preferredLockTip = tip;
+                break;
+            }
+
+            if (fallbackTip == null)
+            {
+                fallbackTip = tip;
+            }
+        }
+
+        if (preferredLockTip != null)
+        {
+            return preferredLockTip;
+        }
+
+        if (fallbackTip != null)
+        {
+            return fallbackTip;
         }
 
         for (int i = activeInstances.Count - 1; i >= 0; i--)
         {
             IconUiImpl candidate = activeInstances[i];
-            if (candidate != null && candidate.IsOwnedBy(interactableTransform))
+            if (candidate == null || candidate.BelongsToItemKey)
+            {
+                continue;
+            }
+
+            if (candidate.IsOwnedBy(interactableTransform))
+            {
+                return candidate;
+            }
+        }
+
+        return null;
+    }
+
+    static IconUiImpl FindTipForItemKey(Transform keyRoot)
+    {
+        IconUiImpl[] tips = keyRoot.GetComponentsInChildren<IconUiImpl>(true);
+        for (int i = 0; i < tips.Length; i++)
+        {
+            if (tips[i] != null)
+            {
+                return tips[i];
+            }
+        }
+
+        for (int i = activeInstances.Count - 1; i >= 0; i--)
+        {
+            IconUiImpl candidate = activeInstances[i];
+            if (candidate != null && candidate.IsOwnedBy(keyRoot))
             {
                 return candidate;
             }

@@ -175,36 +175,22 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
             Collider hitCollider = hits[i].collider;
             IPlayerBase interactable = hitCollider.GetComponentInParent<IPlayerBase>();
             MonoBehaviour interactableBehaviour = interactable as MonoBehaviour;
-            if (interactable != null
-                && interactableBehaviour != null
-                && CanInteract(interactable)
-                && IsAimingAtInteractable(hits[i], interactableBehaviour))
+
+            if (TryActivateInteractable(hits[i], interactable, interactableBehaviour))
             {
                 IsHit = true;
-                if (UiInteraction != null)
-                {
-                    UiInteraction.SetActive(IsHit);
-                }
-
-                if (UiInteractionText != null)
-                {
-                    UiInteractionText.text = interactable.GetDescription();
-                }
-
-                ActPanelKeyUi.ShowDefaultEKey();
-                interactable.EventAimStart();
-
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    interactable.Interact();
-                }
-
                 break;
             }
 
-            // Non-trigger colliders (doors, walls, furniture) occlude items behind them.
+            // Non-trigger colliders occlude unless a pickable key sits just behind (drawer recess).
             if (!hitCollider.isTrigger)
             {
+                if (TryFindRecessedItemKey(hits, i, out RaycastHit keyHit, out ItemKeyImpl recessedKey)
+                    && TryActivateInteractable(keyHit, recessedKey, recessedKey))
+                {
+                    IsHit = true;
+                }
+
                 break;
             }
         }
@@ -213,6 +199,81 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
         {
             UiInteraction.SetActive(false);
         }
+    }
+
+    bool TryActivateInteractable(
+        RaycastHit hit,
+        IPlayerBase interactable,
+        MonoBehaviour interactableBehaviour)
+    {
+        if (interactable == null || interactableBehaviour == null)
+        {
+            return false;
+        }
+
+        string description = interactable.GetDescription();
+        if (string.IsNullOrEmpty(description))
+        {
+            return false;
+        }
+
+        if (!CanInteract(interactable) || !IsAimingAtInteractable(hit, interactableBehaviour))
+        {
+            return false;
+        }
+
+        if (UiInteraction != null)
+        {
+            UiInteraction.SetActive(true);
+        }
+
+        if (UiInteractionText != null)
+        {
+            UiInteractionText.text = description;
+        }
+
+        ActPanelKeyUi.ShowDefaultEKey();
+        interactable.EventAimStart();
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            interactable.Interact();
+        }
+
+        return true;
+    }
+
+    // Keys resting in open drawers/shelves sit just behind furniture mesh colliders.
+    bool TryFindRecessedItemKey(
+        RaycastHit[] hits,
+        int solidIndex,
+        out RaycastHit keyHit,
+        out ItemKeyImpl itemKey)
+    {
+        const float maxRecessDepth = 0.35f;
+        keyHit = default;
+        itemKey = null;
+
+        float solidDistance = hits[solidIndex].distance;
+        for (int j = solidIndex + 1; j < hits.Length; j++)
+        {
+            if (hits[j].distance - solidDistance > maxRecessDepth)
+            {
+                break;
+            }
+
+            ItemKeyImpl candidate = hits[j].collider.GetComponentInParent<ItemKeyImpl>();
+            if (candidate == null)
+            {
+                continue;
+            }
+
+            keyHit = hits[j];
+            itemKey = candidate;
+            return true;
+        }
+
+        return false;
     }
 
     bool IsPlotBlockingInteractionUi()
@@ -355,7 +416,9 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
             return iconUi.IsInCheckRange;
         }
 
-        float distance = Vector3.Distance(mainCamera.transform.position, interactableBehaviour.transform.position);
+        float distance = Vector3.Distance(
+            mainCamera.transform.position,
+            interactableBehaviour.transform.position);
         return distance <= InteractionRange;
     }
 

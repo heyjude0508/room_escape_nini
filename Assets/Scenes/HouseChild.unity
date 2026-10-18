@@ -10215,7 +10215,7 @@ MonoBehaviour:
   tipImage: {fileID: 296122050}
   circleSprite: {fileID: -2413806693520163455, guid: 62c5297b908f53f4692ebcb9f1645f28,
     type: 3}
-  checkSprite: {fileID: 21300000, guid: c6ba52c3e8af5b341995cc343e85e4a0, type: 3}
+  checkSprite: {fileID: 21300000, guid: 4800731ef4eae344c85a8e9b24fb7278, type: 3}
   hintDistance: 1.3
   interactDistance: 0.7
   worldScale: 1
@@ -10536,7 +10536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemSocket:
-    id: S016
+    id: S017
     itemName: Tomato
     itemSprite: {fileID: 21300000, guid: 0073d24e79164ee3aed1be9791f1ef8b, type: 3}
     itemActionDesc: Press E to pick up the tomato.
@@ -12026,6 +12026,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DoorSideKey_L
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 615dcd6f65f0cdd41a0ea7df7bc206e5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16514,7 +16519,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 1f88c543156433e4d975a062ce7ab65d,
         type: 3}
       propertyPath: m_Name
-      value: Tomato
+      value: Tomato_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -18123,7 +18128,7 @@ MonoBehaviour:
   tipImage: {fileID: 518282273}
   circleSprite: {fileID: -2413806693520163455, guid: 62c5297b908f53f4692ebcb9f1645f28,
     type: 3}
-  checkSprite: {fileID: 21300000, guid: a5b6ecdbc26aa9f47b973c7481d1268a, type: 3}
+  checkSprite: {fileID: 21300000, guid: 4800731ef4eae344c85a8e9b24fb7278, type: 3}
   hintDistance: 1.8
   interactDistance: 1.3
   worldScale: 1
@@ -41028,8 +41033,32 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1414301948}
     - target: {fileID: 6512776, guid: 6e06cd5e349abd247a4d1b02faed6fe5, type: 3}
-      propertyPath: m_IsTrigger
+      propertyPath: m_Size.x
+      value: 0.55
+      objectReference: {fileID: 0}
+    - target: {fileID: 6512776, guid: 6e06cd5e349abd247a4d1b02faed6fe5, type: 3}
+      propertyPath: m_Size.y
+      value: 0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 6512776, guid: 6e06cd5e349abd247a4d1b02faed6fe5, type: 3}
+      propertyPath: m_Size.z
+      value: 0.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 6512776, guid: 6e06cd5e349abd247a4d1b02faed6fe5, type: 3}
+      propertyPath: m_Center.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6512776, guid: 6e06cd5e349abd247a4d1b02faed6fe5, type: 3}
+      propertyPath: m_Center.y
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 6512776, guid: 6e06cd5e349abd247a4d1b02faed6fe5, type: 3}
+      propertyPath: m_Center.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6512776, guid: 6e06cd5e349abd247a4d1b02faed6fe5, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 11177420, guid: 6e06cd5e349abd247a4d1b02faed6fe5, type: 3}
       propertyPath: m_Animation
@@ -41051,6 +41080,8 @@ PrefabInstance:
     - {fileID: 11447906, guid: 6e06cd5e349abd247a4d1b02faed6fe5, type: 3}
     - {fileID: 0}
     - {fileID: 11456696, guid: 6e06cd5e349abd247a4d1b02faed6fe5, type: 3}
+    - {fileID: 6420866, guid: 6e06cd5e349abd247a4d1b02faed6fe5, type: 3}
+    - {fileID: 6516508, guid: 6e06cd5e349abd247a4d1b02faed6fe5, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 439948, guid: 6e06cd5e349abd247a4d1b02faed6fe5,
@@ -43491,7 +43522,7 @@ MonoBehaviour:
   tipImage: {fileID: 1224927517}
   circleSprite: {fileID: -2413806693520163455, guid: 62c5297b908f53f4692ebcb9f1645f28,
     type: 3}
-  checkSprite: {fileID: 21300000, guid: c6ba52c3e8af5b341995cc343e85e4a0, type: 3}
+  checkSprite: {fileID: 21300000, guid: 4800731ef4eae344c85a8e9b24fb7278, type: 3}
   hintDistance: 1.3
   interactDistance: 0.7
   worldScale: 1
@@ -46605,8 +46636,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.031083535
-  m_Center: {x: -6.305334e-10, y: 0.03602336, z: 0.00000005258169}
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0.03, z: 0}
 --- !u!1001 &1326898023
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -48247,8 +48278,8 @@ MonoBehaviour:
   circleSprite: {fileID: -2413806693520163455, guid: 62c5297b908f53f4692ebcb9f1645f28,
     type: 3}
   checkSprite: {fileID: 21300000, guid: a5b6ecdbc26aa9f47b973c7481d1268a, type: 3}
-  hintDistance: 1.3
-  interactDistance: 0.7
+  hintDistance: 1.8
+  interactDistance: 1.3
   worldScale: 1
   cameraPull: 0.06
 --- !u!1001 &1351225146
@@ -50164,8 +50195,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.27262497, y: 0.08171696, z: 0.22582157}
-  m_Center: {x: -0.00019130111, y: 0.000000059604645, z: -0.0031802393}
+  m_Size: {x: 0.25, y: 0.1, z: 0.18}
+  m_Center: {x: 0, y: 0.02, z: -0.02}
 --- !u!114 &1426761315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61202,7 +61233,7 @@ MonoBehaviour:
   tipImage: {fileID: 1712638986}
   circleSprite: {fileID: -2413806693520163455, guid: 62c5297b908f53f4692ebcb9f1645f28,
     type: 3}
-  checkSprite: {fileID: 21300000, guid: a5b6ecdbc26aa9f47b973c7481d1268a, type: 3}
+  checkSprite: {fileID: 21300000, guid: 4800731ef4eae344c85a8e9b24fb7278, type: 3}
   hintDistance: 1.3
   interactDistance: 0.7
   worldScale: 1
@@ -72781,7 +72812,7 @@ PrefabInstance:
     - target: {fileID: 4459864850019384738, guid: 6bacecc4f3df9584198879c73a6b6c36,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.28
+      value: -0.352
       objectReference: {fileID: 0}
     - target: {fileID: 4459864850019384738, guid: 6bacecc4f3df9584198879c73a6b6c36,
         type: 3}
@@ -72791,7 +72822,7 @@ PrefabInstance:
     - target: {fileID: 4459864850019384738, guid: 6bacecc4f3df9584198879c73a6b6c36,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.72
+      value: -2.221
       objectReference: {fileID: 0}
     - target: {fileID: 4459864850019384738, guid: 6bacecc4f3df9584198879c73a6b6c36,
         type: 3}
@@ -73511,7 +73542,7 @@ PrefabInstance:
     - target: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.010599493
+      value: 0.003
       objectReference: {fileID: 0}
     - target: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e,
         type: 3}
@@ -73536,12 +73567,12 @@ PrefabInstance:
     - target: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.003959894
+      value: -0.001
       objectReference: {fileID: 0}
     - target: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0069598854
+      value: -0.003
       objectReference: {fileID: 0}
     - target: {fileID: 8911583434078454184, guid: a2e1bb6daa99d10448ecb13dbc48741e,
         type: 3}
@@ -73614,7 +73645,7 @@ MonoBehaviour:
   tipImage: {fileID: 2051675779}
   circleSprite: {fileID: -2413806693520163455, guid: 62c5297b908f53f4692ebcb9f1645f28,
     type: 3}
-  checkSprite: {fileID: 21300000, guid: c6ba52c3e8af5b341995cc343e85e4a0, type: 3}
+  checkSprite: {fileID: 21300000, guid: 4800731ef4eae344c85a8e9b24fb7278, type: 3}
   hintDistance: 1.3
   interactDistance: 0.7
   worldScale: 1
@@ -74313,7 +74344,7 @@ MonoBehaviour:
   tipImage: {fileID: 2082996703}
   circleSprite: {fileID: -2413806693520163455, guid: 62c5297b908f53f4692ebcb9f1645f28,
     type: 3}
-  checkSprite: {fileID: 21300000, guid: a5b6ecdbc26aa9f47b973c7481d1268a, type: 3}
+  checkSprite: {fileID: 21300000, guid: 4800731ef4eae344c85a8e9b24fb7278, type: 3}
   hintDistance: 1.3
   interactDistance: 0.7
   worldScale: 1
@@ -76004,7 +76035,7 @@ MonoBehaviour:
   tipImage: {fileID: 2127528879}
   circleSprite: {fileID: -2413806693520163455, guid: 62c5297b908f53f4692ebcb9f1645f28,
     type: 3}
-  checkSprite: {fileID: 21300000, guid: c6ba52c3e8af5b341995cc343e85e4a0, type: 3}
+  checkSprite: {fileID: 21300000, guid: 4800731ef4eae344c85a8e9b24fb7278, type: 3}
   hintDistance: 1.3
   interactDistance: 0.7
   worldScale: 1

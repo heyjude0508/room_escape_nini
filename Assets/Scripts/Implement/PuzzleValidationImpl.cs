@@ -197,10 +197,10 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
     void MarkSolved()
     {
         puzzleValidation.isSolved = true;
-        DisableInteractionColliders();
-        DisableHostBoxColliders();
-        EnableInactiveHostContents();
-        DisableIconTips();
+        DisablePuzzleInteractionColliders();
+        DisableSelfBoxColliders();
+        EnableInactiveContents();
+        DisablePuzzleIconTips();
 
         if (puzzleValidation.puzzleCollider != null)
         {
@@ -210,13 +210,42 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
         enabled = false;
     }
 
-    void DisableInteractionColliders()
+    // Turn off lock / InteractZone colliders only — keep ItemKey pickups usable.
+    void DisablePuzzleInteractionColliders()
     {
-        Collider[] colliders = GetComponentsInChildren<Collider>(true);
-        foreach (Collider collider in colliders)
+        Transform lockRoot = transform.Find("Lock");
+        if (lockRoot != null)
         {
-            // Keep UI raycasts on CombLockPanel intact.
+            DisableCollidersUnder(lockRoot, keepItemKeys: true);
+        }
+
+        Collider[] selfColliders = GetComponents<Collider>();
+        for (int i = 0; i < selfColliders.Length; i++)
+        {
+            if (selfColliders[i] != null && selfColliders[i].isTrigger)
+            {
+                selfColliders[i].enabled = false;
+            }
+        }
+    }
+
+    void DisableCollidersUnder(Transform root, bool keepItemKeys)
+    {
+        Collider[] colliders = root.GetComponentsInChildren<Collider>(true);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            Collider collider = colliders[i];
+            if (collider == null)
+            {
+                continue;
+            }
+
             if (collider.GetComponentInParent<Canvas>() != null)
+            {
+                continue;
+            }
+
+            if (keepItemKeys && collider.GetComponentInParent<ItemKeyImpl>() != null)
             {
                 continue;
             }
@@ -225,36 +254,23 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
         }
     }
 
-    // Lock sits under GiftBox; turn off the host BoxCollider so drawer contents can be aimed.
-    void DisableHostBoxColliders()
+    // PuzzleValidationImpl lives on GiftBox; disable this object's BoxColliders after unlock.
+    void DisableSelfBoxColliders()
     {
-        Transform host = transform.parent;
-        if (host == null)
-        {
-            return;
-        }
-
-        BoxCollider[] boxColliders = host.GetComponents<BoxCollider>();
+        BoxCollider[] boxColliders = GetComponents<BoxCollider>();
         for (int i = 0; i < boxColliders.Length; i++)
         {
-            BoxCollider boxCollider = boxColliders[i];
-            if (boxCollider != null && !boxCollider.isTrigger)
+            if (boxColliders[i] != null)
             {
-                boxCollider.enabled = false;
+                boxColliders[i].enabled = false;
             }
         }
     }
 
-    // Reveal inactive rewards under GiftBox (e.g. DoorSideKey_L) and enable their colliders.
-    void EnableInactiveHostContents()
+    // Reveal inactive rewards under this object (e.g. DoorSideKey_L) and enable their colliders.
+    void EnableInactiveContents()
     {
-        Transform host = transform.parent;
-        if (host == null)
-        {
-            return;
-        }
-
-        EnableInactiveRecursive(host);
+        EnableInactiveRecursive(transform);
     }
 
     void EnableInactiveRecursive(Transform root)
@@ -263,8 +279,7 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
         {
             Transform child = root.GetChild(i);
 
-            // Keep Lock interaction state as disabled by MarkSolved; skip KeyBlock barrier.
-            if (child == transform || child.name == "KeyBlock")
+            if (child.name == "KeyBlock" || child.name == "Lock")
             {
                 continue;
             }
@@ -291,12 +306,32 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
         }
     }
 
-    void DisableIconTips()
+    // Only hide lock tips — never the key's IconTip under DoorSideKey_L.
+    void DisablePuzzleIconTips()
     {
+        Transform lockRoot = transform.Find("Lock");
         IconUiImpl[] iconTips = FindObjectsOfType<IconUiImpl>(true);
         foreach (IconUiImpl iconTip in iconTips)
         {
-            if (!iconTip.IsOwnedBy(transform))
+            if (iconTip == null)
+            {
+                continue;
+            }
+
+            if (iconTip.GetComponentInParent<ItemKeyImpl>() != null)
+            {
+                continue;
+            }
+
+            // Prefer Lock ownership; if no Lock, fall back to tips owned by this object excluding keys.
+            if (lockRoot != null)
+            {
+                if (!iconTip.IsOwnedBy(lockRoot))
+                {
+                    continue;
+                }
+            }
+            else if (!iconTip.IsOwnedBy(transform))
             {
                 continue;
             }
