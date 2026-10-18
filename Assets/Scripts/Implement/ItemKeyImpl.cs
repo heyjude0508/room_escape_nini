@@ -39,6 +39,12 @@ public class ItemKeyImpl : MonoBehaviour, IItemKey
         }
 
         ItemKey copy = CreateCopy();
+        if (bag.HasItem(copy.id))
+        {
+            Debug.LogWarning($"Item id '{copy.id}' already in bag; not picking up '{copy.itemName}'.");
+            return;
+        }
+
         if (BagManagementImpl.IsFragmentId(copy.id))
         {
             bag.AddFragment(copy);

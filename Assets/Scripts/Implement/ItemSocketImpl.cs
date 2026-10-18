@@ -59,16 +59,20 @@ public class ItemSocketImpl : MonoBehaviour, IItemSocket
 
     public void PickItem()
     {
-        if (bag != null)
-        {
-            bag.AddItem(CreateCopy());
-        }
-        else
+        if (bag == null)
         {
             Debug.LogError("Cannot find the bag.");
             return;
         }
 
+        ItemSocket copy = CreateCopy();
+        if (bag.HasItem(copy.id))
+        {
+            Debug.LogWarning($"Item id '{copy.id}' already in bag; not picking up '{copy.itemName}'.");
+            return;
+        }
+
+        bag.AddItem(copy);
         Destroy(gameObject);
     }
 
