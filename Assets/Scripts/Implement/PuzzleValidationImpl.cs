@@ -198,6 +198,8 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
     {
         puzzleValidation.isSolved = true;
         DisableInteractionColliders();
+        DisableHostBoxColliders();
+        EnableInactiveHostContents();
         DisableIconTips();
 
         if (puzzleValidation.puzzleCollider != null)
@@ -220,6 +222,72 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
             }
 
             collider.enabled = false;
+        }
+    }
+
+    // Lock sits under GiftBox; turn off the host BoxCollider so drawer contents can be aimed.
+    void DisableHostBoxColliders()
+    {
+        Transform host = transform.parent;
+        if (host == null)
+        {
+            return;
+        }
+
+        BoxCollider[] boxColliders = host.GetComponents<BoxCollider>();
+        for (int i = 0; i < boxColliders.Length; i++)
+        {
+            BoxCollider boxCollider = boxColliders[i];
+            if (boxCollider != null && !boxCollider.isTrigger)
+            {
+                boxCollider.enabled = false;
+            }
+        }
+    }
+
+    // Reveal inactive rewards under GiftBox (e.g. DoorSideKey_L) and enable their colliders.
+    void EnableInactiveHostContents()
+    {
+        Transform host = transform.parent;
+        if (host == null)
+        {
+            return;
+        }
+
+        EnableInactiveRecursive(host);
+    }
+
+    void EnableInactiveRecursive(Transform root)
+    {
+        for (int i = 0; i < root.childCount; i++)
+        {
+            Transform child = root.GetChild(i);
+
+            // Keep Lock interaction state as disabled by MarkSolved; skip KeyBlock barrier.
+            if (child == transform || child.name == "KeyBlock")
+            {
+                continue;
+            }
+
+            if (!child.gameObject.activeSelf)
+            {
+                child.gameObject.SetActive(true);
+                EnableCollidersUnder(child);
+            }
+
+            EnableInactiveRecursive(child);
+        }
+    }
+
+    void EnableCollidersUnder(Transform root)
+    {
+        Collider[] colliders = root.GetComponentsInChildren<Collider>(true);
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            if (colliders[i] != null)
+            {
+                colliders[i].enabled = true;
+            }
         }
     }
 
