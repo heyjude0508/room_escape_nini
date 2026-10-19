@@ -3,9 +3,9 @@ using UnityEngine;
 
 public interface IBagManager
 {
-    void AddItem(ItemBase item);
+    bool AddItem(ItemBase item);
 
-    void AddFragment(ItemBase item);
+    bool AddFragment(ItemBase item);
 
     void RemoveItem(string itemId);
 

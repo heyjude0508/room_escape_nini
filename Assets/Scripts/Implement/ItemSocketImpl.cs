@@ -72,7 +72,11 @@ public class ItemSocketImpl : MonoBehaviour, IItemSocket
             return;
         }
 
-        bag.AddItem(copy);
+        if (!bag.AddItem(copy))
+        {
+            return;
+        }
+
         Destroy(gameObject);
     }
 

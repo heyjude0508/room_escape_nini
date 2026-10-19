@@ -45,13 +45,12 @@ public class ItemKeyImpl : MonoBehaviour, IItemKey
             return;
         }
 
-        if (BagManagementImpl.IsFragmentId(copy.id))
+        bool added = BagManagementImpl.IsFragmentId(copy.id)
+            ? bag.AddFragment(copy)
+            : bag.AddItem(copy);
+        if (!added)
         {
-            bag.AddFragment(copy);
-        }
-        else
-        {
-            bag.AddItem(copy);
+            return;
         }
 
         HouseChildSequencer sequencer = FindObjectOfType<HouseChildSequencer>();
