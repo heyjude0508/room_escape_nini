@@ -1,0 +1,14 @@
+# Osaka postcard quad (aspect ~867:618)
+o PostcardOsaka
+mtllib PostcardOsaka.mtl
+usemtl PostcardOsaka
+v -0.12 -0.0855 0.002
+v 0.12 -0.0855 0.002
+v 0.12 0.0855 0.002
+v -0.12 0.0855 0.002
+vt 0 0
+vt 1 0
+vt 1 1
+vt 0 1
+vn 0 0 1
+f 1/1/1 2/2/1 3/3/1 4/4/1
