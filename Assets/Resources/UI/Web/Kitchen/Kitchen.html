@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>American Classic Kitchen</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<meta name="description" content="20 classic American recipes: cheeseburgers, apple pie, Buffalo wings... Bring real American comfort food into your home kitchen.">
+<style>
+  :root {
+    --bg: #faf7f2;
+    --paper: #ffffff;
+    --ink: #2d2a26;
+    --muted: #8a8378;
+    --accent: #c0392b;
+    --accent-soft: #f7e6e2;
+    --gold: #d9a441;
+    --line: #eae4da;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: "Georgia", "Times New Roman", serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+  }
+  a { color: var(--accent); }
+
+  /* ---------- header ---------- */
+  header {
+    background: linear-gradient(180deg, #3a342e 0%, #2d2a26 100%);
+    color: #f5efe4;
+    text-align: center;
+    padding: 72px 20px 60px;
+    position: relative;
+  }
+  header .kicker {
+    letter-spacing: 0.45em;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  header h1 {
+    font-size: clamp(34px, 6vw, 56px);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+  }
+  header .sub {
+    margin-top: 14px;
+    font-size: 16px;
+    color: #cfc6b8;
+    font-style: italic;
+  }
+  .divider {
+    width: 64px; height: 3px;
+    background: var(--gold);
+    margin: 22px auto 0;
+  }
+
+  /* ---------- toolbar ---------- */
+  .toolbar {
+    max-width: 1080px;
+    margin: -26px auto 0;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+  }
+  .toolbar-inner {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(45,42,38,.08);
+    padding: 14px 18px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+  }
+  #search {
+    flex: 1 1 240px;
+    max-width: 360px;
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 15px;
+    background: var(--bg);
+    color: var(--ink);
+  }
+  #search:focus { outline: 2px solid var(--gold); }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    border: 1px solid var(--line);
+    background: var(--paper);
+    border-radius: 999px;
+    padding: 7px 16px;
+    font-size: 13.5px;
+    font-family: inherit;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--accent); }
+  .chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  /* ---------- grid ---------- */
+  main { max-width: 1080px; margin: 40px auto 80px; padding: 0 20px; }
+  .count { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 24px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+  }
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .18s ease, box-shadow .18s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 14px 34px rgba(45,42,38,.12); }
+  .card-img {
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 58px;
+    position: relative;
+  }
+  .card-img .tag {
+    position: absolute;
+    top: 12px; left: 12px;
+    background: rgba(255,255,255,.92);
+    color: var(--accent);
+    font-size: 12px;
+    padding: 3px 12px;
+    border-radius: 999px;
+    letter-spacing: .08em;
+  }
+  .card-img .fav {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,.92);
+    font-size: 18px;
+    line-height: 1;
+    color: #b9b2a5;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .15s ease, color .15s ease;
+  }
+  .card-img .fav:hover { transform: scale(1.18); color: var(--gold); }
+  .card-img .fav.on { color: var(--gold); }
+  .fav-toggle {
+    position: absolute;
+    top: 26px; right: 32px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(217,164,65,.5);
+    border-radius: 999px;
+    color: var(--gold);
+    font-family: inherit;
+    font-size: 15px;
+    padding: 8px 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all .15s ease;
+  }
+  .fav-toggle:hover { background: rgba(217,164,65,.15); }
+  .fav-toggle.active {
+    background: var(--gold);
+    color: #2d2a26;
+    border-color: var(--gold);
+    font-weight: 700;
+  }
+  .fav-count {
+    background: rgba(0,0,0,.25);
+    border-radius: 999px;
+    font-size: 12px;
+    padding: 1px 8px;
+  }
+  .fav-toggle.active .fav-count { background: rgba(45,42,38,.2); }
+  @media (max-width: 720px) {
+    .fav-toggle { top: 14px; right: 16px; padding: 6px 12px; font-size: 13px; }
+    .fav-count { display: none; }
+  }
+  .card-body { padding: 18px 20px 22px; flex: 1; display: flex; flex-direction: column; }
+  .card-body h3 { font-size: 20px; margin-bottom: 4px; }
+  .card-body .en { font-size: 13px; color: var(--gold); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
+  .card-body p { font-size: 14px; color: var(--muted); flex: 1; }
+  .card-meta {
+    margin-top: 14px;
+    display: flex;
+    gap: 14px;
+    font-size: 12.5px;
+    color: var(--muted);
+    border-top: 1px dashed var(--line);
+    padding-top: 12px;
+  }
+  .empty { text-align: center; color: var(--muted); padding: 60px 0; display: none; }
+
+  /* ---------- footer ---------- */
+  footer {
+    border-top: 1px solid var(--line);
+    text-align: center;
+    padding: 36px 20px 48px;
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+  footer .heart { color: var(--accent); }
+
+  /* ---------- modal ---------- */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(30,26,22,.55);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 5vh 16px;
+    z-index: 50;
+    overflow-y: auto;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--paper);
+    border-radius: 16px;
+    max-width: 760px;
+    width: 100%;
+    padding: 40px 42px 44px;
+    position: relative;
+    box-shadow: 0 30px 80px rgba(0,0,0,.35);
+    animation: pop .2s ease;
+  }
+  @keyframes pop { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .modal .close {
+    position: absolute; top: 14px; right: 16px;
+    background: none; border: none;
+    font-size: 26px; color: var(--muted);
+    cursor: pointer; line-height: 1;
+  }
+  .modal .close:hover { color: var(--accent); }
+  .modal h2 { font-size: 28px; margin-bottom: 2px; }
+  .modal .en-sub { color: var(--gold); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 14px; }
+  .modal .story { font-style: italic; color: var(--muted); font-size: 14.5px; margin-bottom: 22px; }
+  .modal .badges { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 22px; }
+  .modal .badge {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 12.5px;
+    padding: 4px 14px;
+    border-radius: 999px;
+  }
+  .modal-cols { display: grid; grid-template-columns: 1fr 1.6fr; gap: 28px; }
+  @media (max-width: 640px) { .modal-cols { grid-template-columns: 1fr; } }
+  .modal h4 {
+    font-size: 15px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--accent-soft);
+  }
+  .modal ul { list-style: none; }
+  .modal ul.ingredients li {
+    padding: 6px 0;
+    font-size: 14.5px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .modal ol.steps { padding-left: 20px; }
+  .modal ol.steps li { padding: 5px 0; font-size: 14.5px; }
+  .modal .tip {
+    margin-top: 24px;
+    background: #fbf3e4;
+    border-left: 3px solid var(--gold);
+    padding: 12px 16px;
+    font-size: 13.5px;
+    color: #7a6535;
+    border-radius: 0 8px 8px 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <button class="fav-toggle" id="favToggle" aria-label="Show favorites only">☆ Favorites <span class="fav-count" id="favCount">0</span></button>
+  <div class="kicker">Est. Family Recipes · Since Always</div>
+  <h1>American Classic Kitchen</h1>
+  <div class="divider"></div>
+  <p class="sub">Twenty American dishes worth passing down through generations</p>
+</header>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <input id="search" type="search" placeholder="Search recipes or ingredients…" aria-label="Search recipes">
+    <div class="chips" id="chips">
+      <button class="chip active" data-cat="All">All</button>
+      <button class="chip" data-cat="Mains">Mains</button>
+      <button class="chip" data-cat="Meat">Meat</button>
+      <button class="chip" data-cat="Seafood">Seafood</button>
+      <button class="chip" data-cat="Desserts">Desserts</button>
+      <button class="chip" data-cat="Breakfast">Breakfast</button>
+      <button class="chip" data-cat="Soups">Soups</button>
+    </div>
+  </div>
+</div>
+
+<main>
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty">No recipes found — try a different search.</p>
+</main>
+
+<footer>
+  <p>Cooked with <span class="heart">♥</span> · Every dish tells a piece of American history</p>
+  <p style="margin-top:6px; opacity:.6;">American Classic Kitchen · Home-cook friendly recipes</p>
+</footer>
+
+<div class="modal-overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="close" id="closeBtn" aria-label="Close">✕</button>
+    <h2 id="m-title"></h2>
+    <div class="en-sub" id="m-en"></div>
+    <p class="story" id="m-story"></p>
+    <div class="badges" id="m-badges"></div>
+    <div class="modal-cols">
+      <div>
+        <h4>Main Ingredients</h4>
+        <ul class="ingredients" id="m-main"></ul>
+        <h4 style="margin-top:18px;">Other</h4>
+        <ul class="ingredients" id="m-other"></ul>
+      </div>
+      <div>
+        <h4>Steps</h4>
+        <ol class="steps" id="m-steps"></ol>
+      </div>
+    </div>
+    <div class="tip" id="m-tip"></div>
+  </div>
+</div>
+
+<script>
+const RECIPES = [
+  {
+    name: "The Classic Cheeseburger", en: "American Icons · Burgers", cat: "Mains", emoji: "🍔",
+    color: "#f9e0c8",
+    time: "25 min", difficulty: "Easy", serves: "Serves 4",
+    story: "Around 1900, towns across America argued over who first put a slice of cheese on a hamburger patty. Whoever it was, the cheeseburger became the soul of American fast food.",
+    main: ["Ground beef (20/80 fat) 500 g", "Cheddar cheese slices, 4", "Bread, 4"],
+    other: ["Half an onion, in rings", "1 tomato, sliced", "Lettuce leaves, 4", "Pickles, 8 slices", "Salt & black pepper", "Butter, 15 g", "Mayonnaise & ketchup, 2 tbsp each"],
+    steps: ["Divide the beef into 4 portions and gently shape patties slightly wider than the bread. Press a shallow dimple into the center of each to prevent puffing.", "Season both sides with salt and pepper. Don't overwork the meat.", "Sear on a screaming-hot cast-iron pan, 2–3 minutes per side, for a deep brown crust.", "Top with cheese for the last minute and let residual heat melt it.", "Toast the bread in butter until golden.", "Assemble: bottom bread → sauce → lettuce → patty → onion rings → tomato → pickles → top bread."],
+    tip: "The secret is high heat and patience — flip only once. The Maillard crust is what makes it taste like a diner burger."
+  },
+  {
+    name: "Apple Pie", en: "American Icons · Pie", cat: "Desserts", emoji: "🥧",
+    color: "#fbe8d0",
+    time: "1 hr 30 min", difficulty: "Medium", serves: "Serves 8",
+    story: "\"As American as apple pie\" — the saying itself is the proof. When WWII soldiers were asked what they were fighting for, the answer was \"Mom and apple pie.\"",
+    main: ["All-purpose flour, 250 g", "Cold butter, 160 g", "6 apples (~900 g, mix tart & sweet)"],
+    other: ["Ice water, 60 ml", "Salt, 3 g", "Sugar, 10 g", "Brown sugar, 60 g", "Ground cinnamon, 1 tsp", "Lemon juice, 1 tbsp", "Cornstarch, 15 g", "1 egg, beaten (for egg wash)"],
+    steps: ["Cut cold butter into the flour, salt and sugar until it resembles coarse sand. Add ice water, gather into 2 discs, wrap and chill for 1 hour.", "Peel and slice the apples; toss with brown sugar, cinnamon, lemon juice and cornstarch. Let sit to draw out juices.", "Roll out one disc and line a 9-inch pie dish. Pile in the filling, mounding high in the center.", "Cover with the second disc, or cut into strips and weave a lattice top.", "Crimp the edges, brush with egg wash and sprinkle with coarse sugar.", "Bake at 200°C for 20 minutes, then 180°C for 45–55 minutes more, until the filling bubbles."],
+    tip: "Bake until the filling bubbles steadily in the center — underbaked cornstarch means a runny pie when you cut it."
+  },
+  {
+    name: "Buffalo Wings", en: "American Icons · Bar Food", cat: "Meat", emoji: "🍗",
+    color: "#f8ddd4",
+    time: "45 min", difficulty: "Easy", serves: "Serves 4",
+    story: "In 1964, at the Anchor Bar in Buffalo, New York, the owner's wife fried a batch of wing sections that were meant for stock, tossed them in hot sauce — and invented America's favorite bar snack.",
+    main: ["Chicken wings (drums & flats) 1.2 kg", "Hot sauce (Frank's RedHot or Tabasco) 120 ml", "Unsalted butter, 60 g"],
+    other: ["Flour, 80 g", "Baking powder, 1 tsp", "Garlic & onion powder, 1 tsp each", "Honey, 1 tbsp", "White vinegar, 1 tsp", "Blue cheese or ranch dressing, for dipping", "Celery sticks"],
+    steps: ["Pat wings dry and toss with flour, baking powder, garlic and onion powder.", "Deep-fry at 180°C for 12–15 minutes until crisp (or bake at 220°C for 40 minutes, flipping once).", "In a small pot over low heat, melt the butter; whisk in hot sauce, honey and vinegar.", "Toss the hot wings in a big bowl with the sauce.", "Serve with celery sticks and blue cheese dressing."],
+    tip: "Baking powder (NOT baking soda!) is the crisp-skin secret. Toss the wings in sauce off the heat, or it will split."
+  },
+  {
+    name: "Mac and Cheese", en: "American Icons · Comfort Food", cat: "Mains", emoji: "🧀",
+    color: "#f7ecd2",
+    time: "40 min", difficulty: "Easy", serves: "Serves 6",
+    story: "Thomas Jefferson brought the pasta-and-cheese idea home from France. It became every American kid's favorite — and in the South, it even earns a spot on the Thanksgiving table.",
+    main: ["Elbow macaroni, 450 g", "Sharp cheddar, shredded, 300 g", "Gruyère or mozzarella, shredded, 150 g"],
+    other: ["Butter, 45 g", "All-purpose flour, 45 g", "Whole milk, 750 ml", "Mustard powder, 1 tsp", "Smoked paprika, 1 tsp", "Salt & black pepper", "Breadcrumbs, 60 g (optional)"],
+    steps: ["Boil the macaroni 2 minutes short of package time. Reserve a splash of pasta water.", "Melt the butter over low heat, whisk in flour for 1 minute, then add milk gradually, whisking until thick.", "Off the heat, stir in the three cheeses, mustard powder and paprika until silky.", "Fold in the macaroni and pour into a baking dish.", "Top with breadcrumbs and extra cheese; bake at 200°C for 15–20 minutes until golden and bubbling."],
+    tip: "Add the cheese off the heat — prolonged boiling will break the sauce into a greasy, grainy mess."
+  },
+  {
+    name: "New England Clam Chowder", en: "American Icons · Coastal Classics", cat: "Soups", emoji: "🥣",
+    color: "#eef1ec",
+    time: "50 min", difficulty: "Easy", serves: "Serves 6",
+    story: "The first bowl of warmth after a fishing boat came ashore on the New England coast. The white cream version vs. the red Manhattan version — New Englanders have fought that war for a century. Cream wins here.",
+    main: ["Fresh clams, 500 g shucked (or canned)", "Bacon, 150 g, diced", "3 potatoes, 1.5 cm dice"],
+    other: ["1 onion, chopped", "2 celery stalks, chopped", "Flour, 30 g", "Clam juice or fish stock, 500 ml", "Heavy cream, 300 ml", "Butter, 30 g", "1 bay leaf", "Black pepper & salt"],
+    steps: ["Steam the clams open; reserve the liquor. Fry the bacon until golden; leave the fat in the pot.", "Sweat the onion and celery in bacon fat until translucent, then sprinkle in flour and cook 1 minute.", "Pour in the clam liquor, whisking smooth. Add potatoes and bay leaf; simmer 15 minutes until tender.", "Add cream and butter. Keep at a bare simmer — never a rolling boil.", "Add the clams for the last 2 minutes. Season and serve.", "Serve with oyster crackers."],
+    tip: "Clams turn to rubber if overcooked — always add them last. Purists eat chowder straight from a clam shell."
+  },
+  {
+    name: "Southern Fried Chicken", en: "American Icons · Southern Soul", cat: "Meat", emoji: "🍗",
+    color: "#f6dfc8",
+    time: "2 hrs (incl. brining)", difficulty: "Medium", serves: "Serves 6",
+    story: "Scottish immigrants brought the frying technique, West African tradition brought the spices. They met in a Southern kitchen — which is how Colonel Sanders ended up chasing his \"11 herbs and spices.\"",
+    main: ["1 whole chicken, cut into 10–12 pieces", "Buttermilk, 500 ml", "All-purpose flour, 300 g"],
+    other: ["Salt, 2 tbsp", "Cornstarch, 50 g", "Smoked paprika, 1 tsp", "Garlic & onion powder, 1 tsp each", "Cayenne pepper, ½ tsp", "White pepper, 1 tsp", "Neutral oil, for frying"],
+    steps: ["Brine the chicken in buttermilk and 1 tbsp salt, refrigerated at least 4 hours (overnight is best).", "Mix flour, cornstarch and all spices for the dredge.", "Lift chicken from the buttermilk, let it drip briefly, then press hard into the dredge. Rest 10 minutes to let the coating hydrate.", "Fry at 170°C: 15 minutes for bone-in thighs, 12 minutes for breasts.", "Drain on a wire rack — never paper towels, which steam the crust soft. Rest 5 minutes before eating."],
+    tip: "Oil temperature is everything: below 160°C the crust drinks oil; above 180°C it burns before the inside cooks. Buy a thermometer."
+  },
+  {
+    name: "Slow BBQ Ribs", en: "American Icons · Backyard BBQ", cat: "Meat", emoji: "🍖",
+    color: "#f5d8cb",
+    time: "4 hrs", difficulty: "Hard", serves: "Serves 4",
+    story: "American BBQ is a philosophy of low and slow: Texas dry-rubbed brisket, Memphis dry ribs, Kansas City sticky-sweet ribs. Every style is a landscape of its own.",
+    main: ["2 racks pork spare ribs (~2 kg)", "Dry rub: brown sugar, 3 tbsp", "KC-style BBQ sauce, 200 ml"],
+    other: ["Smoked paprika, 2 tbsp", "Black pepper, 1 tbsp", "Garlic & onion powder, 1 tbsp each", "Salt, 1 tbsp", "Cayenne, 1 tsp", "Apple wood chips (optional)"],
+    steps: ["Peel the membrane off the back of the racks — grab it with a paper towel and pull.", "Mix the dry rub and coat both racks thickly. Chill at least 2 hours.", "Oven at 130°C: set ribs on a rack over a sheet pan and roast for 3 hours.", "Brush with BBQ sauce and bake 30 minutes; brush again and finish at 220°C for 10 minutes to glaze.", "Rest 10 minutes, then cut into single ribs."],
+    tip: "Perfect ribs bite clean but leave a 5 mm tug of meat on the bone — fall-off-the-bone is actually overcooked."
+  },
+  {
+    name: "Meatloaf", en: "American Icons · Family Table", cat: "Meat", emoji: "🥩",
+    color: "#f3dcc4",
+    time: "1 hr 15 min", difficulty: "Easy", serves: "Serves 6",
+    story: "Depression-era ingenuity: stretch cheap ground meat with breadcrumbs and leftovers to feed the whole family. Today it is shorthand for \"Mom's cooking\" in America.",
+    main: ["Ground beef, 700 g", "1 tomato", "1/2 onion"],
+    other: ["2 eggs", "2 garlic cloves, minced", "Breadcrumbs, 80 g", "Milk, 100 ml", "Ketchup, 60 g + 80 g (used twice)", "Worcestershire sauce, 1 tbsp", "Salt, 2 tsp; black pepper, 1 tsp"],
+    steps: ["Soak the breadcrumbs in milk for 10 minutes.", "Gently mix everything, including 60 g of the ketchup — don't knead, or it turns dense.", "Shape into a loaf on a sheet pan (better than a loaf tin — more glaze, more crust).", "Spread the remaining 80 g ketchup thickly on top.", "Bake at 175°C for 60 minutes, to an internal temperature of 68°C.", "Rest 10 minutes before slicing."],
+    tip: "Day-old meatloaf on buttered bread is the sandwich Americans love more than the dinner itself."
+  },
+  {
+    name: "Cobb Salad", en: "American Icons · Hollywood", cat: "Mains", emoji: "🥗",
+    color: "#e8f0e4",
+    time: "20 min", difficulty: "Easy", serves: "Serves 2",
+    story: "Hollywood, 1937: Bob Cobb, owner of the Brown Derby restaurant, raided the fridge for a midnight snack, chopped everything into one bowl — and the legend made it onto the menu the next day.",
+    main: ["Romaine lettuce, 300 g, chopped", "2 chicken breasts, seared and sliced", "4 strips bacon, crisped and crumbled"],
+    other: ["1 avocado, diced", "2 hard-boiled eggs, chopped", "1 tomato, diced", "Blue cheese, crumbled, 60 g", "2 chives, minced", "Vinaigrette: 3 tbsp red wine vinegar + 9 tbsp olive oil + 1 tsp Dijon"],
+    steps: ["Whisk vinegar, Dijon, salt and pepper; drizzle in olive oil slowly to emulsify.", "Spread the chopped romaine across a wide, shallow bowl.", "Arrange chicken, bacon, avocado, egg, tomato and blue cheese in neat parallel rows — that's the Cobb ritual.", "Scatter chives, dress at the table and toss before eating."],
+    tip: "The classic presentation is six colored stripes — feed the eyes first, then the stomach."
+  },
+  {
+    name: "Chocolate Chip Cookies", en: "American Icons · Bake Sale", cat: "Desserts", emoji: "🍪",
+    color: "#f4e3cf",
+    time: "30 min", difficulty: "Easy", serves: "24 cookies",
+    story: "1938, Massachusetts: Ruth Wakefield of the Toll House Inn chopped a chocolate bar into her butter dough, expecting it to melt. It didn't. That beautiful accident became America's best-selling cookie.",
+    main: ["Butter, 170 g, softened", "All-purpose flour, 300 g", "Chocolate chips, 300 g"],
+    other: ["Brown sugar, 150 g", "White sugar, 80 g", "2 eggs", "Vanilla extract, 1 tsp", "Baking soda, 1 tsp", "Salt, 1 tsp"],
+    steps: ["Cream butter and both sugars until pale and fluffy, about 3 minutes.", "Beat in the eggs one at a time, then the vanilla.", "Sift in flour, baking soda and salt; fold until just combined.", "Stir in the chips; chill the dough 30 minutes to prevent spreading.", "Scoop 3 cm balls onto sheets, 5 cm apart. Bake at 180°C for 11–13 minutes — golden edges, soft centers.", "Rest on the sheet 5 minutes, then move to a rack."],
+    tip: "If the centers look underdone straight from the oven, that's correct — carryover heat finishes them. Crisp edges, gooey middles."
+  },
+  {
+    name: "Philly Cheesesteak", en: "American Icons · Street Food", cat: "Mains", emoji: "🥖",
+    color: "#f3ddca",
+    time: "25 min", difficulty: "Easy", serves: "Serves 2",
+    story: "A civic religion in Philadelphia. Whether to use Cheez Whiz or provolone, with or without onions — the argument will find you in any cheesesteak line in the city.",
+    main: ["Beef eye of round, 400 g, shaved paper-thin (freeze slightly first)", "2 hoagie rolls or hot dog buns", "4 slices cheddar or provolone"],
+    other: ["1 onion, thinly sliced", "Mushrooms, 100 g (optional)", "Salt & black pepper", "Butter, 20 g"],
+    steps: ["Shave the beef thin (half-frozen meat slices easiest). Sear over fierce heat, chopping it into crumbles with your spatula as it browns.", "Add the onions (and mushrooms) and cook until caramelized; combine with the beef.", "Pile the meat into two mounds, top with cheese, and let it melt over low heat.", "Toast the split rolls in butter. Scoop each mound into a roll in one confident shovel — that's how the old shops do it."],
+    tip: "Order like a local: \"With\" means onions; \"Whiz Wit\" means cheese sauce and onions. Practice before you land in Philly."
+  },
+  {
+    name: "Roast Turkey & Gravy", en: "American Icons · Thanksgiving", cat: "Meat", emoji: "🦃",
+    color: "#f5dcc3",
+    time: "4 hrs", difficulty: "Medium", serves: "Serves 10",
+    story: "The legendary centerpiece of 1621. Every November, ninety million turkeys cross American dinner tables — no dish carries more ceremony.",
+    main: ["1 turkey, 5–6 kg, fully thawed", "Unsalted butter, 100 g", "Fresh sage, rosemary & thyme, 3 sprigs each"],
+    other: ["1 head garlic, halved", "1 lemon", "Salt, 3 tbsp; black pepper, 2 tsp", "Chicken stock, 500 ml (for the roasting pan)", "Gravy: pan drippings + flour 30 g + stock 500 ml"],
+    steps: ["Thaw the turkey in the fridge 2 days ahead; take it out 1 hour before roasting.", "Stuff the cavity with herbs and garlic. Butter the skin all over and season generously.", "Pour stock into the roasting pan, set the turkey on a rack, legs to the back.", "Roast at 180°C for 3–3.5 hours, to 74°C in the thickest part of the breast. Tent with foil if browning too fast.", "Rest 30 minutes before carving — this is how you keep the juices in.", "Use the pan drippings to make gravy: brown the flour in the fat, whisk in stock, simmer until glossy."],
+    tip: "Resting 30 minutes isn't wasted time — carve early and all the juice ends up on the cutting board, not in the meat."
+  },
+  {
+    name: "Buttermilk Pancakes", en: "American Icons · Weekend Breakfast", cat: "Breakfast", emoji: "🥞",
+    color: "#f7e8cf",
+    time: "25 min", difficulty: "Easy", serves: "Serves 4",
+    story: "Pancake mix is an American supermarket institution — but homemade buttermilk pancakes stack twice as tall. Saturday morning is a family ritual.",
+    main: ["All-purpose flour, 250 g", "Buttermilk, 350 ml (or 330 ml milk + 1 tbsp lemon juice, rested 10 min)", "1 egg"],
+    other: ["Butter, 45 g, melted", "Sugar, 2 tbsp", "Baking powder, 2 tsp", "Baking soda, ½ tsp", "Salt, ½ tsp", "Maple syrup & a knob of butter, to serve"],
+    steps: ["Whisk the dry ingredients; whisk the buttermilk, egg and melted butter.", "Pour wet into dry and stir until you can still see flour streaks — lumps are correct.", "Rest the batter 10 minutes.", "Heat a pan over medium, brush with oil, pour ¼ cup per pancake. Flip when bubbles pop across the surface; cook 1–2 minutes more.", "Stack tall, crown with butter, flood with maple syrup."],
+    tip: "Overmixing develops gluten → rubbery pancakes. Leave the lumps. Restrain your hand."
+  },
+  {
+    name: "Gumbo", en: "American Icons · New Orleans", cat: "Soups", emoji: "🍲",
+    color: "#efdfc6",
+    time: "1 hr 30 min", difficulty: "Medium", serves: "Serves 8",
+    story: "Louisiana in a pot: French roux, African okra, Choctaw filé powder. Creole gumbo is New Orleans' edible epic.",
+    main: ["Andouille sausage, 300 g, sliced", "Chicken thighs, 400 g, cut up", "Roux: flour 60 g + butter 60 g"],
+    other: ["Okra, 200 g", "The Holy Trinity: 1 onion, 1 celery stalk, 1 green bell pepper, diced", "Chicken stock, 1.2 L", "Cajun seasoning, 2 tbsp", "2 bay leaves", "Cayenne, to taste", "Steamed white rice, to serve"],
+    steps: ["Cook the butter-and-flour roux over low heat to the color of dark chocolate, about 20 minutes. This is the soul of the dish — burn it and you start over.", "Add the Holy Trinity and cook until soft.", "Brown the sausage and chicken, pour in the stock, add okra and seasonings.", "Simmer 1 hour, skimming fat; adjust seasoning.", "Ladle over white rice, scatter scallions, serve."],
+    tip: "Never walk away from the roux. It should look like dark chocolate — one shade darker is charcoal."
+  },
+  {
+    name: "Hot Dog", en: "American Icons · Ballpark", cat: "Mains", emoji: "🌭",
+    color: "#f5dfcb",
+    time: "15 min", difficulty: "Easy", serves: "Serves 4",
+    story: "From Coney Island carts to ballpark bleachers, the hot dog is America's street-food totem. New Yorkers eat enough of them to circle the globe.",
+    main: ["4 all-beef hot dogs", "4 hot dog buns", "Yellow mustard"],
+    other: ["Ketchup (Chicago says: don't you dare)", "Sweet pickle relish", "Sauerkraut (optional)", "Minced onion (optional)"],
+    steps: ["Warm the dogs in simmering water or over gentle heat, about 5 minutes — never blast them until they split.", "Toast the split buns 1 minute until soft and steaming inside.", "Dress by city: New York = mustard + sauerkraut. Chicago = mustard, tomato, relish, sport peppers, celery salt — and never, ever ketchup.", "Serve in paper sleeves and eat hot."],
+    tip: "A proper dog catches every drop of juice — so warm the bun first and simmer the dog until it just barely opens."
+  },
+  {
+    name: "Banana Split", en: "American Icons · Soda Fountain", cat: "Desserts", emoji: "🍨",
+    color: "#f6ead0",
+    time: "10 min", difficulty: "Easy", serves: "Serves 1",
+    story: "1904, Latrobe, Pennsylvania: a 23-year-old pharmacy apprentice named Strickland built it for college students — a split banana, three scoops, every topping in the store.",
+    main: ["1 banana, split lengthwise", "1 scoop each: vanilla, strawberry, chocolate ice cream", "Whipped cream, 1 cloud"],
+    other: ["Crushed pineapple, 2 tbsp", "Strawberry sauce, 2 tbsp", "Warm chocolate sauce, 2 tbsp", "1 maraschino cherry", "Chopped nuts"],
+    steps: ["Stand the two banana halves against the sides of a long sundae dish.", "Line up the three scoops in the middle: vanilla, strawberry, chocolate.", "Dress each scoop: pineapple on vanilla, strawberry sauce on strawberry, chocolate on chocolate.", "Crown with whipped cream, nuts and the cherry.", "Serve with a long spoon — and a straw for the melt."],
+    tip: "The order IS the ritual: vanilla–strawberry–chocolate left to right, and the cherry always on top."
+  },
+  {
+    name: "Brownies", en: "American Icons · Lunchbox", cat: "Desserts", emoji: "🍫",
+    color: "#e9d5c8",
+    time: "45 min", difficulty: "Easy", serves: "16 squares",
+    story: "1893, Chicago's Palmer House: a guest asked for \"a dessert shorter than cake, small enough for a lunchbox.\" The brownie was born — and the name says brown.",
+    main: ["Unsalted butter, 170 g", "Dark chocolate (70%), 200 g", "Sugar, 250 g"],
+    other: ["3 eggs", "Vanilla extract, 1 tsp", "All-purpose flour, 90 g", "Cocoa powder, 20 g", "Salt, ½ tsp", "Walnuts, 100 g (optional)"],
+    steps: ["Melt butter and chocolate over a water bath until glossy; cool slightly.", "Whisk in sugar, then eggs one at a time until the batter thickens and shines, about 1 minute. Add vanilla.", "Sift in flour, cocoa and salt; fold until just combined.", "Pour into a lined square pan; scatter walnuts on top.", "Bake at 175°C for 25–30 minutes — a skewer should come out with moist crumbs, not wet batter.", "Cool completely before cutting."],
+    tip: "Moist crumbs on the skewer = fudgy brownies. Want them cakey? Give them 5 more minutes."
+  },
+  {
+    name: "Reuben Sandwich", en: "American Icons · Deli", cat: "Mains", emoji: "🥪",
+    color: "#f4ddc4",
+    time: "20 min", difficulty: "Easy", serves: "Serves 2",
+    story: "Omaha, Nebraska: grocer Reuben Kulakofsky invented it for a late-night poker game. It later won a national sandwich contest — the Midwest's gift to America.",
+    main: ["4 slices rye bread", "Corned beef, 300 g, thinly sliced", "4 slices Swiss cheese"],
+    other: ["Sauerkraut, 150 g, squeezed dry", "Russian dressing (Thousand Island + 1 tsp each Worcestershire & hot sauce)", "Butter, 30 g"],
+    steps: ["Mix the dressing. Wilt the sauerkraut briefly in a dry pan and squeeze it dry.", "Butter the outsides of the bread.", "Build inside-out: cheese → corned beef → sauerkraut → Russian dressing → cheese → bread.", "Griddle over medium heat, 3–4 minutes per side, until crisp and the cheese is molten.", "Cut on the diagonal. Eat immediately."],
+    tip: "Cheese on both sides isn't extravagance — it's engineering: it glues the sauerkraut on and seals in the steam."
+  },
+  {
+    name: "Linguine with White Clam Sauce", en: "American Icons · Little Italy", cat: "Seafood", emoji: "🍝",
+    color: "#eef0e6",
+    time: "30 min", difficulty: "Easy", serves: "Serves 4",
+    story: "Italian immigrants in Boston and New York rebuilt their seaside pasta with local clams. In Little Italy, it still opens the menu at the oldest places.",
+    main: ["Linguine, 450 g", "Fresh clams, 1 kg (or 400 g shucked)", "Dry white wine, 150 ml"],
+    other: ["5 garlic cloves, sliced", "Olive oil, 60 ml + butter 30 g", "Red pepper flakes, 1 tsp", "Flat-leaf parsley, half a bunch, chopped", "1 lemon", "Clam juice or seafood stock, 200 ml"],
+    steps: ["Purge and rinse the clams. Boil the linguine 2 minutes short; save a cup of pasta water.", "Gently brown the garlic and pepper flakes in olive oil — don't let it scorch.", "Add the clams and wine, cover, and steam 3–5 minutes until they open. Discard any that stay shut.", "Shell half the clams; leave the rest in-shell for flavor.", "Add butter and pasta water, then the linguine; toss 1 minute to coat and emulsify.", "Finish with parsley and a squeeze of lemon."],
+    tip: "Starchy pasta water is what makes the sauce cling to every strand. Never pour it down the drain."
+  },
+  {
+    name: "The Classic Pizza", en: "American Icons · Italian-American", cat: "Mains", emoji: "🍕",
+    color: "#f7e3c8",
+    time: "15 min", difficulty: "Easy", serves: "Serves 1",
+    story: "1905, Manhattan: Gennaro Lombardi opened America's first pizzeria in Little Italy, selling pies by the slice to dock workers. A century later, the home-kitchen shortcut is just as American: good bread, ripe tomatoes, cheese, and the hottest oven you own.",
+    main: ["Bread, 1", "Cheddar cheese slices, 4", "San Marzano tomatoes, 2"],
+    other: ["Olive oil, 2 tbsp", "Salt, 1 tsp", "1 garlic clove, grated", "Fresh basil leaves", "Dried oregano, 1 tsp", "Red pepper flakes (optional)"],
+    steps: ["Slice the tomatoes thinly and season with salt, grated garlic, oregano and a little olive oil. Let them sit 5 minutes — no cooking needed.", "Pat the cheddar slices dry so they don't flood the bread.", "Dry-toast the bread in a hot pan until firm and lightly golden — this seals the surface so it won't go soggy.", "Brush the bread with olive oil and lay the tomato slices across it.", "Scatter the cheddar over the top and drizzle with a little more oil.", "Broil on the oven's highest setting, 4–6 minutes, until the cheese bubbles and the edges char.", "Finish with torn basil and a thread of olive oil. Slice and serve immediately."],
+    tip: "Toasting the bread first is the whole trick — it builds a moisture barrier, so the crust stays crisp under the sauce instead of turning to mush."
+  }
+];
+
+/* ---------- render ---------- */
+const grid = document.getElementById("grid");
+const countEl = document.getElementById("count");
+const emptyEl = document.getElementById("empty");
+const searchEl = document.getElementById("search");
+const chipsEl = document.getElementById("chips");
+let activeCat = "All";
+
+/* ---------- favorites ---------- */
+const FAV_KEY = "ack-favorites";
+/* Every visitor starts with these six recipes already saved. */
+const DEFAULT_FAVORITES = [
+  "The Classic Cheeseburger",
+  "Mac and Cheese",
+  "Meatloaf",
+  "Banana Split",
+  "Brownies",
+  "The Classic Pizza"
+];
+let favorites = new Set(DEFAULT_FAVORITES);
+try {
+  const saved = localStorage.getItem(FAV_KEY);
+  if (saved !== null) favorites = new Set(JSON.parse(saved));
+} catch (e) {}
+saveFavs();   // seed the six defaults for first-time visitors
+let showFavOnly = false;
+const favToggle = document.getElementById("favToggle");
+const favCount = document.getElementById("favCount");
+
+function saveFavs() {
+  try { localStorage.setItem(FAV_KEY, JSON.stringify([...favorites])); } catch (e) {}
+}
+function updateFavToggle() {
+  favCount.textContent = favorites.size;
+  favToggle.firstChild.textContent = showFavOnly ? "★ " : "☆ ";
+  favToggle.classList.toggle("active", showFavOnly);
+}
+
+function render() {
+  const q = searchEl.value.trim().toLowerCase();
+  const list = RECIPES.filter(r => {
+    const catOk = activeCat === "All" || r.cat === activeCat;
+    const favOk = !showFavOnly || favorites.has(r.name);
+    const text = (r.name + r.en + r.main.join("") + r.other.join("")).toLowerCase();
+    return catOk && favOk && (!q || text.includes(q));
+  });
+  countEl.textContent = showFavOnly
+    ? `${list.length} favorite${list.length === 1 ? "" : "s"} · Saved recipes`
+    : `${list.length} recipes · A century of American flavor`;
+  grid.innerHTML = list.map(r => {
+    const idx = RECIPES.indexOf(r);
+    const faved = favorites.has(r.name);
+    return `
+    <article class="card" data-idx="${idx}">
+      <div class="card-img" style="background:${r.color}">
+        <span class="tag">${r.cat}</span>${r.emoji}
+        <button class="fav ${faved ? "on" : ""}" data-idx="${idx}" title="${faved ? "Remove from favorites" : "Save to favorites"}" aria-label="Toggle favorite">${faved ? "★" : "☆"}</button>
+      </div>
+      <div class="card-body">
+        <h3>${r.name}</h3>
+        <div class="en">${r.en}</div>
+        <p>${r.story.slice(0, 52)}…</p>
+        <div class="card-meta">
+          <span>⏱ ${r.time}</span>
+          <span>📶 ${r.difficulty}</span>
+          <span>🍽 ${r.serves}</span>
+        </div>
+      </div>
+    </article>`;
+  }).join("");
+  emptyEl.textContent = showFavOnly && !list.length
+    ? "No favorites yet — tap the ☆ on any recipe card to save it here."
+    : "No recipes found — try a different search.";
+  emptyEl.style.display = list.length ? "none" : "block";
+  updateFavToggle();
+}
+
+grid.addEventListener("click", e => {
+  const favBtn = e.target.closest(".fav");
+  if (favBtn) {
+    e.stopPropagation();
+    const name = RECIPES[+favBtn.dataset.idx].name;
+    if (favorites.has(name)) { favorites.delete(name); } else { favorites.add(name); }
+    saveFavs();
+    render();
+    return;
+  }
+  const card = e.target.closest(".card");
+  if (card) openModal(+card.dataset.idx);
+});
+
+favToggle.addEventListener("click", () => {
+  showFavOnly = !showFavOnly;
+  render();
+});
+
+/* ---------- modal ---------- */
+const overlay = document.getElementById("overlay");
+function openModal(i) {
+  const r = RECIPES[i];
+  document.getElementById("m-title").textContent = r.emoji + " " + r.name;
+  document.getElementById("m-en").textContent = r.en;
+  document.getElementById("m-story").textContent = r.story;
+  document.getElementById("m-badges").innerHTML =
+    `<span class="badge">⏱ ${r.time}</span><span class="badge">📶 Difficulty: ${r.difficulty}</span><span class="badge">🍽 ${r.serves}</span>`;
+  document.getElementById("m-main").innerHTML =
+    r.main.map(x => `<li>${x}</li>`).join("");
+  document.getElementById("m-other").innerHTML =
+    r.other.map(x => `<li>${x}</li>`).join("");
+  document.getElementById("m-steps").innerHTML =
+    r.steps.map(x => `<li>${x}</li>`).join("");
+  document.getElementById("m-tip").innerHTML = "💡 <b>Chef's Tip</b> — " + r.tip;
+  overlay.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeModal() {
+  overlay.classList.remove("open");
+  document.body.style.overflow = "";
+}
+document.getElementById("closeBtn").addEventListener("click", closeModal);
+overlay.addEventListener("click", e => { if (e.target === overlay) closeModal(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+/* ---------- filters ---------- */
+searchEl.addEventListener("input", render);
+chipsEl.addEventListener("click", e => {
+  const chip = e.target.closest(".chip");
+  if (!chip) return;
+  chipsEl.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+  chip.classList.add("active");
+  activeCat = chip.dataset.cat;
+  render();
+});
+
+render();
+</script>
+
+<!-- hidden-arg-anchor -->
+</body>
+</html>

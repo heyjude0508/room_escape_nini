@@ -1,0 +1,30 @@
+services:
+  web:
+    build: ./Kitchen                  # Kitchen/Dockerfile + nginx.conf + Kitchen.html
+    image: american-classic-kitchen:1.0
+    container_name: kitchen
+    expose:
+      - "1001"             # internal only; proxy forwards public traffic
+    restart: unless-stopped
+
+  snake:
+    build: ./Snake                   # Snake/Dockerfile + nginx.conf + Snake.html
+    image: american-classic-snake:1.0
+    container_name: snake
+    expose:
+      - "1002"             # internal only; the proxy is the single entry point
+    restart: unless-stopped
+
+  proxy:
+    image: nginx:1.27-alpine
+    container_name: johnny-proxy
+    ports:
+      - "80:80"
+      - "443:443"          # HTTPS
+    volumes:
+      - ./Nginx/proxy.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./Nginx/certs:/etc/nginx/certs:ro   # ssl cert bundle + private key
+    depends_on:
+      - web
+      - snake
+    restart: unless-stopped

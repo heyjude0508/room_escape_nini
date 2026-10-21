@@ -1,9 +1,24 @@
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
 {
+    const string ParentDad = "Dad";
+    const string ParentMom = "Mom";
+    static readonly Regex ParentPairGroupRegex = new Regex(
+        @"\(([^)]*)\)",
+        RegexOptions.Compiled);
     [SerializeField] PuzzleValidation puzzleValidation;
     [SerializeField] PuzzleValidateUiImpl puzzleValidateUi;
+    [SerializeField] string validateUiPanelName = "CombLockPanel";
+
+    readonly HashSet<string> acceptedBagParents = new HashSet<string>();
+
+    public bool HasAcceptedBagParent(string parent)
+    {
+        return !string.IsNullOrEmpty(parent) && acceptedBagParents.Contains(parent);
+    }
 
     void Awake()
     {
@@ -79,7 +94,7 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
 
         if (puzzleValidateUi == null)
         {
-            Debug.LogError("CombLockPanel / PuzzleValidateUiImpl not found for " + name);
+            Debug.LogError(validateUiPanelName + " / PuzzleValidateUiImpl not found for " + name);
             return;
         }
 
@@ -93,20 +108,78 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
             return;
         }
 
-        if (string.Equals(inputCode, puzzleValidation.validationCode, System.StringComparison.Ordinal))
+        string expected = puzzleValidation.validationCode;
+        if (string.IsNullOrEmpty(expected))
         {
-            PlaySolveAnimation();
-            PlaySound(puzzleValidation.solvedSound);
-            MarkSolved();
-            if (puzzleValidateUi != null)
-            {
-                puzzleValidateUi.ShowCorrectThenClose();
-            }
-
-            Debug.Log($"Input {puzzleValidation.validationCode} correctly.");
+            RejectCode(inputCode);
             return;
         }
 
+        // Exact match (comb lock / legacy).
+        if (string.Equals(inputCode, expected, System.StringComparison.Ordinal))
+        {
+            CompletePuzzleSolved();
+            return;
+        }
+
+        // Rolling cart: Dad / Mom submitted independently.
+        if (TryParseParentItemInput(inputCode, out string parent, out _)
+            && MatchesParentPairBagCode(inputCode, expected))
+        {
+            if (HasAcceptedBagParent(parent))
+            {
+                if (puzzleValidateUi != null)
+                {
+                    puzzleValidateUi.ShowBagParentAlreadyAccepted(parent);
+                }
+
+                return;
+            }
+
+            if (puzzleValidateUi != null)
+            {
+                // Capture locked slot visuals before removing items from the bag.
+                puzzleValidateUi.NotifyBagParentAccepted(parent);
+                puzzleValidateUi.ConsumeSelectedBagItems();
+            }
+
+            acceptedBagParents.Add(parent);
+
+            if (AreAllBagParentsAccepted(expected))
+            {
+                CompletePuzzleSolved();
+            }
+            else
+            {
+                PlaySound(puzzleValidation.solvedSound);
+                if (puzzleValidateUi != null)
+                {
+                    puzzleValidateUi.ShowBagParentAcceptedStayOpen(parent);
+                }
+            }
+
+            Debug.Log($"Accepted bag parent '{parent}' for {name}.");
+            return;
+        }
+
+        RejectCode(inputCode);
+    }
+
+    void CompletePuzzleSolved()
+    {
+        PlaySolveAnimation();
+        PlaySound(puzzleValidation.solvedSound);
+        MarkSolved();
+        if (puzzleValidateUi != null)
+        {
+            puzzleValidateUi.ShowCorrectThenClose();
+        }
+
+        Debug.Log($"Input {puzzleValidation.validationCode} correctly.");
+    }
+
+    void RejectCode(string inputCode)
+    {
         PlaySound(puzzleValidation.unsolvedSound);
         if (puzzleValidateUi != null)
         {
@@ -114,6 +187,218 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
         }
 
         Debug.Log($"Wrong code: {inputCode}");
+    }
+
+    bool AreAllBagParentsAccepted(string validationCode)
+    {
+        if (!TryParseParentPairValidation(validationCode, out Dictionary<string, string[][]> byParent)
+            || byParent == null
+            || byParent.Count == 0)
+        {
+            return false;
+        }
+
+        foreach (string parent in byParent.Keys)
+        {
+            if (!acceptedBagParents.Contains(parent))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    static bool MatchesParentPairBagCode(string inputCode, string validationCode)
+    {
+        if (string.IsNullOrWhiteSpace(inputCode) || string.IsNullOrWhiteSpace(validationCode))
+        {
+            return false;
+        }
+
+        if (!TryParseParentItemInput(inputCode, out string parent, out string[] selectedIds))
+        {
+            return false;
+        }
+
+        if (!TryParseParentPairValidation(validationCode, out Dictionary<string, string[][]> byParent))
+        {
+            return false;
+        }
+
+        if (!byParent.TryGetValue(parent, out string[][] pairs) || pairs == null)
+        {
+            return false;
+        }
+
+        if (selectedIds == null || selectedIds.Length != pairs.Length)
+        {
+            return false;
+        }
+
+        // Collect non-empty unique selected ids (order does not matter).
+        List<string> selected = new List<string>(selectedIds.Length);
+        HashSet<string> seen = new HashSet<string>();
+        for (int i = 0; i < selectedIds.Length; i++)
+        {
+            string id = selectedIds[i] ?? string.Empty;
+            if (string.IsNullOrEmpty(id))
+            {
+                return false;
+            }
+
+            if (!seen.Add(id))
+            {
+                return false;
+            }
+
+            selected.Add(id);
+        }
+
+        if (selected.Count != pairs.Length)
+        {
+            return false;
+        }
+
+        // Unordered: assign each parenthesis exactly one selected id that belongs to it.
+        bool[] usedSelected = new bool[selected.Count];
+        return TryAssignPairsToSelected(pairs, selected, 0, usedSelected);
+    }
+
+    static bool TryAssignPairsToSelected(
+        string[][] pairs,
+        List<string> selected,
+        int pairIndex,
+        bool[] usedSelected)
+    {
+        if (pairIndex >= pairs.Length)
+        {
+            return true;
+        }
+
+        string[] pair = pairs[pairIndex];
+        if (pair == null || pair.Length < 2)
+        {
+            return false;
+        }
+
+        string optionA = pair[0] ?? string.Empty;
+        string optionB = pair[1] ?? string.Empty;
+
+        for (int i = 0; i < selected.Count; i++)
+        {
+            if (usedSelected[i])
+            {
+                continue;
+            }
+
+            string id = selected[i];
+            bool matchA = string.Equals(id, optionA, System.StringComparison.Ordinal);
+            bool matchB = string.Equals(id, optionB, System.StringComparison.Ordinal);
+            if (!matchA && !matchB)
+            {
+                continue;
+            }
+
+            // This parenthesis consumes exactly this one id.
+            usedSelected[i] = true;
+            if (TryAssignPairsToSelected(pairs, selected, pairIndex + 1, usedSelected))
+            {
+                return true;
+            }
+
+            usedSelected[i] = false;
+        }
+
+        return false;
+    }
+
+    static bool TryParseParentItemInput(string inputCode, out string parent, out string[] selectedIds)
+    {
+        parent = null;
+        selectedIds = null;
+
+        int sep = inputCode.IndexOf('|');
+        if (sep <= 0 || sep >= inputCode.Length - 1)
+        {
+            return false;
+        }
+
+        parent = inputCode.Substring(0, sep).Trim();
+        if (!string.Equals(parent, ParentDad, System.StringComparison.Ordinal)
+            && !string.Equals(parent, ParentMom, System.StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        string itemsPart = inputCode.Substring(sep + 1);
+        selectedIds = itemsPart.Split(',');
+        for (int i = 0; i < selectedIds.Length; i++)
+        {
+            selectedIds[i] = selectedIds[i] != null ? selectedIds[i].Trim() : string.Empty;
+        }
+
+        return selectedIds.Length > 0;
+    }
+
+    static bool TryParseParentPairValidation(
+        string validationCode,
+        out Dictionary<string, string[][]> byParent)
+    {
+        byParent = new Dictionary<string, string[][]>();
+        string[] sections = validationCode.Split('|');
+        if (sections == null || sections.Length == 0)
+        {
+            return false;
+        }
+
+        for (int s = 0; s < sections.Length; s++)
+        {
+            string section = sections[s] != null ? sections[s].Trim() : string.Empty;
+            if (string.IsNullOrEmpty(section))
+            {
+                continue;
+            }
+
+            int colon = section.IndexOf(':');
+            if (colon <= 0)
+            {
+                return false;
+            }
+
+            string parent = section.Substring(0, colon).Trim();
+            if (!string.Equals(parent, ParentDad, System.StringComparison.Ordinal)
+                && !string.Equals(parent, ParentMom, System.StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            string pairsPart = section.Substring(colon + 1);
+            MatchCollection matches = ParentPairGroupRegex.Matches(pairsPart);
+            if (matches == null || matches.Count == 0)
+            {
+                return false;
+            }
+
+            string[][] pairs = new string[matches.Count][];
+            for (int i = 0; i < matches.Count; i++)
+            {
+                string inner = matches[i].Groups[1].Value;
+                string[] parts = inner.Split(',');
+                string a = parts.Length > 0 && parts[0] != null ? parts[0].Trim() : string.Empty;
+                string b = parts.Length > 1 && parts[1] != null ? parts[1].Trim() : string.Empty;
+                if (string.IsNullOrEmpty(a) && string.IsNullOrEmpty(b))
+                {
+                    return false;
+                }
+
+                pairs[i] = new[] { a, b };
+            }
+
+            byParent[parent] = pairs;
+        }
+
+        return byParent.Count > 0;
     }
 
     public void PlaySolveAnimation()
@@ -180,18 +465,32 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
             return local;
         }
 
-        GameObject panel = GameObject.Find("CombLockPanel");
-        if (panel != null)
+        if (!string.IsNullOrWhiteSpace(validateUiPanelName))
         {
-            PuzzleValidateUiImpl ui = panel.GetComponent<PuzzleValidateUiImpl>();
-            if (ui != null)
+            PuzzleValidateUiImpl named = FindValidateUiByPanelName(validateUiPanelName);
+            if (named != null)
             {
-                return ui;
+                return named;
             }
         }
 
-        // CombLockPanel starts inactive; includeInactive finds it under Canvas.
+        // Panels often start inactive; includeInactive finds them under Canvas.
         return FindObjectOfType<PuzzleValidateUiImpl>(true);
+    }
+
+    static PuzzleValidateUiImpl FindValidateUiByPanelName(string panelName)
+    {
+        // GameObject.Find skips inactive objects; panels start disabled.
+        PuzzleValidateUiImpl[] panels = FindObjectsOfType<PuzzleValidateUiImpl>(true);
+        for (int i = 0; i < panels.Length; i++)
+        {
+            if (panels[i] != null && panels[i].gameObject.name == panelName)
+            {
+                return panels[i];
+            }
+        }
+
+        return null;
     }
 
     void MarkSolved()
