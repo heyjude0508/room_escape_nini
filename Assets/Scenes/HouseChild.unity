@@ -8407,7 +8407,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &232112852
 Transform:
   m_ObjectHideFlags: 0
@@ -19746,8 +19746,9 @@ MonoBehaviour:
     id: N005
     itemName: Recipes Website
     storyContent: The internet is so convenient nowadays. I found a recipe website
-      <b><i>www.baidu.com</i></b> with super detailed instructions for every dish.
-      I saved all our favorites, let's find a chance to try them out.
+      <b><i>www.johnny4games.com/kitchen</i></b> with super detailed instructions
+      for every dish. I saved all our favorites, let's find a chance to try them
+      out.
     itemActionDesc: Press E to read
 --- !u!64 &551453675
 MeshCollider:

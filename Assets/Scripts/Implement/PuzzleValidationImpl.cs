@@ -175,7 +175,32 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
             puzzleValidateUi.ShowCorrectThenClose();
         }
 
+        if (IsRollingCartPuzzle())
+        {
+            HouseChildSequencer sequencer = FindObjectOfType<HouseChildSequencer>(true);
+            if (sequencer != null)
+            {
+                sequencer.NotifyRollingCartSolved();
+            }
+            else
+            {
+                Debug.LogError("HouseChildSequencer not found for RollingCart solve.");
+            }
+        }
+
         Debug.Log($"Input {puzzleValidation.validationCode} correctly.");
+    }
+
+    bool IsRollingCartPuzzle()
+    {
+        if (!string.IsNullOrWhiteSpace(validateUiPanelName)
+            && string.Equals(validateUiPanelName, "RollingCartPanel", System.StringComparison.Ordinal))
+        {
+            return true;
+        }
+
+        return puzzleValidation != null
+            && string.Equals(puzzleValidation.id, "RollingCart", System.StringComparison.Ordinal);
     }
 
     void RejectCode(string inputCode)
@@ -622,7 +647,8 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
                 continue;
             }
 
-            // Prefer Lock ownership; if no Lock, fall back to tips owned by this object excluding keys.
+            // Prefer Lock ownership; if no Lock, tips owned by this object or its root
+            // (detached IconTips keep ownerRoot under RollingCart_01 while MainCart holds the puzzle).
             if (lockRoot != null)
             {
                 if (!iconTip.IsOwnedBy(lockRoot))
@@ -630,7 +656,8 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
                     continue;
                 }
             }
-            else if (!iconTip.IsOwnedBy(transform))
+            else if (!iconTip.IsOwnedBy(transform)
+                     && (transform.root == null || !iconTip.IsOwnedBy(transform.root)))
             {
                 continue;
             }

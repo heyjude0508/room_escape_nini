@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HouseChildSequencer : MonoBehaviour
 {
@@ -11,14 +12,19 @@ public class HouseChildSequencer : MonoBehaviour
     const float EnterKeyPulseInterval = 0.6f;
 
     const float FragmentPlotTime = 0.6f;
+    const float RollingCartBlackoutSeconds = 0.8f;
     const string FragmentTlItemId = "F001";
     const string MainDoorPuzzleId = "MainLock";
     const string KitchenTriggerId = "Tri001";
+    const string RollingCartObjectName = "RollingCart_01";
 
     const string ActPanelName = "ActPanel";
+    const string BlackoutCanvasName = "RollingCartBlackoutCanvas";
 
     PlotUiImpl plotUiImpl;
     GameObject actPanel;
+    GameObject blackoutRoot;
+    Image blackoutImage;
 
     string meAvatar = "Me";
     string pieAvatar = "Pie";
@@ -31,10 +37,12 @@ public class HouseChildSequencer : MonoBehaviour
     Coroutine chefAssigCoroutine;
     Coroutine chefReactPlotCoroutine;
     Coroutine enterKeyPulseCoroutine;
+    Coroutine rollingCartSolvedCoroutine;
     bool fragmentTlPlotPlayed;
     bool mainDoorPlotPlayed;
     bool kitchenPlotPlayed;
     bool chefReactPlotPlayed;
+    bool rollingCartSolvedPlayed;
     bool plotBlockingInteractionUi;
 
     public bool IsBlockingInteractionUi => plotBlockingInteractionUi;
@@ -173,6 +181,158 @@ public class HouseChildSequencer : MonoBehaviour
         }
 
         chefAssigCoroutine = StartCoroutine(ChefAssigThenReact(npc.npcAvatarName));
+    }
+
+    public void NotifyRollingCartSolved()
+    {
+        if (rollingCartSolvedPlayed)
+        {
+            return;
+        }
+
+        rollingCartSolvedPlayed = true;
+        if (rollingCartSolvedCoroutine != null)
+        {
+            StopCoroutine(rollingCartSolvedCoroutine);
+        }
+
+        rollingCartSolvedCoroutine = StartCoroutine(RollingCartSolvedSequence());
+    }
+
+    IEnumerator RollingCartSolvedSequence()
+    {
+        BeginPlotBlocking();
+        try
+        {
+            SetBlackoutVisible(true);
+            yield return new WaitForSeconds(RollingCartBlackoutSeconds);
+            HideRollingCart01();
+            SetBlackoutVisible(false);
+        }
+        finally
+        {
+            rollingCartSolvedCoroutine = null;
+            EndPlotBlocking();
+        }
+    }
+
+    void HideRollingCart01()
+    {
+        GameObject cart = GameObject.Find(RollingCartObjectName);
+        if (cart == null)
+        {
+            // Include inactive in case something already disabled the root.
+            Transform found = FindInSceneIncludingInactive(RollingCartObjectName);
+            if (found != null)
+            {
+                cart = found.gameObject;
+            }
+        }
+
+        if (cart == null)
+        {
+            Debug.LogWarning(RollingCartObjectName + " not found to hide after solve.");
+            return;
+        }
+
+        // Detached IconTips are no longer children of the cart — disable by ownership.
+        DisableIconTipsOwnedBy(cart.transform);
+        cart.SetActive(false);
+    }
+
+    static void DisableIconTipsOwnedBy(Transform root)
+    {
+        if (root == null)
+        {
+            return;
+        }
+
+        IconUiImpl[] tips = FindObjectsOfType<IconUiImpl>(true);
+        for (int i = 0; i < tips.Length; i++)
+        {
+            IconUiImpl tip = tips[i];
+            if (tip == null || !tip.IsOwnedBy(root))
+            {
+                continue;
+            }
+
+            tip.enabled = false;
+            tip.gameObject.SetActive(false);
+        }
+    }
+
+    void SetBlackoutVisible(bool visible)
+    {
+        EnsureBlackoutUi();
+        if (blackoutRoot == null)
+        {
+            return;
+        }
+
+        blackoutRoot.SetActive(visible);
+        if (blackoutImage != null)
+        {
+            blackoutImage.color = Color.black;
+        }
+    }
+
+    void EnsureBlackoutUi()
+    {
+        if (blackoutRoot != null && blackoutImage != null)
+        {
+            return;
+        }
+
+        blackoutRoot = GameObject.Find(BlackoutCanvasName);
+        if (blackoutRoot != null)
+        {
+            blackoutImage = blackoutRoot.GetComponentInChildren<Image>(true);
+            if (blackoutImage != null)
+            {
+                return;
+            }
+        }
+
+        blackoutRoot = new GameObject(BlackoutCanvasName);
+        Canvas canvas = blackoutRoot.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 32000;
+        blackoutRoot.AddComponent<CanvasScaler>();
+        blackoutRoot.AddComponent<GraphicRaycaster>();
+
+        GameObject imageGo = new GameObject("Blackout", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        imageGo.transform.SetParent(blackoutRoot.transform, false);
+        RectTransform rect = imageGo.GetComponent<RectTransform>();
+        rect.anchorMin = Vector2.zero;
+        rect.anchorMax = Vector2.one;
+        rect.offsetMin = Vector2.zero;
+        rect.offsetMax = Vector2.zero;
+
+        blackoutImage = imageGo.GetComponent<Image>();
+        blackoutImage.color = Color.black;
+        blackoutImage.raycastTarget = true;
+        blackoutRoot.SetActive(false);
+    }
+
+    static Transform FindInSceneIncludingInactive(string objectName)
+    {
+        Transform[] all = Resources.FindObjectsOfTypeAll<Transform>();
+        for (int i = 0; i < all.Length; i++)
+        {
+            Transform t = all[i];
+            if (t == null || t.name != objectName)
+            {
+                continue;
+            }
+
+            // Skip assets / prefabs not in a loaded scene.
+            if (t.gameObject.scene.IsValid() && t.gameObject.scene.isLoaded)
+            {
+                return t;
+            }
+        }
+
+        return null;
     }
 
     IEnumerator ChefAssigThenReact(string npcAvatarName)
