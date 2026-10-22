@@ -75,9 +75,13 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
         {
             HandleBagItemSelection();
         }
-        else if (IsAnyStoryOpen())
+        else if (IsAnyStoryOpen() || WebsiteUiImpl.IsOpen)
         {
-            // StoryPanel is open: do not raycast world interactables.
+            // StoryPanel / WebsitePanel open: do not raycast world interactables.
+            if (UiInteraction != null)
+            {
+                UiInteraction.SetActive(false);
+            }
         }
         else
         {
@@ -232,7 +236,7 @@ public class PlayerActionImpl : MonoBehaviour, IPlayerAction
             UiInteractionText.text = description;
         }
 
-        ActPanelKeyUi.ShowDefaultEKey();
+        IconUiImpl.ShowDefaultEKey();
         interactable.EventAimStart();
 
         if (Input.GetKeyDown(KeyCode.E))

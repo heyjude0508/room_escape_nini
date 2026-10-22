@@ -68,7 +68,7 @@ public class PuzzlePositionImpl : MonoBehaviour, IPuzzlePosition
     public void EventAimStart()
     {
         //gameEventAimStart.Raise();
-        ActPanelKeyUi.SetCanInteract(CanSolve());
+        IconUiImpl.SetCanInteract(CanSolve());
     }
 
     public void EventAimEnd()

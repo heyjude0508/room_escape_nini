@@ -3,6 +3,7 @@
 public class ItemTriggerImpl : MonoBehaviour, IItemTrigger
 {
     [SerializeField] ItemTrigger itemTrigger;
+    [SerializeField, HideInInspector] WebsiteUiImpl websiteUi;
 
     bool hasTriggered;
 
@@ -30,7 +31,18 @@ public class ItemTriggerImpl : MonoBehaviour, IItemTrigger
 
     public void Interact()
     {
-        if (hasTriggered || itemTrigger == null)
+        if (itemTrigger == null)
+        {
+            return;
+        }
+
+        if (websiteUi != null)
+        {
+            websiteUi.Show();
+            return;
+        }
+
+        if (hasTriggered)
         {
             return;
         }
@@ -49,6 +61,12 @@ public class ItemTriggerImpl : MonoBehaviour, IItemTrigger
 
     void OnTriggerEnter(Collider other)
     {
+        // Website openers only respond to E / raycast Interact, not walk-in.
+        if (websiteUi != null)
+        {
+            return;
+        }
+
         if (!IsPlayerCollider(other))
         {
             return;

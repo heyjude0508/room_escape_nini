@@ -4,7 +4,15 @@ using UnityEngine.UI;
 
 public class IconUiImpl : MonoBehaviour, IIconUi
 {
+    const string ActPanelName = "ActPanel";
+    const string EKeyName = "EKey";
+    const string NoEKeyName = "NoEKey";
+
     static readonly List<IconUiImpl> activeInstances = new List<IconUiImpl>();
+    static Transform actPanelEKey;
+    static Transform actPanelNoEKey;
+    static bool actPanelKeysResolved;
+
     [SerializeField] Camera targetCamera;
     [SerializeField] Image tipImage;
     [SerializeField] Sprite circleSprite;
@@ -381,6 +389,83 @@ public class IconUiImpl : MonoBehaviour, IIconUi
                 tipImage.enabled = checkSprite != null;
                 break;
         }
+    }
+
+    public static void SetCanInteract(bool canInteract)
+    {
+        CacheActPanelKeys();
+        if (actPanelEKey != null)
+        {
+            actPanelEKey.gameObject.SetActive(canInteract);
+        }
+
+        if (actPanelNoEKey != null)
+        {
+            actPanelNoEKey.gameObject.SetActive(!canInteract);
+        }
+    }
+
+    public static void ShowDefaultEKey()
+    {
+        SetCanInteract(true);
+    }
+
+    static void CacheActPanelKeys()
+    {
+        if (actPanelKeysResolved && actPanelEKey != null && actPanelNoEKey != null)
+        {
+            return;
+        }
+
+        actPanelKeysResolved = true;
+        Transform actPanel = FindActPanel();
+        if (actPanel == null)
+        {
+            return;
+        }
+
+        actPanelEKey = actPanel.Find(EKeyName);
+        actPanelNoEKey = actPanel.Find(NoEKeyName);
+    }
+
+    static Transform FindActPanel()
+    {
+        Canvas[] canvases = Object.FindObjectsOfType<Canvas>(true);
+        for (int i = 0; i < canvases.Length; i++)
+        {
+            Transform found = FindChildRecursive(canvases[i].transform, ActPanelName);
+            if (found != null)
+            {
+                return found;
+            }
+        }
+
+        return null;
+    }
+
+    static Transform FindChildRecursive(Transform parent, string childName)
+    {
+        if (parent == null)
+        {
+            return null;
+        }
+
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Transform child = parent.GetChild(i);
+            if (child.name == childName)
+            {
+                return child;
+            }
+
+            Transform nested = FindChildRecursive(child, childName);
+            if (nested != null)
+            {
+                return nested;
+            }
+        }
+
+        return null;
     }
 
 }
