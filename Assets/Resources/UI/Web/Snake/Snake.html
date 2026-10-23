@@ -323,8 +323,23 @@ const ovScore = document.getElementById("ov-score");
 const btn     = document.getElementById("btn");
 
 const BEST_KEY = "snake-best";
+const urlParams = new URLSearchParams(window.location.search);
+const sid = (urlParams.get("sid") || "").trim();
 let best = +(localStorage.getItem(BEST_KEY) || 0);
 bestEl.textContent = best;
+
+function reportScoreToUnity(finalScore) {
+  const padded = String(Math.min(finalScore, 9999)).padStart(4, "0");
+  const msg = sid ? ("snakeScore:" + padded + ":" + sid) : ("snakeScore:" + padded);
+  try {
+    if (window.Unity && typeof Unity.call === "function") {
+      Unity.call(msg);
+    }
+  } catch (e) {}
+  if (sid) {
+    try { localStorage.setItem("snake-score-" + sid, padded); } catch (e) {}
+  }
+}
 
 let snake, dir, nextDir, food, score, interval;
 let timer = null, paused = false, running = false;
@@ -437,6 +452,7 @@ function gameOver() {
   ovScore.innerHTML = "Score <b>" + String(Math.min(score, 9999)).padStart(4, "0") + "</b> &nbsp;·&nbsp; Best <b>" + best + "</b>";
   btn.textContent = "PLAY AGAIN";
   overlay.classList.remove("hidden");
+  reportScoreToUnity(score);
 }
 
 function tick() {
@@ -561,6 +577,23 @@ function setDir(x, y) {
   nextDir = {x, y};
 }
 
+function togglePause() {
+  if (!running) return;
+  paused = !paused;
+  if (paused) { clearInterval(timer); timer = null; }
+  else setSpeed();
+}
+
+// Unity WebView often cannot forward keyboard events into the page.
+// WebsiteUiImpl calls this from C# via EvaluateJS when Snake tab is active.
+window.__snakeInput = function(cmd) {
+  if (cmd === "up") setDir(0, -1);
+  else if (cmd === "down") setDir(0, 1);
+  else if (cmd === "left") setDir(-1, 0);
+  else if (cmd === "right") setDir(1, 0);
+  else if (cmd === "pause") togglePause();
+};
+
 document.addEventListener("keydown", e => {
   const k = e.key;
   if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"," "].includes(k)) e.preventDefault();
@@ -570,11 +603,7 @@ document.addEventListener("keydown", e => {
   if (k === "ArrowDown"  || k === "s" || k === "S") setDir(0, 1);
   if (k === "ArrowLeft"  || k === "a" || k === "A") setDir(-1, 0);
   if (k === "ArrowRight" || k === "d" || k === "D") setDir(1, 0);
-  if (k === " ") {
-    paused = !paused;
-    if (paused) { clearInterval(timer); timer = null; }
-    else setSpeed();
-  }
+  if (k === " ") togglePause();
 });
 
 btn.addEventListener("click", () => {

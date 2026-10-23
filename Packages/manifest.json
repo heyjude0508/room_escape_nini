@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "net.gree.unity-webview": "https://github.com/gree/unity-webview.git?path=/dist/package",
     "com.unity.2d.psdimporter": "8.1.2",
     "com.unity.cinemachine": "3.1.7",
     "com.unity.collab-proxy": "2.12.4",

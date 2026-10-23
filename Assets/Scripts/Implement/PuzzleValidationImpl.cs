@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
 {
+    public const string DynamicWebsitePasswordCode = "dynamic";
+
     const string ParentDad = "Dad";
     const string ParentMom = "Mom";
     static readonly Regex ParentPairGroupRegex = new Regex(
@@ -18,6 +20,28 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
     public bool HasAcceptedBagParent(string parent)
     {
         return !string.IsNullOrEmpty(parent) && acceptedBagParents.Contains(parent);
+    }
+
+    public string PuzzleId => puzzleValidation != null ? puzzleValidation.id : string.Empty;
+
+    /// <summary>
+    /// When Validation Code is "dynamic", password is set by website Snake score (sid session).
+    /// </summary>
+    public bool UsesDynamicWebsitePassword =>
+        puzzleValidation != null
+        && string.Equals(
+            puzzleValidation.validationCode,
+            DynamicWebsitePasswordCode,
+            System.StringComparison.OrdinalIgnoreCase);
+
+    public void SetValidationCode(string code)
+    {
+        if (puzzleValidation == null)
+        {
+            puzzleValidation = new PuzzleValidation();
+        }
+
+        puzzleValidation.validationCode = code ?? string.Empty;
     }
 
     void Awake()
@@ -109,8 +133,10 @@ public class PuzzleValidationImpl : MonoBehaviour, IPuzzleValidation
         }
 
         string expected = puzzleValidation.validationCode;
-        if (string.IsNullOrEmpty(expected))
+        if (string.IsNullOrEmpty(expected)
+            || string.Equals(expected, DynamicWebsitePasswordCode, System.StringComparison.OrdinalIgnoreCase))
         {
+            // Still "dynamic" means Snake score has not been applied yet.
             RejectCode(inputCode);
             return;
         }

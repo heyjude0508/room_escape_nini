@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +15,14 @@ public class ItemStoryImpl : MonoBehaviour, IItemStory
     const float PaperScreenRatio = 0.9f;
 
     static int openStoryCount;
+    static readonly HashSet<string> readStoryIds = new HashSet<string>();
+
+    public static event Action<string> OnStoryRead;
+
+    public static bool HasReadStory(string storyId)
+    {
+        return !string.IsNullOrWhiteSpace(storyId) && readStoryIds.Contains(storyId);
+    }
 
     [SerializeField] ItemStory itemStory;
 
@@ -176,9 +186,20 @@ public class ItemStoryImpl : MonoBehaviour, IItemStory
             storyText.text = displayText;
         }
 
+        MarkStoryRead(itemStory.id);
         SetPlayerLocked(true);
         SetStoryPanelVisible(true);
         SetCursorForUi(true);
+    }
+
+    void MarkStoryRead(string storyId)
+    {
+        if (string.IsNullOrWhiteSpace(storyId) || !readStoryIds.Add(storyId))
+        {
+            return;
+        }
+
+        OnStoryRead?.Invoke(storyId);
     }
 
     public void HideStory()
